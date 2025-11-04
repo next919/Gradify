@@ -1,5 +1,8 @@
 // Collapsible sections + lazy init for Quran, nav opens target, global search
 document.addEventListener('DOMContentLoaded', () => {
+  // Force close all sections on initial load (avoid appearing open on homepage)
+  document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
+
   const year = document.getElementById('year'); if (year) year.textContent = new Date().getFullYear();
 
   // Mobile nav toggle
