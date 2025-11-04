@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gradify — تلاوات كاملة + بحث</title>
-  <meta name="description" content="مشغل تلاوات كامل من mp3quran.net لعدة قراء مع محرك بحث.">
+  <title>Gradify — منصّة عصرية</title>
+  <meta name="description" content="Gradify — تصميم أزرق عصري، قسم القرآن الكريم (mp3quran API)، مواقع الذكاء الاصطناعي، شروحات، وبحث شامل.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -14,62 +14,109 @@
   <header class="header" id="top">
     <div class="container">
       <div class="brand-wrap"><span class="brand">Gradify</span></div>
+
+      <!-- Global search -->
+      <div class="global-search">
+        <input id="siteSearch" type="search" placeholder="ابحث في الموقع (الأقسام، البطاقات، الأدوات...)" aria-label="بحث شامل">
+        <div id="searchResults" class="search-results" hidden></div>
+      </div>
+
+      <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
       <nav class="nav" id="mainNav" aria-label="القائمة">
+        <a href="#hero">الرئيسية</a>
         <a href="#quran">القرآن الكريم</a>
-        <a href="#about">حول</a>
+        <a href="#tutorials">الشروحات</a>
+        <a href="#ai-tools">مواقع الذكاء الاصطناعي</a>
+        <a href="#contact">تواصل</a>
       </nav>
     </div>
   </header>
 
-  <main>
-  <section class="section" id="quran">
-    <div class="container">
-      <h1 class="section-title">القرآن الكريم — mp3quran.net</h1>
-      <p class="muted">اختر القارئ، ثم ابحث عن السورة أو تصفّح جميع السور (001–114). الروابط تُولَّد تلقائيًا من خوادم mp3quran.net.</p>
-
-      <div class="toolbar">
-        <div class="readers" role="tablist" aria-label="القراء"></div>
-        <div class="tools">
-          <input id="searchBox" class="search" type="search" placeholder="ابحث باسم السورة أو رقمها (مثال: يس أو 36)" aria-label="بحث">
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <h1 class="xl">منصّة عصرية بخفة وسرعة</h1>
+        <p class="lead">تصميم أزرق أنيق، أقسام جاهزة، وتجربة متجاوبة تناسب الجوال والكمبيوتر.</p>
+        <div class="cta">
+          <a class="btn" href="#quran">ابدأ من القرآن الكريم</a>
+          <a class="btn ghost" href="#ai-tools">اكتشف مواقع الذكاء الاصطناعي</a>
         </div>
       </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quran Section (API-driven) -->
+  <section class="section alt" id="quran" aria-labelledby="quran-title">
+    <div class="container">
+      <h2 class="section-title" id="quran-title">القرآن الكريم</h2>
+      <p class="muted">جلب تلقائي لكل القرّاء من mp3quran مع بحث للقارئ والسورة وتشغيل فوري.</p>
+
+      <div class="toolbar">
+        <input id="reciterSearch" class="search" type="search" placeholder="ابحث عن قارئ (مثال: عبد الباسط)" aria-label="بحث عن قارئ">
+        <select id="reciterSelect" class="select" aria-label="قائمة القراء"></select>
+        <select id="moshafSelect" class="select" aria-label="قائمة المصاحف"></select>
+      </div>
+
+      <input id="surahSearch" class="search" type="search" placeholder="بحث داخل السور (اسم أو رقم)" aria-label="بحث داخل السور">
 
       <div id="surahList" class="surahs" aria-live="polite"></div>
 
       <details class="tip">
-        <summary>تعديل القُرّاء أو الخوادم</summary>
-        عدّل المصفوفة <code>READERS</code> في <code>script.js</code>. لكل قارئ حدّد
-        <code>host</code> (مثل: <code>server7.mp3quran.net</code>) و <code>path</code> (مثل: <code>basit</code>).
-        سيتم توليد الروابط بصيغة: <code>https://HOST/PATH/NNN.mp3</code>.
+        <summary>كيف أضيف/أعدّل؟</summary>
+        لا تحتاج لإضافة يدوية—القرّاء والمصاحف والسور تُجلب مباشرة من واجهة mp3quran. يمكنك تعديل التنسيق من <code>script.js</code>.
       </details>
     </div>
   </section>
 
-  <section class="section alt" id="about">
-    <div class="container grid-2">
-      <div>
-        <h2 class="section-title">حول الموقع</h2>
-        <p>هذا القالب يوفّر تلاوات كاملة لكل السور (١–١١٤) لعدة قرّاء من <strong>mp3quran.net</strong> مع مشغّل سفلي ثابت ومحرك بحث سريع.</p>
-        <p>يمكنك إضافة أي قارئ جديد عبر تحديد <em>host</em> و<em>path</em> فقط، وسيتم إنشاء روابط كل السور تلقائيًا.</p>
-      </div>
-      <div class="card">
-        <h3>تخصيص سريع</h3>
-        <ul class="list">
-          <li>إضافة قارئ جديد: عدّل <code>READERS</code>.</li>
-          <li>تحرير أسماء السور أو ترتيبها: عدّل <code>SURAHS</code>.</li>
-          <li>الألوان والخطوط: من <code>styles.css</code>.</li>
-        </ul>
+  <!-- Tutorials -->
+  <section class="section" id="tutorials" aria-labelledby="tutorials-title">
+    <div class="container">
+      <h2 class="section-title" id="tutorials-title">الشروحات</h2>
+      <div class="grid-3 cards" id="tutorialsGrid">
+        <article class="card"><h3>شرح 1 (قريبًا)</h3><p>مكان للدروس القصيرة.</p><a class="btn tiny" href="#">تفاصيل</a></article>
+        <article class="card"><h3>شرح 2 (قريبًا)</h3><p>دليل خطوة بخطوة.</p><a class="btn tiny" href="#">تفاصيل</a></article>
+        <article class="card"><h3>شرح 3 (قريبًا)</h3><p>روابط خارجية أو قنوات.</p><a class="btn tiny" href="#">تفاصيل</a></article>
       </div>
     </div>
   </section>
-  </main>
+
+  <!-- AI Tools -->
+  <section class="section alt" id="ai-tools" aria-labelledby="ai-title">
+    <div class="container">
+      <h2 class="section-title" id="ai-title">مواقع الذكاء الاصطناعي</h2>
+      <p class="muted">تعريف سريع وروابط مباشرة للموقع والتطبيق (إن وجد).</p>
+      <div id="aiGrid" class="grid-3 cards"></div>
+      <details class="tip">
+        <summary>إضافة/تعديل المواقع</summary>
+        افتح <code>script.js</code> وعدّل المصفوفة <code>AI_TOOLS</code>.
+      </details>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="container grid-2">
+      <div>
+        <h2 class="section-title">تواصل</h2>
+        <p>راسلنا: <a href="mailto:hello@gradifysa.com">hello@gradifysa.com</a></p>
+      </div>
+      <div class="card"><h3>روابط سريعة</h3><ul class="list"><li><a href="#quran">القرآن الكريم</a></li><li><a href="#tutorials">الشروحات</a></li><li><a href="#ai-tools">مواقع الذكاء الاصطناعي</a></li></ul></div>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="container">
-      <p>© <span id="year"></span> <strong>Gradify</strong> — تشغيل تلاوات من mp3quran.net</p>
+      <p>© <span id="year"></span> <strong>Gradify</strong> — كل الحقوق محفوظة.</p>
+      <div class="footer-cta">
+        <a class="to-top" href="#top">↑</a>
+      </div>
     </div>
   </footer>
 
+  <!-- Sticky player -->
   <div id="playerBar" class="player" aria-live="polite">
     <button class="p-btn" id="pToggle" aria-label="تشغيل/إيقاف">⏯</button>
     <div class="p-meta">
