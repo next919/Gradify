@@ -3,51 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>جراديفي | Gradify — منصة عصرية خفيفة</title>
-  <meta name="description" content="تصميم زاهٍ ومريح للعين، متجاوب للجوال والكمبيوتر، مع أقسام قابلة للفتح عند الحاجة.">
+  <title>جراديفي | Gradify — Aura Design</title>
+  <meta name="description" content="تصميم Aura حديث بزجاجية خفيفة، ألوان متدرجة زاهية، وتجربة مريحة على الجوال والكمبيوتر.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body id="top">
-  <a class="skip" href="#content">تخطي إلى المحتوى</a>
   <header class="header">
     <div class="container header-wrap">
       <a class="brand-link" href="#top" aria-label="الرئيسية">
-        <span class="brand-en">Gradify</span><span class="brand-sep">|</span><span class="brand-ar">جراديفي</span>
+        <span class="brand-en">Gradify</span><span class="brand-sep">•</span><span class="brand-ar">جراديفي</span>
       </a>
-      <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
       <nav class="nav" id="mainNav" aria-label="القائمة">
-        <a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a>
-        <a data-open="#sec-ai" href="#sec-ai">مواقع الذكاء الاصطناعي</a>
-        <a data-open="#sec-tuts" href="#sec-tuts">الشروحات</a>
+        <a data-open="#sec-quran" href="#sec-quran">القرآن</a>
+        <a data-open="#sec-ai" href="#sec-ai">ذكاء اصطناعي</a>
+        <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
         <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
-        <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
+        <a data-open="#sec-english" href="#sec-english">تعلم الانجليزية</a>
         <a data-open="#sec-contact" href="#sec-contact">تواصل</a>
       </nav>
+      <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="container hero-grid">
+  <div class="aura">
+    <span class="a1"></span><span class="a2"></span><span class="a3"></span>
+  </div>
+
+  <section class="hero container">
+    <div class="hero-inner">
       <div class="hero-text">
-        <h1>ألوان زاهية. تجربة مريحة.</h1>
-        <p class="lead">موقع سريع ومتجاوب للجوال والكمبيوتر. الأقسام تُفتح عند الحاجة والبحث سهل.</p>
+        <h1>تصميم <span class="grad">Aura</span> جديد كليًا</h1>
+        <p class="lead">ألوان زاهية، بطاقات زجاجية، وتوافق كامل مع الجوال والكمبيوتر. الأقسام تظهر فقط عند الحاجة.</p>
         <div class="cta">
-          <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن الكريم</a>
-          <a class="btn" href="#sec-ai" data-open="#sec-ai">جرّب أدوات الذكاء الاصطناعي</a>
+          <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن</a>
+          <a class="btn ghost" href="#sec-ai" data-open="#sec-ai">استكشف الذكاء الاصطناعي</a>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="bubble b1"></div><div class="bubble b2"></div><div class="bubble b3"></div>
+      <div class="hero-cards" aria-hidden="true">
+        <div class="hc glass"></div><div class="hc glass"></div><div class="hc glass"></div>
       </div>
     </div>
   </section>
 
   <main id="content" class="container main">
-    <details id="sec-quran" class="section-acc">
-      <summary><div class="s-head"><h2>القرآن الكريم</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <details id="sec-quran" class="section-acc glass">
+      <summary>
+        <div class="s-head">
+          <div class="s-icon">🕋</div>
+          <h2>القرآن الكريم</h2>
+          <span class="hint">اضغط للفتح</span>
+        </div>
+      </summary>
       <div class="section-body">
         <p class="muted">جلب تلقائي لجميع القرّاء من mp3quran، مع بحث للقارئ والسور ومشغّل سفلي ثابت. (يتم التحميل عند فتح القسم)</p>
         <div class="toolbar">
@@ -60,13 +69,13 @@
       </div>
     </details>
 
-    <details id="sec-ai" class="section-acc">
-      <summary><div class="s-head"><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <details id="sec-ai" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">✨</div><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body"><div id="aiGrid" class="grid cards"></div></div>
     </details>
 
-    <details id="sec-tuts" class="section-acc">
-      <summary><div class="s-head"><h2>الشروحات</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <details id="sec-tuts" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">📚</div><h2>الشروحات</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body">
         <div id="tutorialsGrid" class="grid cards">
           <article class="card"><h3>شرح 1 (قريبًا)</h3><p>مكان للدروس القصيرة.</p><a class="btn small" href="#">تفاصيل</a></article>
@@ -76,22 +85,22 @@
       </div>
     </details>
 
-    <details id="sec-useful" class="section-acc">
-      <summary><div class="s-head"><h2>مواقع مفيدة</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <details id="sec-useful" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body"><div id="usefulGrid" class="grid cards"></div></div>
     </details>
 
-    <details id="sec-english" class="section-acc">
-      <summary><div class="s-head"><h2>تعلم الإنجليزية مجاناً (تعليم ذاتي)</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <details id="sec-english" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body"><div id="englishGrid" class="grid cards"></div></div>
     </details>
 
-    <details id="sec-contact" class="section-acc">
-      <summary><div class="s-head"><h2>تواصل</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <details id="sec-contact" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">✉️</div><h2>تواصل</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body">
         <div class="grid two">
-          <div class="card"><h3>راسلنا</h3><p>hello@gradifysa.com</p></div>
-          <div class="card">
+          <div class="card glass"><h3>راسلنا</h3><p>hello@gradifysa.com</p></div>
+          <div class="card glass">
             <h3>روابط سريعة</h3>
             <ul class="list">
               <li><a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a></li>
@@ -111,7 +120,7 @@
     </div>
   </footer>
 
-  <div id="playerBar" class="player" aria-live="polite">
+  <div id="playerBar" class="player glass" aria-live="polite">
     <button class="p-btn" id="pToggle" aria-label="تشغيل/إيقاف">⏯</button>
     <div class="p-meta"><div class="p-title">لا يوجد تشغيل</div><div class="p-sub muted">—</div></div>
     <div class="p-actions">
