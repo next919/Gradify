@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>جراديفي | Gradify — منصّة عصرية</title>
-  <meta name="description" content="جراديفي | Gradify — تصميم أزرق عصري، قسم القرآن الكريم (mp3quran API + بديل محلي)، مواقع الذكاء الاصطناعي، الشروحات، مواقع مفيدة، وتعلم الإنجليزية.">
+  <title>جراديفي | Gradify — أقسام قابلة للطي</title>
+  <meta name="description" content="جراديفي | Gradify — موقع بأقسام قابلة للفتح عند الضغط، مع قسم القرآن (mp3quran API)، مواقع الذكاء الاصطناعي، الشروحات، مواقع مفيدة، وتعلم الإنجليزية.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -19,99 +19,99 @@
         <span class="brand-ar">جراديفي</span>
       </a>
 
-      <!-- Global search -->
       <div class="global-search">
-        <input id="siteSearch" type="search" placeholder="ابحث في الموقع (الأقسام، الأدوات، الدروس...)" aria-label="بحث شامل">
+        <input id="siteSearch" type="search" placeholder="ابحث في الموقع" aria-label="بحث شامل">
         <div id="searchResults" class="search-results" hidden></div>
       </div>
 
       <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
       <nav class="nav" id="mainNav" aria-label="القائمة">
-        <a href="#quran">القرآن الكريم</a>
-        <a href="#ai-tools">مواقع الذكاء الاصطناعي</a>
-        <a href="#tutorials">الشروحات</a>
-        <a href="#useful">مواقع مفيدة</a>
-        <a href="#english">تعلم الإنجليزية</a>
-        <a href="#contact">تواصل</a>
+        <a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a>
+        <a data-open="#sec-ai" href="#sec-ai">مواقع الذكاء الاصطناعي</a>
+        <a data-open="#sec-tuts" href="#sec-tuts">الشروحات</a>
+        <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
+        <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
+        <a data-open="#sec-contact" href="#sec-contact">تواصل</a>
       </nav>
     </div>
   </header>
 
-  <!-- Quran FIRST -->
-  <section class="section" id="quran">
-    <div class="container">
-      <h2 class="section-title">القرآن الكريم</h2>
-      <p class="muted">جلب تلقائي لجميع القرّاء من mp3quran، مع بحث للقارئ والسور ومشغّل سفلي ثابت. في حال تعذر الجلب، سنعرض قرّاء افتراضيين.</p>
+  <main class="container main">
 
-      <div class="toolbar">
-        <input id="reciterSearch" class="search" type="search" placeholder="ابحث عن قارئ (مثال: عبد الباسط)" aria-label="بحث عن قارئ">
-        <select id="reciterSelect" class="select" aria-label="قائمة القراء"></select>
-        <select id="moshafSelect" class="select" aria-label="قائمة المصاحف"></select>
+    <!-- Section: Quran -->
+    <details id="sec-quran" class="section-acc">
+      <summary><h2 class="section-title">القرآن الكريم</h2><span class="hint">اضغط لفتح</span></summary>
+      <div class="section-body">
+        <p class="muted">جلب تلقائي لجميع القرّاء من mp3quran، مع بحث للقارئ والسور ومشغّل سفلي ثابت. (لا يُحمّل المحتوى إلا عند فتح القسم)</p>
+        <div class="toolbar">
+          <input id="reciterSearch" class="search" type="search" placeholder="ابحث عن قارئ" aria-label="بحث عن قارئ" disabled>
+          <select id="reciterSelect" class="select" aria-label="قائمة القراء" disabled></select>
+          <select id="moshafSelect" class="select" aria-label="قائمة المصاحف" disabled></select>
+        </div>
+        <input id="surahSearch" class="search" type="search" placeholder="بحث داخل السور (اسم/رقم)" aria-label="بحث داخل السور" disabled>
+        <div id="surahList" class="surahs" aria-live="polite"></div>
       </div>
+    </details>
 
-      <input id="surahSearch" class="search" type="search" placeholder="بحث داخل السور (اسم أو رقم)" aria-label="بحث داخل السور">
-      <div id="surahList" class="surahs" aria-live="polite"></div>
-
-      <details class="tip"><summary>معلومة</summary>يتم بناء الروابط بصيغة <code>SERVER/NNN.mp3</code> مباشرة من مصدر mp3quran.</details>
-    </div>
-  </section>
-
-  <!-- AI Tools SECOND -->
-  <section class="section alt" id="ai-tools">
-    <div class="container">
-      <h2 class="section-title">مواقع الذكاء الاصطناعي</h2>
-      <p class="muted">أدوات موثوقة مع روابط مباشرة للموقع والتطبيق (إن وجد).</p>
-      <div id="aiGrid" class="grid-3 cards"></div>
-    </div>
-  </section>
-
-  <!-- Tutorials THIRD -->
-  <section class="section" id="tutorials">
-    <div class="container">
-      <h2 class="section-title">الشروحات</h2>
-      <div class="grid-3 cards" id="tutorialsGrid">
-        <article class="card"><h3>شرح 1 (قريبًا)</h3><p>مكان للدروس القصيرة.</p><a class="btn tiny" href="#">تفاصيل</a></article>
-        <article class="card"><h3>شرح 2 (قريبًا)</h3><p>دليل خطوة بخطوة.</p><a class="btn tiny" href="#">تفاصيل</a></article>
-        <article class="card"><h3>شرح 3 (قريبًا)</h3><p>روابط خارجية أو قنوات.</p><a class="btn tiny" href="#">تفاصيل</a></article>
+    <!-- Section: AI tools -->
+    <details id="sec-ai" class="section-acc">
+      <summary><h2 class="section-title">مواقع الذكاء الاصطناعي</h2><span class="hint">اضغط لفتح</span></summary>
+      <div class="section-body">
+        <p class="muted">أدوات موثوقة مع روابط مباشرة للموقع والتطبيق (إن وجد).</p>
+        <div id="aiGrid" class="grid-3 cards"></div>
       </div>
-    </div>
-  </section>
+    </details>
 
-  <!-- Useful Sites FOURTH -->
-  <section class="section alt" id="useful">
-    <div class="container">
-      <h2 class="section-title">مواقع مفيدة</h2>
-      <div class="grid-3 cards" id="usefulGrid"></div>
-    </div>
-  </section>
-
-  <!-- English Learning FIFTH -->
-  <section class="section" id="english">
-    <div class="container">
-      <h2 class="section-title">تعلم اللغة الإنجليزية مجاناً (تعليم ذاتي)</h2>
-      <div class="grid-3 cards" id="englishGrid"></div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="section" id="contact">
-    <div class="container grid-2">
-      <div>
-        <h2 class="section-title">تواصل</h2>
-        <p>راسلنا: <a href="mailto:hello@gradifysa.com">hello@gradifysa.com</a></p>
+    <!-- Section: Tutorials -->
+    <details id="sec-tuts" class="section-acc">
+      <summary><h2 class="section-title">الشروحات</h2><span class="hint">اضغط لفتح</span></summary>
+      <div class="section-body">
+        <div class="grid-3 cards" id="tutorialsGrid">
+          <article class="card"><h3>شرح 1 (قريبًا)</h3><p>مكان للدروس القصيرة.</p><a class="btn tiny" href="#">تفاصيل</a></article>
+          <article class="card"><h3>شرح 2 (قريبًا)</h3><p>دليل خطوة بخطوة.</p><a class="btn tiny" href="#">تفاصيل</a></article>
+          <article class="card"><h3>شرح 3 (قريبًا)</h3><p>روابط خارجية أو قنوات.</p><a class="btn tiny" href="#">تفاصيل</a></article>
+        </div>
       </div>
-      <div class="card"><h3>روابط سريعة</h3><ul class="list"><li><a href="#quran">القرآن الكريم</a></li><li><a href="#ai-tools">مواقع الذكاء الاصطناعي</a></li><li><a href="#tutorials">الشروحات</a></li></ul></div>
-    </div>
-  </section>
+    </details>
+
+    <!-- Section: Useful -->
+    <details id="sec-useful" class="section-acc">
+      <summary><h2 class="section-title">مواقع مفيدة</h2><span class="hint">اضغط لفتح</span></summary>
+      <div class="section-body">
+        <div class="grid-3 cards" id="usefulGrid"></div>
+      </div>
+    </details>
+
+    <!-- Section: English -->
+    <details id="sec-english" class="section-acc">
+      <summary><h2 class="section-title">تعلم اللغة الإنجليزية مجاناً (تعليم ذاتي)</h2><span class="hint">اضغط لفتح</span></summary>
+      <div class="section-body">
+        <div class="grid-3 cards" id="englishGrid"></div>
+      </div>
+    </details>
+
+    <!-- Section: Contact -->
+    <details id="sec-contact" class="section-acc">
+      <summary><h2 class="section-title">تواصل</h2><span class="hint">اضغط لفتح</span></summary>
+      <div class="section-body">
+        <div class="grid-2">
+          <div>
+            <p>راسلنا: <a href="mailto:hello@gradifysa.com">hello@gradifysa.com</a></p>
+          </div>
+          <div class="card"><h3>روابط سريعة</h3><ul class="list"><li><a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a></li><li><a data-open="#sec-ai" href="#sec-ai">مواقع الذكاء الاصطناعي</a></li><li><a data-open="#sec-tuts" href="#sec-tuts">الشروحات</a></li></ul></div>
+        </div>
+      </div>
+    </details>
+  </main>
 
   <footer class="footer">
     <div class="container">
-      <p>© <span id="year"></span> <strong>جراديفي | Gradify</strong> — كل الحقوق محفوظة.</p>
+      <p>© <span id="year"></span> <strong>جراديفي | Gradify</strong></p>
       <a class="to-top" href="#top">↑</a>
     </div>
   </footer>
 
-  <!-- Sticky player -->
+  <!-- Sticky player (shared) -->
   <div id="playerBar" class="player" aria-live="polite">
     <button class="p-btn" id="pToggle" aria-label="تشغيل/إيقاف">⏯</button>
     <div class="p-meta"><div class="p-title">لا يوجد تشغيل</div><div class="p-sub muted">—</div></div>

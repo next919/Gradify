@@ -1,38 +1,40 @@
-/* Gradify Restored — RTL Blue */
+/* Collapsible sections version — RTL Blue */
 :root{ --bg:#0b1220; --bg-alt:#0f1a2f; --text:#f4f7ff; --muted:#b8c3e0; --brand:#3b82f6; --brand-2:#60a5fa; --card:#0e1629; --shadow:0 12px 40px rgba(0,0,0,.25) }
 @media (prefers-color-scheme: light){ :root{ --bg:#fff; --bg-alt:#f5f8ff; --text:#0f172a; --muted:#566384; --card:#fff } }
 *{box-sizing:border-box} html{scroll-behavior:smooth}
 body{margin:0; font-family:"Cairo",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:radial-gradient(1200px 500px at 50% -10%, rgba(59,130,246,.15), transparent), var(--bg); color:var(--text); line-height:1.8}
 .container{width:min(1100px,92%); margin-inline:auto}
-.section{padding:clamp(56px,8vw,110px) 0} .section.alt{background:linear-gradient(180deg, color-mix(in oklab, var(--bg) 70%, var(--bg-alt)), var(--bg))}
-.section-title{font-size:clamp(1.4rem,3vw,2rem); margin:0 0 1rem} .muted{color:var(--muted)}
-
 .header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(10px); background: color-mix(in oklab, var(--bg) 70%, transparent); border-bottom:1px solid rgba(255,255,255,.06)}
 .header-grid{display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:1rem; padding:.8rem 0}
 .brand-link{display:flex; align-items:baseline; gap:.4rem; text-decoration:none}
 .brand-en{font-weight:900; font-size:clamp(1.6rem,3.3vw,2.4rem); background:linear-gradient(90deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
-.brand-sep{opacity:.6}
-.brand-ar{font-weight:900; font-size:clamp(1.1rem,2.6vw,1.6rem); color:var(--text)}
+.brand-sep{opacity:.6} .brand-ar{font-weight:900; font-size:clamp(1.1rem,2.6vw,1.6rem); color:var(--text)}
 .nav{margin-inline-start:auto; display:flex; gap:.6rem} .nav a{color:var(--muted); text-decoration:none; padding:.45rem .7rem; border-radius:10px}
 .nav-toggle{display:none; background:transparent; border:none; color:var(--text); font-size:1.4rem}
 @media (max-width:860px){ .nav-toggle{display:inline-block} .nav{position:fixed; inset-inline:0; top:60px; background:var(--bg); border-top:1px solid rgba(255,255,255,.06); display:grid; gap:.3rem; padding:1rem; translate:0 -130%; transition:translate .2s ease} .nav.open{translate:0 0} }
 
+.main{padding:clamp(32px,5vw,52px) 0}
+.section-acc{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:14px; margin:0 0 16px; box-shadow:var(--shadow)}
+.section-acc > summary{list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:1rem 1.1rem}
+.section-acc[open] > summary{border-bottom:1px solid rgba(255,255,255,.09)}
+.section-title{margin:0} .hint{color:var(--muted); font-size:.9rem}
+.section-body{padding:1rem 1.1rem}
 .grid-2{display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(1rem,3vw,2rem)} .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem}
 @media (max-width:900px){ .grid-2{grid-template-columns:1fr} .grid-3{grid-template-columns:1fr 1fr} } @media (max-width:560px){ .grid-3{grid-template-columns:1fr} }
 .card{background:var(--card); padding:1rem; border-radius:12px; border:1px solid rgba(255,255,255,.06)}
 .list{margin:0; padding-inline-start:1rem} .list li{margin:.4rem 0}
-.search{inline-size:min(360px, 90vw); padding:.7rem .9rem; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:var(--card); color:var(--text)}
-.select{inline-size:min(280px, 90vw); padding:.7rem .9rem; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:var(--card); color:var(--text)}
+.search{inline-size:min(360px, 90vw); padding:.7rem .9rem; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:var(--bg-alt); color:var(--text)}
+.select{inline-size:min(280px, 90vw); padding:.7rem .9rem; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:var(--bg-alt); color:var(--text)}
 .surahs{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem}
 @media (max-width:900px){ .surahs{grid-template-columns:1fr 1fr} } @media (max-width:560px){ .surahs{grid-template-columns:1fr} }
-.surah{display:flex; align-items:center; gap:.8rem; background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:.9rem}
+.surah{display:flex; align-items:center; gap:.8rem; background:var(--bg-alt); border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:.9rem}
 .surah .num{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(180deg,var(--brand),var(--brand-2));color:#fff;font-weight:800}
 .surah .meta{display:flex; flex-direction:column} .surah .meta small{color:var(--muted)} .surah .play{margin-inline-start:auto}
 .btn{display:inline-block; padding:.7rem 1rem; border-radius:10px; font-weight:700; background:linear-gradient(180deg, color-mix(in oklab, var(--brand) 18%, transparent), transparent); color:var(--text); border:1px solid rgba(255,255,255,.12); text-decoration:none}
 .btn.tiny{padding:.5rem .7rem}
 .footer{border-top:1px solid rgba(255,255,255,.06); padding:1rem 0} .footer .container{display:flex; align-items:center; justify-content:space-between; gap:1rem}
+
 .player{position:sticky; bottom:0; inset-inline:0; display:flex; align-items:center; gap:.8rem; padding:.6rem .9rem; background:rgba(2,6,23,.8); backdrop-filter:blur(8px); border-top:1px solid rgba(255,255,255,.08)}
 .p-btn{background:transparent; border:1px solid rgba(255,255,255,.2); color:var(--text); padding:.4rem .6rem; border-radius:8px; cursor:pointer}
 .p-meta{display:flex; flex-direction:column} .p-title{font-weight:800} .p-actions{margin-inline-start:auto; display:flex; align-items:center; gap:.6rem}
 input[type="range"]{accent-color:var(--brand); inline-size:min(40vw,360px)}
-.tip{margin-top:1rem; border:1px dashed rgba(255,255,255,.2); padding:.8rem; border-radius:12px}
