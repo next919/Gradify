@@ -1,6 +1,6 @@
-// Modern theme + robust home click handler + collapsible lazy init
+// Bright theme with robust behavior
 document.addEventListener('DOMContentLoaded', () => {
-  // Force close all sections on first load
+  // Close all sections on first load
   document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
 
   // Mobile nav
@@ -8,47 +8,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.getElementById('mainNav');
   if (toggle && nav) {
     toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
+      const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open));
     });
     nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false');
     }));
   }
 
-  // Robust: any click on brand/home anchors closes all sections and scrolls top
+  // Close all sections when clicking brand/home (works on GitHub Pages)
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (!a) return;
     const isBrand = a.classList.contains('brand-link') || a.closest('.brand-link');
     const href = (a.getAttribute('href') || '').replace(location.origin, '');
-    const isHomeHref = ['#top', '#home', '/', '/#top', location.pathname + '#top'].includes(href);
-    if (isBrand || isHomeHref) {
+    const isHome = ['#top', '#home', '/', '/#top', location.pathname + '#top'].includes(href);
+    if (isBrand || isHome) {
       e.preventDefault();
-      closeAll();
+      document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
 
-  function closeAll(){
-    document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
-    if (document.activeElement) document.activeElement.blur();
-  }
-
-  // Open target section from nav/links with data-open
+  // Open a section from nav/CTA
   document.querySelectorAll('[data-open]').forEach(a => {
     a.addEventListener('click', (e) => {
-      const sel = a.getAttribute('data-open');
-      const details = sel && document.querySelector(sel);
-      if (details) { details.open = true; setTimeout(() => details.scrollIntoView({behavior:'smooth', block:'start'}), 50); }
+      const sel = a.getAttribute('data-open'); const details = sel && document.querySelector(sel);
+      if (details){ details.open = true; setTimeout(()=> details.scrollIntoView({behavior:'smooth', block:'start'}), 40); }
     });
   });
 
-  // Year
-  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  // Footer year
+  const y=document.getElementById('year'); if (y) y.textContent=new Date().getFullYear();
 
-  // ===== AI/Useful/English content rendered when section opens
+  // Content data
   const AI_TOOLS = [
     { name:'ChatGPT', desc:'مساعد ذكي للكتابة والبرمجة والبحث السريع.', site:'https://chat.openai.com/', app:'' },
     { name:'Perplexity', desc:'بحث بالذكاء الاصطناعي مع مصادر.', site:'https://www.perplexity.ai/', app:'' },
@@ -70,120 +62,116 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(detailsId);
     if (!el) return;
     el.addEventListener('toggle', () => {
-      if (el.open && !el.dataset.inited){ el.dataset.inited = '1'; renderer(); }
+      if (el.open && !el.dataset.inited){ el.dataset.inited='1'; renderer(); }
     });
   }
 
   renderOnce('sec-ai', () => {
-    const aiGrid = document.getElementById('aiGrid');
+    const grid = document.getElementById('aiGrid');
     AI_TOOLS.forEach(t => {
-      const c = document.createElement('article'); c.className='card tool';
+      const c=document.createElement('article'); c.className='card';
       c.innerHTML = `<h3>${t.name}</h3><p class="muted">${t.desc}</p>
         <div class="links"><a class="btn small" target="_blank" rel="noopener" href="${t.site}">الموقع</a>
         ${t.app ? `<a class="btn small ghost" target="_blank" rel="noopener" href="${t.app}">التطبيق</a>`:''}</div>`;
-      aiGrid.appendChild(c);
+      grid.appendChild(c);
     });
   });
 
   renderOnce('sec-useful', () => {
-    const usefulGrid = document.getElementById('usefulGrid');
+    const grid = document.getElementById('usefulGrid');
     USEFUL.forEach(s => {
-      const c = document.createElement('article'); c.className='card';
+      const c=document.createElement('article'); c.className='card';
       c.innerHTML = `<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn small" target="_blank" href="${s.link}">زيارة</a>`;
-      usefulGrid.appendChild(c);
+      grid.appendChild(c);
     });
   });
 
   renderOnce('sec-english', () => {
-    const englishGrid = document.getElementById('englishGrid');
+    const grid = document.getElementById('englishGrid');
     ENGLISH.forEach(s => {
-      const c = document.createElement('article'); c.className='card';
+      const c=document.createElement('article'); c.className='card';
       c.innerHTML = `<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn small" target="_blank" href="${s.link}">زيارة</a>`;
-      englishGrid.appendChild(c);
+      grid.appendChild(c);
     });
   });
 
-  // ===== Quran lazy init
+  // Quran lazy init
   renderOnce('sec-quran', () => initQuran());
 
   function initQuran(){
-    const API = 'https://mp3quran.net/api/v3/reciters?language=ar';
-    const SURAHS = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-    const reciterSearch = document.getElementById('reciterSearch');
-    const reciterSelect = document.getElementById('reciterSelect');
-    const moshafSelect  = document.getElementById('moshafSelect');
-    const surahSearch   = document.getElementById('surahSearch');
-    const list          = document.getElementById('surahList');
+    const API='https://mp3quran.net/api/v3/reciters?language=ar';
+    const SURAHS=["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+    const reciterSearch=document.getElementById('reciterSearch');
+    const reciterSelect=document.getElementById('reciterSelect');
+    const moshafSelect=document.getElementById('moshafSelect');
+    const surahSearch=document.getElementById('surahSearch');
+    const list=document.getElementById('surahList');
 
-    const audio = document.getElementById('audio');
-    const pTitle = document.querySelector('.p-title');
-    const pSub   = document.querySelector('.p-sub');
-    const pToggle= document.getElementById('pToggle');
-    const pStop  = document.getElementById('pStop');
-    const pSeek  = document.getElementById('pSeek');
-    const openSrc= document.getElementById('openSrc');
+    const audio=document.getElementById('audio');
+    const pTitle=document.querySelector('.p-title');
+    const pSub=document.querySelector('.p-sub');
+    const pToggle=document.getElementById('pToggle');
+    const pStop=document.getElementById('pStop');
+    const pSeek=document.getElementById('pSeek');
+    const openSrc=document.getElementById('openSrc');
 
-    reciterSearch.disabled = reciterSelect.disabled = moshafSelect.disabled = surahSearch.disabled = false;
+    [reciterSearch,reciterSelect,moshafSelect,surahSearch].forEach(el=>el.disabled=false);
 
-    let RECITERS = []; let filtered = [];
-    let currentReciter = null; let currentMoshaf = null; let qSurah = '';
+    let RECITERS=[],filtered=[],currentReciter=null,currentMoshaf=null,qSurah='';
 
     function useFallback(){
-      RECITERS = [{
-        id: 99901, name:'عبد الباسط (مرتل) — بديل',
-        moshaf:[{ name:'افتراضي', surah_total:114, server:'https://server7.mp3quran.net/basit/', surah_list:'' }]
-      },{
-        id: 99902, name:'المنشاوي (مرتل) — بديل',
-        moshaf:[{ name:'افتراضي', surah_total:114, server:'https://server7.mp3quran.net/minsh/', surah_list:'' }]
-      }];
-      filtered = RECITERS; fillReciters();
+      RECITERS=[
+        {id:99901,name:'عبد الباسط (مرتل) — بديل',moshaf:[{name:'افتراضي',surah_total:114,server:'https://server7.mp3quran.net/basit/',surah_list:''}]},
+        {id:99902,name:'المنشاوي (مرتل) — بديل',moshaf:[{name:'افتراضي',surah_total:114,server:'https://server7.mp3quran.net/minsh/',surah_list:''}]}
+      ];
+      filtered=RECITERS; fillReciters();
     }
 
-    fetch(API).then(r => r.json()).then(data => {
-      RECITERS = data && data.reciters ? data.reciters : [];
+    fetch(API).then(r=>r.json()).then(data=>{
+      RECITERS=data && data.reciters ? data.reciters : [];
       filtered = RECITERS.length ? RECITERS : (useFallback(), []);
       if (RECITERS.length) fillReciters();
     }).catch(useFallback);
 
     function fillReciters(){
-      reciterSelect.innerHTML = '';
-      filtered.forEach(r => { const opt=document.createElement('option'); opt.value=r.id; opt.textContent=r.name; reciterSelect.appendChild(opt); });
+      reciterSelect.innerHTML='';
+      filtered.forEach(r=>{ const opt=document.createElement('option'); opt.value=r.id; opt.textContent=r.name; reciterSelect.appendChild(opt); });
       if (filtered.length){ currentReciter = filtered[0]; fillMoshaf(); }
     }
 
-    reciterSearch.addEventListener('input', () => {
+    reciterSearch.addEventListener('input', ()=>{
       const q = reciterSearch.value.trim();
       filtered = !q ? RECITERS : RECITERS.filter(r => r.name.includes(q));
       fillReciters();
     });
 
-    reciterSelect.addEventListener('change', () => {
+    reciterSelect.addEventListener('change', ()=>{
       const id = Number(reciterSelect.value);
       currentReciter = RECITERS.find(r => r.id === id) || filtered.find(r => String(r.id)===String(id));
       fillMoshaf();
     });
 
     function fillMoshaf(){
-      moshafSelect.innerHTML = '';
+      moshafSelect.innerHTML='';
       if (!currentReciter || !currentReciter.moshaf) return;
-      currentReciter.moshaf.forEach(m => {
-        const opt = document.createElement('option');
-        opt.value = m.server; opt.textContent = `${m.name} — ${m.surah_total} سورة`; opt.dataset.list = m.surah_list || '';
+      currentReciter.moshaf.forEach(m=>{
+        const opt=document.createElement('option');
+        opt.value=m.server; opt.textContent=`${m.name} — ${m.surah_total} سورة`; opt.dataset.list=m.surah_list || '';
         moshafSelect.appendChild(opt);
       });
-      currentMoshaf = currentReciter.moshaf[0] || null;
+      currentMoshaf=currentReciter.moshaf[0] || null;
       renderSurahs();
     }
 
-    moshafSelect.addEventListener('change', () => {
-      currentMoshaf = { server: moshafSelect.value,
+    moshafSelect.addEventListener('change', ()=>{
+      currentMoshaf={ server: moshafSelect.value,
         name: moshafSelect.options[moshafSelect.selectedIndex].textContent,
         surah_list: moshafSelect.options[moshafSelect.selectedIndex].dataset.list };
       renderSurahs();
     });
 
     function renderSurahs(){
-      list.innerHTML = '';
+      list.innerHTML='';
       if (!currentMoshaf) return;
       const available = (currentMoshaf.surah_list && String(currentMoshaf.surah_list).length)
         ? String(currentMoshaf.surah_list).split(',').map(n => Number(n.trim()))
@@ -194,45 +182,37 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       filteredSurahs.forEach(n => {
-        const name = SURAHS[n-1] || `سورة ${n}`;
-        const card = document.createElement('div'); card.className='surah';
+        const name=SURAHS[n-1] || `سورة ${n}`;
+        const card=document.createElement('div'); card.className='surah';
         card.innerHTML = `<div class="num">${String(n).padStart(2,'0')}</div>
           <div class="meta"><strong>${name}</strong><small>${currentReciter.name}</small></div>
           <div class="play"><button class="btn small">تشغيل</button></div>`;
-        card.querySelector('.btn').addEventListener('click', () => play(n, name));
+        card.querySelector('.btn').addEventListener('click', ()=> play(n, name));
         list.appendChild(card);
       });
     }
 
-    surahSearch.addEventListener('input', () => { qSurah = surahSearch.value.trim(); renderSurahs(); });
+    surahSearch.addEventListener('input', ()=>{ qSurah=surahSearch.value.trim(); renderSurahs(); });
 
     function play(n, name){
       if (!currentMoshaf || !currentMoshaf.server) return;
       const base = currentMoshaf.server.endsWith('/') ? currentMoshaf.server : (currentMoshaf.server + '/');
       const url = base + String(n).padStart(3,'0') + '.mp3';
-      const audio = document.getElementById('audio');
       if (audio.src !== url) audio.src = url;
       audio.play();
-      document.querySelector('.p-title').textContent = name;
-      document.querySelector('.p-sub').textContent = currentReciter.name + ' — ' + String(n).padStart(3,'0');
-      document.getElementById('pToggle').textContent = '⏸';
-      const open = document.getElementById('openSrc'); open.href = url; open.style.display='inline-block';
+      pTitle.textContent = name;
+      pSub.textContent = currentReciter.name + ' — ' + String(n).padStart(3,'0');
+      pToggle.textContent = '⏸';
+      openSrc.href = url; openSrc.style.display='inline-block';
     }
 
-    document.getElementById('pToggle').addEventListener('click', () => {
-      const audio = document.getElementById('audio'); if (!audio.src) return;
-      if (audio.paused){ audio.play(); document.getElementById('pToggle').textContent='⏸'; }
-      else { audio.pause(); document.getElementById('pToggle').textContent='▶️'; }
+    pToggle.addEventListener('click', ()=>{
+      if (!audio.src) return;
+      if (audio.paused){ audio.play(); pToggle.textContent='⏸'; }
+      else { audio.pause(); pToggle.textContent='▶️'; }
     });
-    document.getElementById('pStop').addEventListener('click', () => {
-      const audio = document.getElementById('audio'); if (!audio.src) return;
-      audio.pause(); audio.currentTime=0; document.getElementById('pToggle').textContent='▶️';
-    });
-    document.getElementById('audio').addEventListener('timeupdate', () => {
-      const audio = document.getElementById('audio'); if (audio.duration) document.getElementById('pSeek').value = (audio.currentTime/audio.duration)*100;
-    });
-    document.getElementById('pSeek').addEventListener('input', (e) => {
-      const audio = document.getElementById('audio'); if (audio.duration) audio.currentTime = (e.target.value/100)*audio.duration;
-    });
+    pStop.addEventListener('click', ()=>{ if (!audio.src) return; audio.pause(); audio.currentTime=0; pToggle.textContent='▶️'; });
+    audio.addEventListener('timeupdate', ()=>{ if (audio.duration) pSeek.value = (audio.currentTime/audio.duration)*100; });
+    pSeek.addEventListener('input', (e)=>{ if (audio.duration) audio.currentTime = (e.target.value/100)*audio.duration; });
   }
 });
