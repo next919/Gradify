@@ -233,3 +233,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('pSeek').addEventListener('input', (e) => { if (audio.duration) audio.currentTime = (e.target.value/100)*audio.duration; });
   }
 });
+// إغلاق جميع الأقسام عند الضغط على زر الرئيسية
+document.querySelector('a[href="#home"]').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.querySelectorAll('.section-acc').forEach(section => {
+    section.removeAttribute('open'); // يغلق كل الأقسام
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' }); // يرجع لأعلى الصفحة
+});
