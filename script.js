@@ -1,36 +1,54 @@
-// Collapsible sections with brand/home click closing all
+// Modern theme + robust home click handler + collapsible lazy init
 document.addEventListener('DOMContentLoaded', () => {
-  // Force-close all on load
+  // Force close all sections on first load
   document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
 
-  // Nav toggle
+  // Mobile nav
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.getElementById('mainNav');
   if (toggle && nav) {
     toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open));
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
     });
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }));
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }));
   }
 
-  // Brand/home closes all sections
-  document.querySelectorAll('.brand-link, a[href="#top"]').forEach(el => {
-    el.addEventListener('click', (e) => {
+  // Robust: any click on brand/home anchors closes all sections and scrolls top
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    const isBrand = a.classList.contains('brand-link') || a.closest('.brand-link');
+    const href = (a.getAttribute('href') || '').replace(location.origin, '');
+    const isHomeHref = ['#top', '#home', '/', '/#top', location.pathname + '#top'].includes(href);
+    if (isBrand || isHomeHref) {
       e.preventDefault();
-      document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
+      closeAll();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    }
   });
 
-  // Nav links open target section
+  function closeAll(){
+    document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
+    if (document.activeElement) document.activeElement.blur();
+  }
+
+  // Open target section from nav/links with data-open
   document.querySelectorAll('[data-open]').forEach(a => {
     a.addEventListener('click', (e) => {
-      const sel = a.getAttribute('data-open'); const details = document.querySelector(sel);
-      if (details) { details.open = true; setTimeout(()=>details.scrollIntoView({behavior:'smooth', block:'start'}),50); }
+      const sel = a.getAttribute('data-open');
+      const details = sel && document.querySelector(sel);
+      if (details) { details.open = true; setTimeout(() => details.scrollIntoView({behavior:'smooth', block:'start'}), 50); }
     });
   });
 
-  // Data
+  // Year
+  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+
+  // ===== AI/Useful/English content rendered when section opens
   const AI_TOOLS = [
     { name:'ChatGPT', desc:'مساعد ذكي للكتابة والبرمجة والبحث السريع.', site:'https://chat.openai.com/', app:'' },
     { name:'Perplexity', desc:'بحث بالذكاء الاصطناعي مع مصادر.', site:'https://www.perplexity.ai/', app:'' },
@@ -48,12 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { name:'EngVid', desc:'فيديوهات مدرسين محترفين', link:'https://www.engvid.com/' }
   ];
 
-  // Lazy render helpers
   function renderOnce(detailsId, renderer){
     const el = document.getElementById(detailsId);
     if (!el) return;
     el.addEventListener('toggle', () => {
-      if (el.open && !el.dataset.inited){ el.dataset.inited='1'; renderer(); }
+      if (el.open && !el.dataset.inited){ el.dataset.inited = '1'; renderer(); }
     });
   }
 
@@ -62,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     AI_TOOLS.forEach(t => {
       const c = document.createElement('article'); c.className='card tool';
       c.innerHTML = `<h3>${t.name}</h3><p class="muted">${t.desc}</p>
-        <div class="links"><a class="btn tiny" target="_blank" rel="noopener" href="${t.site}">الموقع</a>
-        ${t.app ? `<a class="btn tiny ghost" target="_blank" rel="noopener" href="${t.app}">التطبيق</a>`:''}</div>`;
+        <div class="links"><a class="btn small" target="_blank" rel="noopener" href="${t.site}">الموقع</a>
+        ${t.app ? `<a class="btn small ghost" target="_blank" rel="noopener" href="${t.app}">التطبيق</a>`:''}</div>`;
       aiGrid.appendChild(c);
     });
   });
@@ -72,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const usefulGrid = document.getElementById('usefulGrid');
     USEFUL.forEach(s => {
       const c = document.createElement('article'); c.className='card';
-      c.innerHTML = `<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn tiny" target="_blank" href="${s.link}">زيارة</a>`;
+      c.innerHTML = `<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn small" target="_blank" href="${s.link}">زيارة</a>`;
       usefulGrid.appendChild(c);
     });
   });
@@ -81,15 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const englishGrid = document.getElementById('englishGrid');
     ENGLISH.forEach(s => {
       const c = document.createElement('article'); c.className='card';
-      c.innerHTML = `<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn tiny" target="_blank" href="${s.link}">زيارة</a>`;
+      c.innerHTML = `<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn small" target="_blank" href="${s.link}">زيارة</a>`;
       englishGrid.appendChild(c);
     });
   });
 
-  // Quran lazy init
+  // ===== Quran lazy init
   renderOnce('sec-quran', () => initQuran());
 
-  // ===== Quran logic
   function initQuran(){
     const API = 'https://mp3quran.net/api/v3/reciters?language=ar';
     const SURAHS = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
@@ -182,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('div'); card.className='surah';
         card.innerHTML = `<div class="num">${String(n).padStart(2,'0')}</div>
           <div class="meta"><strong>${name}</strong><small>${currentReciter.name}</small></div>
-          <div class="play"><button class="btn tiny">تشغيل</button></div>`;
+          <div class="play"><button class="btn small">تشغيل</button></div>`;
         card.querySelector('.btn').addEventListener('click', () => play(n, name));
         list.appendChild(card);
       });
