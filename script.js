@@ -1,31 +1,36 @@
-// Collapsible sections + lazy init for Quran, nav opens target, global search
+// Collapsible sections with brand/home click closing all
 document.addEventListener('DOMContentLoaded', () => {
-  // Force close all sections on initial load (avoid appearing open on homepage)
+  // Force-close all on load
   document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
 
-  const year = document.getElementById('year'); if (year) year.textContent = new Date().getFullYear();
-
-  // Mobile nav toggle
+  // Nav toggle
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.getElementById('mainNav');
   if (toggle && nav) {
     toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
+      const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open));
     });
     nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }));
   }
 
-  // Let nav links open their target <details> section
-  document.querySelectorAll('[data-open]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      const sel = a.getAttribute('data-open');
-      const details = document.querySelector(sel);
-      if (details) { details.open = true; setTimeout(() => details.scrollIntoView({behavior:'smooth', block:'start'}), 50); }
+  // Brand/home closes all sections
+  document.querySelectorAll('.brand-link, a[href="#top"]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.section-acc').forEach(d => d.removeAttribute('open'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 
-  // Global search (simple index)
+  // Nav links open target section
+  document.querySelectorAll('[data-open]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const sel = a.getAttribute('data-open'); const details = document.querySelector(sel);
+      if (details) { details.open = true; setTimeout(()=>details.scrollIntoView({behavior:'smooth', block:'start'}),50); }
+    });
+  });
+
+  // Data
   const AI_TOOLS = [
     { name:'ChatGPT', desc:'مساعد ذكي للكتابة والبرمجة والبحث السريع.', site:'https://chat.openai.com/', app:'' },
     { name:'Perplexity', desc:'بحث بالذكاء الاصطناعي مع مصادر.', site:'https://www.perplexity.ai/', app:'' },
@@ -43,12 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
     { name:'EngVid', desc:'فيديوهات مدرسين محترفين', link:'https://www.engvid.com/' }
   ];
 
-  // Render AI tools / useful / english when opened (lazy)
-  function renderOnce(detailsId, renderer) {
+  // Lazy render helpers
+  function renderOnce(detailsId, renderer){
     const el = document.getElementById(detailsId);
     if (!el) return;
     el.addEventListener('toggle', () => {
-      if (el.open && !el.dataset.inited) { el.dataset.inited = '1'; renderer(); }
+      if (el.open && !el.dataset.inited){ el.dataset.inited='1'; renderer(); }
     });
   }
 
@@ -81,34 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Simple global search
-  const siteSearch = document.getElementById('siteSearch');
-  const resultsBox = document.getElementById('searchResults');
-  const index = [
-    { title:'القرآن الكريم', text:'mp3quran جميع القراء بحث تشغيل', href:'#sec-quran', open:'#sec-quran' },
-    { title:'مواقع الذكاء الاصطناعي', text:AI_TOOLS.map(t=>t.name).join(' '), href:'#sec-ai', open:'#sec-ai' },
-    { title:'الشروحات', text:'دروس وأدلة', href:'#sec-tuts', open:'#sec-tuts' },
-    { title:'مواقع مفيدة', text:USEFUL.map(s=>s.name).join(' '), href:'#sec-useful', open:'#sec-useful' },
-    { title:'تعلم الإنجليزية', text:ENGLISH.map(s=>s.name).join(' '), href:'#sec-english', open:'#sec-english' }
-  ];
-  siteSearch.addEventListener('input', () => {
-    const q = siteSearch.value.trim();
-    if (!q) { resultsBox.hidden = true; resultsBox.innerHTML=''; return; }
-    const matches = index.filter(i => (i.title + ' ' + i.text).includes(q)).slice(0,8);
-    resultsBox.innerHTML = matches.length
-      ? matches.map(m => `<a href="${m.href}" data-open="${m.open}">${m.title}</a>`).join('')
-      : '<span class="muted" style="padding:.5rem">لا نتائج.</span>';
-    resultsBox.hidden = false;
-  });
-  resultsBox.addEventListener('click', (e) => {
-    const a = e.target.closest('a'); if (!a) return;
-    const sel = a.getAttribute('data-open'); const det = sel && document.querySelector(sel);
-    if (det) det.open = true;
-    resultsBox.hidden = true;
-  });
-  document.addEventListener('click', (e) => { if (!resultsBox.contains(e.target) && e.target !== siteSearch) resultsBox.hidden = true; });
-
-  // Quran section (lazy init when opened)
+  // Quran lazy init
   renderOnce('sec-quran', () => initQuran());
 
   // ===== Quran logic
@@ -216,28 +194,29 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!currentMoshaf || !currentMoshaf.server) return;
       const base = currentMoshaf.server.endsWith('/') ? currentMoshaf.server : (currentMoshaf.server + '/');
       const url = base + String(n).padStart(3,'0') + '.mp3';
+      const audio = document.getElementById('audio');
       if (audio.src !== url) audio.src = url;
       audio.play();
-      pTitle.textContent = name; pSub.textContent = currentReciter.name + ' — ' + String(n).padStart(3,'0');
+      document.querySelector('.p-title').textContent = name;
+      document.querySelector('.p-sub').textContent = currentReciter.name + ' — ' + String(n).padStart(3,'0');
       document.getElementById('pToggle').textContent = '⏸';
       const open = document.getElementById('openSrc'); open.href = url; open.style.display='inline-block';
     }
 
     document.getElementById('pToggle').addEventListener('click', () => {
-      if (!audio.src) return;
+      const audio = document.getElementById('audio'); if (!audio.src) return;
       if (audio.paused){ audio.play(); document.getElementById('pToggle').textContent='⏸'; }
       else { audio.pause(); document.getElementById('pToggle').textContent='▶️'; }
     });
-    document.getElementById('pStop').addEventListener('click', () => { if (!audio.src) return; audio.pause(); audio.currentTime=0; document.getElementById('pToggle').textContent='▶️'; });
-    audio.addEventListener('timeupdate', () => { if (audio.duration) document.getElementById('pSeek').value = (audio.currentTime/audio.duration)*100; });
-    document.getElementById('pSeek').addEventListener('input', (e) => { if (audio.duration) audio.currentTime = (e.target.value/100)*audio.duration; });
+    document.getElementById('pStop').addEventListener('click', () => {
+      const audio = document.getElementById('audio'); if (!audio.src) return;
+      audio.pause(); audio.currentTime=0; document.getElementById('pToggle').textContent='▶️';
+    });
+    document.getElementById('audio').addEventListener('timeupdate', () => {
+      const audio = document.getElementById('audio'); if (audio.duration) document.getElementById('pSeek').value = (audio.currentTime/audio.duration)*100;
+    });
+    document.getElementById('pSeek').addEventListener('input', (e) => {
+      const audio = document.getElementById('audio'); if (audio.duration) audio.currentTime = (e.target.value/100)*audio.duration;
+    });
   }
-});
-// إغلاق جميع الأقسام عند الضغط على زر الرئيسية
-document.querySelector('a[href="#home"]').addEventListener('click', (e) => {
-  e.preventDefault();
-  document.querySelectorAll('.section-acc').forEach(section => {
-    section.removeAttribute('open'); // يغلق كل الأقسام
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' }); // يرجع لأعلى الصفحة
 });

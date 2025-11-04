@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>جراديفي | Gradify — أقسام قابلة للطي</title>
-  <meta name="description" content="جراديفي | Gradify — موقع بأقسام قابلة للفتح عند الضغط، مع قسم القرآن (mp3quran API)، مواقع الذكاء الاصطناعي، الشروحات، مواقع مفيدة، وتعلم الإنجليزية.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -14,16 +13,12 @@
   <header class="header">
     <div class="container header-grid">
       <a class="brand-link" href="#top" aria-label="العودة للرئيسية">
-        <span class="brand-en">Gradify</span>
-        <span class="brand-sep">|</span>
-        <span class="brand-ar">جراديفي</span>
+        <span class="brand-en">Gradify</span><span class="brand-sep">|</span><span class="brand-ar">جراديفي</span>
       </a>
-
       <div class="global-search">
         <input id="siteSearch" type="search" placeholder="ابحث في الموقع" aria-label="بحث شامل">
         <div id="searchResults" class="search-results" hidden></div>
       </div>
-
       <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
       <nav class="nav" id="mainNav" aria-label="القائمة">
         <a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a>
@@ -37,12 +32,10 @@
   </header>
 
   <main class="container main">
-
-    <!-- Section: Quran -->
     <details id="sec-quran" class="section-acc">
       <summary><h2 class="section-title">القرآن الكريم</h2><span class="hint">اضغط لفتح</span></summary>
       <div class="section-body">
-        <p class="muted">جلب تلقائي لجميع القرّاء من mp3quran، مع بحث للقارئ والسور ومشغّل سفلي ثابت. (لا يُحمّل المحتوى إلا عند فتح القسم)</p>
+        <p class="muted">جلب تلقائي لجميع القرّاء من mp3quran، مع بحث للقارئ والسور. (يتم التحميل عند الفتح)</p>
         <div class="toolbar">
           <input id="reciterSearch" class="search" type="search" placeholder="ابحث عن قارئ" aria-label="بحث عن قارئ" disabled>
           <select id="reciterSelect" class="select" aria-label="قائمة القراء" disabled></select>
@@ -53,16 +46,13 @@
       </div>
     </details>
 
-    <!-- Section: AI tools -->
     <details id="sec-ai" class="section-acc">
       <summary><h2 class="section-title">مواقع الذكاء الاصطناعي</h2><span class="hint">اضغط لفتح</span></summary>
       <div class="section-body">
-        <p class="muted">أدوات موثوقة مع روابط مباشرة للموقع والتطبيق (إن وجد).</p>
         <div id="aiGrid" class="grid-3 cards"></div>
       </div>
     </details>
 
-    <!-- Section: Tutorials -->
     <details id="sec-tuts" class="section-acc">
       <summary><h2 class="section-title">الشروحات</h2><span class="hint">اضغط لفتح</span></summary>
       <div class="section-body">
@@ -74,7 +64,6 @@
       </div>
     </details>
 
-    <!-- Section: Useful -->
     <details id="sec-useful" class="section-acc">
       <summary><h2 class="section-title">مواقع مفيدة</h2><span class="hint">اضغط لفتح</span></summary>
       <div class="section-body">
@@ -82,7 +71,6 @@
       </div>
     </details>
 
-    <!-- Section: English -->
     <details id="sec-english" class="section-acc">
       <summary><h2 class="section-title">تعلم اللغة الإنجليزية مجاناً (تعليم ذاتي)</h2><span class="hint">اضغط لفتح</span></summary>
       <div class="section-body">
@@ -90,14 +78,11 @@
       </div>
     </details>
 
-    <!-- Section: Contact -->
     <details id="sec-contact" class="section-acc">
       <summary><h2 class="section-title">تواصل</h2><span class="hint">اضغط لفتح</span></summary>
       <div class="section-body">
         <div class="grid-2">
-          <div>
-            <p>راسلنا: <a href="mailto:hello@gradifysa.com">hello@gradifysa.com</a></p>
-          </div>
+          <div><p>راسلنا: <a href="mailto:hello@gradifysa.com">hello@gradifysa.com</a></p></div>
           <div class="card"><h3>روابط سريعة</h3><ul class="list"><li><a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a></li><li><a data-open="#sec-ai" href="#sec-ai">مواقع الذكاء الاصطناعي</a></li><li><a data-open="#sec-tuts" href="#sec-tuts">الشروحات</a></li></ul></div>
         </div>
       </div>
@@ -111,7 +96,6 @@
     </div>
   </footer>
 
-  <!-- Sticky player (shared) -->
   <div id="playerBar" class="player" aria-live="polite">
     <button class="p-btn" id="pToggle" aria-label="تشغيل/إيقاف">⏯</button>
     <div class="p-meta"><div class="p-title">لا يوجد تشغيل</div><div class="p-sub muted">—</div></div>
