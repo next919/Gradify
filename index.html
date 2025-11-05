@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>جراديفي | Gradify — Aura</title>
-  <meta name="description" content="منصة خفيفة وعصرية — أقسام جاهزة: القرآن الكريم، مواقع الذكاء الاصطناعي، الشروحات، مواقع مفيدة، تعلّم الإنجليزية، وتواصل معنا.">
+  <meta name="description" content="منصة خفيفة وعصرية — القرآن (استماع وقراءة)، مواقع الذكاء الاصطناعي، تعلّم الإنجليزية، مواقع مفيدة، وشروحات.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body id="top">
@@ -17,10 +17,10 @@
       <nav class="nav" id="mainNav" aria-label="القائمة">
         <a data-open="#sec-quran" href="#sec-quran">القرآن</a>
         <a data-open="#sec-ai" href="#sec-ai">ذكاء اصطناعي</a>
-        <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
-        <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
         <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
-        <a data-open="#sec-contact" href="#sec-contact">تواصل</a>
+        <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
+        <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
+        <a data-open="#sec-contact" href="#sec-contact">اتصل بنا</a>
       </nav>
     </div>
   </header>
@@ -44,26 +44,69 @@
   </section>
 
   <main id="content" class="container main">
+
+    <!-- Quran -->
     <details id="sec-quran" class="section-acc glass">
       <summary><div class="s-head"><div class="s-icon">🕋</div><h2>القرآن الكريم</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body">
-        <div class="toolbar">
-          <input id="qSearchReader" class="field" placeholder="ابحث عن قارئ (إبراهيم، عبدالباسط…)">
-          <input id="qSearchSurah" class="field" placeholder="ابحث داخل السور (اسم أو رقم)">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="listenTab">استماع</button>
+          <button class="tab-btn" data-tab="readTab">تصفح وقراءة</button>
         </div>
-        <div id="quranList" class="grid cards">
-          <article class="card"><h3>الفاتحة</h3><p class="muted">مثال تجريبي — اربط روابط mp3 لاحقًا.</p><button class="btn small" disabled>تشغيل</button></article>
-          <article class="card"><h3>البقرة</h3><p class="muted">مثال تجريبي.</p><button class="btn small" disabled>تشغيل</button></article>
+
+        <!-- استماع -->
+        <div id="listenTab" class="tab-pane active">
+          <div class="toolbar">
+            <label class="field-wrap"><span>القارئ</span>
+              <select id="readerSelect" class="field"></select>
+            </label>
+            <label class="field-wrap"><span>السورة</span>
+              <select id="surahSelect" class="field"></select>
+            </label>
+            <button id="playBtn" class="btn small primary">تشغيل</button>
+          </div>
+          <audio id="player" controls class="player" preload="none"></audio>
+          <p class="muted">* المشغّل يستخدم روابط رسمية مباشرة (mp3) — اختر القارئ والسورة ثم اضغط تشغيل.</p>
         </div>
-        <p class="muted">* للحفظ النهائي سأربط لك mp3quran لجميع القراء لاحقًا إذا رغبت.</p>
+
+        <!-- تصفح وقراءة -->
+        <div id="readTab" class="tab-pane">
+          <div class="toolbar">
+            <input id="surahSearch" class="field" placeholder="ابحث باسم السورة (مثال: البقرة)">
+          </div>
+          <div id="readGrid" class="grid cards"></div>
+          <p class="muted">زر <b>قراءة</b> يفتح صفحة السورة على quran.com، وزر <b>استماع</b> يشغّل نفس السورة من القارئ المختار أعلاه.</p>
+        </div>
       </div>
     </details>
 
+    <!-- AI Sites -->
     <details id="sec-ai" class="section-acc glass">
       <summary><div class="s-head"><div class="s-icon">✨</div><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body"><div id="aiGrid" class="grid cards"></div></div>
+      <div class="section-body">
+        <div id="aiGrid" class="grid cards featured-layout"></div>
+      </div>
     </details>
 
+    <!-- English -->
+    <details id="sec-english" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">اضغط للفتح</span></div></summary>
+      <div class="section-body">
+        <h3 class="sub">1) الاستماع</h3><div id="engListen" class="grid cards"></div>
+        <h3 class="sub">2) مواقع شاملة</h3><div id="engAll" class="grid cards"></div>
+        <h3 class="sub">3) الكتابة والمفردات</h3><div id="engWrite" class="grid cards"></div>
+        <h3 class="sub">4) للأطفال</h3><div id="engKids" class="grid cards"></div>
+        <h3 class="sub">5) لغات أخرى (الأكثر شعبية)</h3><div id="otherLangs" class="grid cards"></div>
+      </div>
+    </details>
+
+    <!-- Useful -->
+    <details id="sec-useful" class="section-acc glass">
+      <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">اضغط للفتح</span></div></summary>
+      <div class="section-body"><div id="usefulGrid" class="grid cards"></div></div>
+    </details>
+
+    <!-- Tutorials -->
     <details id="sec-tuts" class="section-acc glass">
       <summary><div class="s-head"><div class="s-icon">📚</div><h2>الشروحات</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body">
@@ -75,28 +118,13 @@
       </div>
     </details>
 
-    <details id="sec-useful" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body"><div id="usefulGrid" class="grid cards"></div></div>
-    </details>
-
-    <details id="sec-english" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body">
-        <h3 class="sub">1) الاستماع</h3><div id="engListen" class="grid cards"></div>
-        <h3 class="sub">2) التحدث</h3><div id="engSpeak" class="grid cards"></div>
-        <h3 class="sub">3) بودكاست</h3><div id="engPod" class="grid cards"></div>
-        <h3 class="sub">4) مواقع شاملة</h3><div id="engAll" class="grid cards"></div>
-        <h3 class="sub">5) مواقع مدفوعة تستحق</h3><div id="engPaid" class="grid cards"></div>
-      </div>
-    </details>
-
+    <!-- Contact -->
     <details id="sec-contact" class="section-acc glass">
       <summary>
         <div class="s-head">
           <div class="s-icon">✉️</div>
-          <h2>تواصل معنا</h2>
-          <span class="hint">الدعم الفني:
+          <h2>اتصل بنا</h2>
+          <span class="hint">الدعم:
             <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a>
           </span>
         </div>
@@ -104,16 +132,13 @@
       <div class="section-body">
         <div class="grid two">
           <div class="card glass">
-            <h3>نموذج الاتصال</h3>
+            <h3>نموذج التواصل</h3>
             <form id="contactForm" class="form" novalidate>
               <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
               <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
               <input class="field" type="text" name="subject" placeholder="الموضوع" required>
               <textarea class="field" name="message" rows="6" placeholder="اكتب رسالتك هنا..." required></textarea>
-              <label style="display:flex;align-items:center;gap:.4rem;margin:.3rem 0">
-                <input id="agree" type="checkbox" required>
-                <span>أوافق على إرسال هذه البيانات لغرض التواصل</span>
-              </label>
+              <label class="consent"><input id="agree" type="checkbox" required><span>أوافق على إرسال هذه البيانات لغرض التواصل</span></label>
               <div class="row" style="gap:.6rem">
                 <button id="sendBtn" class="btn primary" type="submit">إرسال</button>
                 <a class="btn small ghost" id="mailtoFallback" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
@@ -129,6 +154,7 @@
         </div>
       </div>
     </details>
+
   </main>
 
   <footer class="footer">
