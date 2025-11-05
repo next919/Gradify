@@ -1,179 +1,34 @@
-// Gradify — Full site with global search + Quran section (mp3quran API)
-document.addEventListener('DOMContentLoaded', () => {
-  const year = document.getElementById('year'); if (year) year.textContent = new Date().getFullYear();
-
-  // ===== Navbar toggle (mobile)
-  const toggle = document.querySelector('.nav-toggle');
-  const nav = document.getElementById('mainNav');
-  if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    }));
-  }
-
-  // ===== AI Tools data (editable)
-  const AI_TOOLS = [
-    { name:'ChatGPT', desc:'مساعد ذكي للكتابة والبرمجة والبحث السريع.', site:'https://chat.openai.com/', app:'' },
-    { name:'Perplexity', desc:'بحث بالذكاء الاصطناعي مع مصادر.', site:'https://www.perplexity.ai/', app:'' },
-    { name:'Claude', desc:'قراءة طويلة وتحليل ممتاز.', site:'https://claude.ai/', app:'' },
-    { name:'Gemini', desc:'أدوات Google للبحث والكتابة والصور.', site:'https://gemini.google.com/', app:'' },
-    { name:'Copilot', desc:'مساعد مايكروسوفت للبحث وتوليد الصور.', site:'https://copilot.microsoft.com/', app:'' }
-  ];
-  const aiGrid = document.getElementById('aiGrid');
-  if (aiGrid) {
-    AI_TOOLS.forEach(t => {
-      const card = document.createElement('article');
-      card.className = 'card tool';
-      card.innerHTML = `<h3>${t.name}</h3><p class="muted">${t.desc}</p>
-        <div class="links"><a class="btn tiny" target="_blank" rel="noopener" href="${t.site}">الموقع</a>
-        ${t.app ? `<a class="btn tiny ghost" target="_blank" rel="noopener" href="${t.app}">التطبيق</a>`:''}</div>`;
-      aiGrid.appendChild(card);
-    });
-  }
-
-  // ===== Global search (simple client index)
-  const siteSearch = document.getElementById('siteSearch');
-  const resultsBox = document.getElementById('searchResults');
-  const index = [
-    { title:'القرآن الكريم', text:'mp3quran جميع القراء بحث وتشغيل', href:'#quran' },
-    { title:'الشروحات', text:'دروس، شروحات، أدلة', href:'#tutorials' },
-    { title:'مواقع الذكاء الاصطناعي', text:'ChatGPT Perplexity Claude Gemini Copilot', href:'#ai-tools' },
-    { title:'تواصل', text:'بريد التواصل وروابط سريعة', href:'#contact' },
-    // Also index AI tools by name/desc
-    ...AI_TOOLS.map(t => ({ title:`${t.name} — أداة ذكاء اصطناعي`, text:t.desc, href:'#ai-tools' }))
-  ];
-  if (siteSearch && resultsBox) {
-    siteSearch.addEventListener('input', () => {
-      const q = siteSearch.value.trim();
-      if (!q) { resultsBox.hidden = true; resultsBox.innerHTML = ''; return; }
-      const matches = index.filter(i => (i.title+i.text).includes(q)).slice(0,8);
-      resultsBox.innerHTML = matches.length
-        ? matches.map(m => `<a href="${m.href}" onclick="document.getElementById('searchResults').hidden=true">${m.title}</a>`).join('')
-        : '<span class="muted" style="padding:.5rem">لا نتائج.</span>';
-      resultsBox.hidden = false;
-    });
-    document.addEventListener('click', (e) => {
-      if (!resultsBox.contains(e.target) && e.target !== siteSearch) resultsBox.hidden = true;
-    });
-  }
-
-  // ===== Quran section (API)
-  const API = 'https://mp3quran.net/api/v3/reciters?language=ar';
-  const SURAHS = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-
-  const reciterSearch = document.getElementById('reciterSearch');
-  const reciterSelect = document.getElementById('reciterSelect');
-  const moshafSelect  = document.getElementById('moshafSelect');
-  const surahSearch   = document.getElementById('surahSearch');
-  const list = document.getElementById('surahList');
-
-  const audio = document.getElementById('audio');
-  const pTitle = document.querySelector('.p-title');
-  const pSub = document.querySelector('.p-sub');
-  const pToggle = document.getElementById('pToggle');
-  const pStop = document.getElementById('pStop');
-  const pSeek = document.getElementById('pSeek');
-  const openSrc = document.getElementById('openSrc');
-
-  let RECITERS = []; let filtered = [];
-  let currentReciter = null; let currentMoshaf = null; let qSurah = '';
-
-  fetch(API).then(r => r.json()).then(data => {
-    RECITERS = data && data.reciters ? data.reciters : [];
-    filtered = RECITERS;
-    fillReciters();
-  }).catch(() => reciterSelect.innerHTML = '<option>تعذر جلب القرّاء</option>');
-
-  function fillReciters() {
-    reciterSelect.innerHTML = '';
-    filtered.forEach(r => {
-      const opt = document.createElement('option'); opt.value = r.id; opt.textContent = r.name; reciterSelect.appendChild(opt);
-    });
-    if (filtered.length) { currentReciter = filtered[0]; fillMoshaf(); }
-  }
-
-  reciterSearch.addEventListener('input', () => {
-    const q = reciterSearch.value.trim();
-    filtered = !q ? RECITERS : RECITERS.filter(r => r.name.includes(q));
-    fillReciters();
-  });
-
-  reciterSelect.addEventListener('change', () => {
-    const id = Number(reciterSelect.value);
-    currentReciter = RECITERS.find(r => r.id === id);
-    fillMoshaf();
-  });
-
-  function fillMoshaf() {
-    moshafSelect.innerHTML = '';
-    if (!currentReciter || !currentReciter.moshaf) return;
-    currentReciter.moshaf.forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = m.server;
-      opt.textContent = `${m.name} — ${m.surah_total} سورة`;
-      opt.dataset.list = m.surah_list || '';
-      moshafSelect.appendChild(opt);
-    });
-    currentMoshaf = currentReciter.moshaf[0] || null;
-    renderSurahs();
-  }
-
-  moshafSelect.addEventListener('change', () => {
-    currentMoshaf = {
-      server: moshafSelect.value,
-      name: moshafSelect.options[moshafSelect.selectedIndex].textContent,
-      surah_list: moshafSelect.options[moshafSelect.selectedIndex].dataset.list
-    };
-    renderSurahs();
-  });
-
-  function renderSurahs() {
-    list.innerHTML = '';
-    if (!currentMoshaf) return;
-    const available = (currentMoshaf.surah_list && String(currentMoshaf.surah_list).length)
-      ? String(currentMoshaf.surah_list).split(',').map(n => Number(n.trim()))
-      : Array.from({length:114}, (_,i)=>i+1);
-
-    const filteredSurahs = available.filter(n => {
-      if (!qSurah) return true;
-      const name = SURAHS[n-1] || '';
-      return name.includes(qSurah) || String(n) === qSurah;
-    });
-
-    filteredSurahs.forEach(n => {
-      const name = SURAHS[n-1] || `سورة ${n}`;
-      const card = document.createElement('div');
-      card.className = 'surah';
-      card.innerHTML = `
-        <div class="num">${String(n).padStart(2,'0')}</div>
-        <div class="meta"><strong>${name}</strong><small>${currentReciter.name}</small></div>
-        <div class="play"><button class="btn tiny">تشغيل</button></div>`;
-      card.querySelector('.btn').addEventListener('click', () => play(n, name));
-      list.appendChild(card);
-    });
-  }
-
-  surahSearch.addEventListener('input', () => { qSurah = surahSearch.value.trim(); renderSurahs(); });
-
-  function play(n, name) {
-    if (!currentMoshaf || !currentMoshaf.server) return;
-    const base = currentMoshaf.server.endsWith('/') ? currentMoshaf.server : (currentMoshaf.server + '/');
-    const url = base + String(n).padStart(3,'0') + '.mp3';
-    if (audio.src !== url) audio.src = url;
-    audio.play();
-    pTitle.textContent = name;
-    pSub.textContent = currentReciter.name + ' — ' + String(n).padStart(3,'0');
-    pToggle.textContent = '⏸';
-    openSrc.href = url; openSrc.style.display = 'inline-block';
-  }
-
-  pToggle.addEventListener('click', () => { if (!audio.src) return; if (audio.paused){ audio.play(); pToggle.textContent='⏸'; } else { audio.pause(); pToggle.textContent='▶️'; } });
-  pStop.addEventListener('click', () => { if (!audio.src) return; audio.pause(); audio.currentTime = 0; pToggle.textContent = '▶️'; });
-  document.getElementById('audio').addEventListener('timeupdate', () => { const a = document.getElementById('audio'); if (a.duration) pSeek.value = (a.currentTime/a.duration)*100; });
-  pSeek.addEventListener('input', () => { const a = document.getElementById('audio'); if (a.duration) a.currentTime = (pSeek.value/100)*a.duration; });
+document.addEventListener('DOMContentLoaded',()=>{
+document.querySelectorAll('.section-acc').forEach(d=>d.removeAttribute('open'));
+const t=document.querySelector('.nav-toggle'), n=document.getElementById('mainNav');
+if(t&&n){t.addEventListener('click',()=>{const o=n.classList.toggle('open');t.setAttribute('aria-expanded',String(o));});
+n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');}));}
+document.addEventListener('click',(e)=>{const a=e.target.closest('a'); if(!a) return; const isBrand=a.classList.contains('brand-link')||a.closest('.brand-link'); const href=(a.getAttribute('href')||'').replace(location.origin,''); const isHome=['#top','#home','/','/#top',location.pathname+'#top'].includes(href); if(isBrand||isHome){e.preventDefault(); document.querySelectorAll('.section-acc').forEach(d=>d.removeAttribute('open')); window.scrollTo({top:0,behavior:'smooth'});}});
+document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',()=>{const s=a.getAttribute('data-open'); const d=s&&document.querySelector(s); if(d){d.open=true; setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),40);}}));
+const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+// DATA
+const AI_TOOLS=[{name:'ChatGPT',desc:'محادثة وكتابة وبرمجة وبحث متعدد الاستعمالات.',site:'https://chat.openai.com/'},{name:'Perplexity',desc:'بحث ذكي يذكر المصادر ويجيب بدقة.',site:'https://www.perplexity.ai/'},{name:'Claude',desc:'تحليل نصوص طويلة وصياغة منظمة.',site:'https://claude.ai/'},{name:'Gemini',desc:'بحث وكتابة وصور وفيديو من Google.',site:'https://gemini.google.com/'},{name:'Microsoft Copilot',desc:'مساعد Bing وOffice.',site:'https://copilot.microsoft.com/'},{name:'Poe',desc:'منصة تجمع عدّة نماذج في مكان واحد.',site:'https://poe.com/'},{name:'Midjourney',desc:'توليد صور فنية عالية الجودة.',site:'https://www.midjourney.com/'},{name:'Leonardo.ai',desc:'تصميم وتوليد صور ومواد تسويقية.',site:'https://leonardo.ai/'},{name:'Ideogram',desc:'صور مع كتابة داخل الصورة بدقة.',site:'https://ideogram.ai/'},{name:'Runway',desc:'تحرير وتوليد فيديو بالذكاء.',site:'https://runwayml.com/'},{name:'Pika',desc:'توليد فيديو من نص أو صورة.',site:'https://pika.art/'},{name:'ElevenLabs',desc:'تحويل نص إلى كلام واقعي.',site:'https://elevenlabs.io/'},{name:'HeyGen',desc:'متحدثين افتراضيين ونطق متعدد اللغات.',site:'https://www.heygen.com/'},{name:'Descript',desc:'تحرير صوت/فيديو مع نسخ تلقائي.',site:'https://www.descript.com/'},{name:'Notion AI',desc:'تلخيص وكتابة داخل مساحات Notion.',site:'https://www.notion.so/product/ai'},{name:'Codeium',desc:'مساعد برمجي مجاني.',site:'https://codeium.com/'},{name:'GitHub Copilot',desc:'اقتراحات برمجية داخل VS Code.',site:'https://github.com/features/copilot'},{name:'Canva Magic',desc:'تصميم سهل بذكاء للصور والعروض.',site:'https://www.canva.com/'}];
+const USEFUL=[{name:'mp3quran',desc:'مكتبة تلاوات وروابط مباشرة.',link:'https://mp3quran.net/'},{name:'Quran.com',desc:'نص القرآن مع تلاوات وتفاسير.',link:'https://quran.com/'},{name:'Azkar',desc:'أذكار الصباح والمساء.',link:'https://azkar.cc/'},{name:'Archive.org',desc:'أرشيف مفتوح للكتب والوسائط.',link:'https://archive.org/'},{name:'Photopea',desc:'فوتوشوب على المتصفح مجانًا.',link:'https://www.photopea.com/'},{name:'Remove.bg',desc:'حذف خلفيات الصور تلقائيًا.',link:'https://remove.bg/'},{name:'TinyWow',desc:'أدوات PDF/صور/فيديو مجانية.',link:'https://tinywow.com/'},{name:'Squoosh',desc:'ضغط الصور بجودة عالية.',link:'https://squoosh.app/'},{name:'Bitly',desc:'اختصار وإدارة الروابط.',link:'https://bitly.com/'},{name:'Speedtest',desc:'اختبار سرعة الإنترنت.',link:'https://www.speedtest.net/'},{name:'PDF24 Tools',desc:'أدوات PDF قوية وسهلة.',link:'https://tools.pdf24.org/'}];
+const ENG={listen:[{name:'BBC 6 Minute English',desc:'مقاطع قصيرة مع نص وتمارين.',link:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{name:'Elllo',desc:'مئات المقاطع مع نصوص.',link:'https://elllo.org/'},{name:'ESL Lab',desc:'اختبارات استماع بالمستويات.',link:'https://www.esl-lab.com/'},{name:'VOA Learning English',desc:'أخبار مبسطة مع صوت.',link:'https://learningenglish.voanews.com/'},{name:'TED-Ed',desc:'فيديوهات تعليمية.',link:'https://ed.ted.com/'}],speak:[{name:'YouGlish',desc:'اسمع نطق الكلمات من يوتيوب.',link:'https://youglish.com/'},{name:'Elsa Speak (مدفوع/تجريبي)',desc:'تقييم نطق بالصوت والذكاء.',link:'https://elsaspeak.com/'},{name:'Speechling',desc:'سجل صوتك واحصل على تصحيح.',link:'https://speechling.com/'},{name:'TalkEnglish',desc:'حوارات وتمارين نطق.',link:'https://www.talkenglish.com/'}],podcast:[{name:'Luke’s English Podcast',desc:'بودكاست ممتع وثقافي.',link:'https://teacherluke.co.uk/'},{name:'The English We Speak',desc:'تعابير دارجة من BBC.',link:'https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak'},{name:'All Ears English',desc:'حديث يومي ونصائح.',link:'https://www.allearsenglish.com/podcast/'},{name:'ESL Pod',desc:'حلقات للمستوى المتوسط.',link:'https://www.eslpod.com/'}],all:[{name:'BBC Learning English',desc:'دروس وفيديو وتمارين — شامل.',link:'https://www.bbc.co.uk/learningenglish/'},{name:'Breaking News English',desc:'قراءة واستماع بمواضيع يومية.',link:'https://breakingnewsenglish.com/'},{name:'EngVid',desc:'دروس فيديو مع مدرسين.',link:'https://www.engvid.com/'},{name:'Coursera',desc:'مساقات جامعية عالمية.',link:'https://www.coursera.org/'}],paid:[{name:'Udemy',desc:'دورات بأسعار مخفضة غالبًا.',link:'https://www.udemy.com/topic/english-language/'},{name:'italki',desc:'مدرّس خصوصي للمحادثة.',link:'https://www.italki.com/'},{name:'Cambly',desc:'محادثة مع متحدثين أصليين.',link:'https://www.cambly.com/'},{name:'Babbel',desc:'منهج تفاعلي وتمارين.',link:'https://www.babbel.com/'}]};
+function once(id,fn){const el=document.getElementById(id); if(!el) return; el.addEventListener('toggle',()=>{ if(el.open && !el.dataset.i){ el.dataset.i=1; fn(); }});}
+once('sec-ai',()=>{const g=document.getElementById('aiGrid'); AI_TOOLS.forEach(t=>{const c=document.createElement('article'); c.className='card glass'; c.innerHTML=`<h3>${t.name}</h3><p class="muted">${t.desc}</p><a class="btn small" target="_blank" rel="noopener" href="${t.site}">زيارة</a>`; g.appendChild(c);});});
+once('sec-useful',()=>{const g=document.getElementById('usefulGrid'); USEFUL.forEach(s=>{const c=document.createElement('article'); c.className='card glass'; c.innerHTML=`<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn small" target="_blank" href="${s.link}">زيارة</a>`; g.appendChild(c);});});
+once('sec-english',()=>{build('engListen',ENG.listen);build('engSpeak',ENG.speak);build('engPod',ENG.podcast);build('engAll',ENG.all);build('engPaid',ENG.paid);});
+function build(id,arr){const g=document.getElementById(id); arr.forEach(s=>{const c=document.createElement('article'); c.className='card glass'; c.innerHTML=`<h3>${s.name}</h3><p class="muted">${s.desc}</p><a class="btn small" target="_blank" href="${s.link}">زيارة</a>`; g.appendChild(c);});}
+// Quran
+once('sec-quran',()=>initQuran());
+function initQuran(){const API='https://mp3quran.net/api/v3/reciters?language=ar'; const S=["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"]; const rS=document.getElementById('reciterSearch'), rSel=document.getElementById('reciterSelect'), mSel=document.getElementById('moshafSelect'), sS=document.getElementById('surahSearch'), list=document.getElementById('surahList'); const au=document.getElementById('audio'), pT=document.querySelector('.p-title'), pSub=document.querySelector('.p-sub'), pTg=document.getElementById('pToggle'), pSt=document.getElementById('pStop'), pSk=document.getElementById('pSeek'), open=document.getElementById('openSrc'); [rS,rSel,mSel,sS].forEach(el=>el.disabled=false); let R=[],F=[],curR=null,curM=null,q=''; function fb(){R=[{id:1,name:'عبد الباسط (مرتل) — بديل',moshaf:[{name:'افتراضي',surah_total:114,server:'https://server7.mp3quran.net/basit/',surah_list:''}]},{id:2,name:'المنشاوي (مرتل) — بديل',moshaf:[{name:'افتراضي',surah_total:114,server:'https://server7.mp3quran.net/minsh/',surah_list:''}]}]; F=R; fill();}
+fetch(API).then(r=>r.json()).then(d=>{R=d&&d.reciters?d.reciters:[]; F=R.length?R:(fb(),[]); if(R.length) fill();}).catch(fb);
+function fill(){rSel.innerHTML=''; F.forEach(r=>{const o=document.createElement('option'); o.value=r.id; o.textContent=r.name; rSel.appendChild(o);}); if(F.length){curR=F[0]; fillM();}}
+rS.addEventListener('input',()=>{const v=rS.value.trim(); F=!v?R:R.filter(x=>x.name.includes(v)); fill();});
+rSel.addEventListener('change',()=>{const id=Number(rSel.value); curR=R.find(r=>r.id===id)||F.find(r=>String(r.id)===String(id)); fillM();});
+function fillM(){mSel.innerHTML=''; if(!curR||!curR.moshaf) return; curR.moshaf.forEach(m=>{const o=document.createElement('option'); o.value=m.server; o.textContent=`${m.name} — ${m.surah_total} سورة`; o.dataset.list=m.surah_list||''; mSel.appendChild(o);}); curM=curR.moshaf[0]||null; render();}
+mSel.addEventListener('change',()=>{curM={server:mSel.value,name:mSel.options[mSel.selectedIndex].textContent,surah_list:mSel.options[mSel.selectedIndex].dataset.list}; render();});
+function render(){list.innerHTML=''; if(!curM) return; const avail=(curM.surah_list&&String(curM.surah_list).length)?String(curM.surah_list).split(',').map(n=>Number(n.trim())):Array.from({length:114},(_,i)=>i+1); const arr=avail.filter(n=>{if(!q) return true; const nm=S[n-1]||''; return nm.includes(q)||String(n)===q;}); arr.forEach(n=>{const nm=S[n-1]||`سورة ${n}`; const c=document.createElement('div'); c.className='surah glass'; c.innerHTML=`<div class='num'>${String(n).padStart(2,'0')}</div><div class='meta'><strong>${nm}</strong><small>${curR.name}</small></div><div class='play'><button class='btn small'>تشغيل</button></div>`; c.querySelector('.btn').addEventListener('click',()=>play(n,nm)); list.appendChild(c);});}
+sS.addEventListener('input',()=>{q=sS.value.trim(); render();});
+function play(n,nm){if(!curM||!curM.server) return; const base=curM.server.endsWith('/')?curM.server:(curM.server+'/'); const url=base+String(n).padStart(3,'0')+'.mp3'; if(au.src!==url) au.src=url; au.play(); pT.textContent=nm; pSub.textContent=curR.name+' — '+String(n).padStart(3,'0'); pTg.textContent='⏸'; open.href=url; open.style.display='inline-block';}
+pTg.addEventListener('click',()=>{if(!au.src) return; if(au.paused){au.play(); pTg.textContent='⏸';} else {au.pause(); pTg.textContent='▶️';}}); pSt.addEventListener('click',()=>{if(!au.src) return; au.pause(); au.currentTime=0; pTg.textContent='▶️';}); au.addEventListener('timeupdate',()=>{if(au.duration) pSk.value=(au.currentTime/au.duration)*100;}); pSk.addEventListener('input',e=>{if(au.duration) au.currentTime=(e.target.value/100)*au.duration;});}
+const FORMSPREE_URL='https://formspree.io/f/REPLACE_WITH_YOUR_ID';
+const form=document.getElementById('contactForm'), hint=document.getElementById('formHint');
+if(form){form.addEventListener('submit',async e=>{e.preventDefault(); if(!FORMSPREE_URL.includes('formspree.io/f/')){hint.textContent='فعّل الربط عبر Formspree أولاً.'; hint.style.color='#b91c1c'; return;} try{const res=await fetch(FORMSPREE_URL,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)}); if(res.ok){form.reset(); hint.textContent='✅ تم الإرسال — سنرد قريبًا.'; hint.style.color='inherit';} else {hint.textContent='تعذر الإرسال. راسلنا على support@gradifysa.com'; hint.style.color='#b91c1c';}}catch(err){hint.textContent='خطأ بالشبكة. حاول مجددًا.'; hint.style.color='#b91c1c';}});}
 });
