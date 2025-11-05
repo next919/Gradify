@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>جراديفي | Gradify — Aura v3.1</title>
-  <meta name="description" content="تصميم Aura v3.1 مع نموذج تواصل وإرسال إلى البريد.">
+  <title>جراديفي | Gradify — Aura v3.2</title>
+  <meta name="description" content="تصميم Aura مع نموذج تواصل يعمل عبر Formspree وبديل mailto.">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -95,39 +95,42 @@
     </details>
 
     <details id="sec-contact" class="section-acc glass" open>
-      <summary><div class="s-head"><div class="s-icon">✉️</div><h2>تواصل معنا</h2><span class="hint">الدعم الفني: support@gradifysa.com</span></div></summary>
+      <summary>
+        <div class="s-head">
+          <div class="s-icon">✉️</div>
+          <h2>تواصل معنا</h2>
+          <span class="hint">الدعم الفني:
+            <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a>
+          </span>
+        </div>
+      </summary>
       <div class="section-body">
         <div class="grid two">
           <div class="card glass">
-            <h3>ارسل رسالة الآن</h3>
+            <h3>نموذج الاتصال</h3>
             <form id="contactForm" class="form" novalidate>
-              <div class="row">
-                <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
-                <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
-              </div>
+              <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
+              <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
               <input class="field" type="text" name="subject" placeholder="الموضوع" required>
               <textarea class="field" name="message" rows="6" placeholder="اكتب رسالتك هنا..." required></textarea>
-              <div class="row">
-                <select class="field" name="type">
-                  <option value="support">دعم فني</option>
-                  <option value="suggestion">اقتراح</option>
-                  <option value="other">أخرى</option>
-                </select>
-                <input class="field" type="text" name="order" placeholder="رقم الطلب (إن وجد)">
+              <label style="display:flex;align-items:center;gap:.5rem;margin:.3rem 0">
+                <input id="agree" type="checkbox" required> <span>أوافق على إرسال هذه البيانات لغرض التواصل</span>
+              </label>
+              <input type="hidden" id="formEndpoint" value="https://formspree.io/f/your-id-here">
+              <div class="row" style="gap:.6rem">
+                <button id="sendBtn" class="btn primary" type="submit">إرسال</button>
+                <a class="btn small ghost" id="mailtoFallback" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
               </div>
-              <input type="hidden" name="_to" value="support@gradifysa.com">
-              <button class="btn primary" type="submit">إرسال</button>
-              <a class="btn small ghost" id="mailtoFallback" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
-              <div id="formMsg" class="muted" role="status" aria-live="polite"></div>
+              <div id="formMsg" class="muted" role="status" aria-live="polite" style="margin-top:.4rem"></div>
             </form>
           </div>
           <div class="card glass">
-            <h3>معلومات التواصل</h3>
-            <ul class="list">
-              <li><strong>الدعم الفني:</strong> support@gradifysa.com</li>
-              <li>سنرد خلال 24 ساعة في أيام العمل.</li>
-              <li>يمكنك أيضًا تعبئة النموذج وسيصلنا فورًا.</li>
-            </ul>
+            <h3>الدعم الفني</h3>
+            <p>
+              راسلنا على:
+              <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a><br>
+              نرد عادة خلال 24 ساعة.
+            </p>
           </div>
         </div>
       </div>
@@ -140,17 +143,6 @@
       <a class="to-top" href="#top">↑</a>
     </div>
   </footer>
-
-  <div id="playerBar" class="player glass" aria-live="polite">
-    <button class="p-btn" id="pToggle" aria-label="تشغيل/إيقاف">⏯</button>
-    <div class="p-meta"><div class="p-title">لا يوجد تشغيل</div><div class="p-sub muted">—</div></div>
-    <div class="p-actions">
-      <button class="p-btn" id="pStop" aria-label="إيقاف">⏹</button>
-      <input type="range" id="pSeek" min="0" max="100" value="0" aria-label="شريط التقدم">
-      <a id="openSrc" class="btn small ghost" target="_blank" rel="noopener">فتح المصدر</a>
-    </div>
-    <audio id="audio" preload="none"></audio>
-  </div>
 
   <script src="script.js" defer></script>
 </body>
