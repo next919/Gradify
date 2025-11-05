@@ -99,7 +99,7 @@ const USEFUL = [
 ];
 
 // Optional direct send: put your Web3Forms key here; otherwise mailto fallback works.
-const WEB3FORMS_KEY = ""; // ضع مفتاحك هنا للإرسال المباشر
+const WEB3FORMS_KEY = ""; // 219a1c52-9eb6-449d-b48a-a1b06dc3f95e
 
 // ===== Helpers =====
 const $ = (s, r=document) => r.querySelector(s);
