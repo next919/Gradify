@@ -3,16 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>جراديفي | Gradify — Aura Design</title>
-  <meta name="description" content="تصميم Aura حديث بزجاجية خفيفة، ألوان متدرجة زاهية، وتجربة مريحة على الجوال والكمبيوتر.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <title>جراديفي | Gradify — Aura</title>
+  <meta name="description" content="منصة خفيفة وعصرية — أقسام جاهزة: القرآن الكريم، مواقع الذكاء الاصطناعي، الشروحات، مواقع مفيدة، تعلّم الإنجليزية، وتواصل معنا.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body id="top">
   <header class="header">
     <div class="container header-wrap">
+      <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
       <a class="brand-link" href="#top" aria-label="الرئيسية">
         <span class="brand-en">Gradify</span><span class="brand-sep">•</span><span class="brand-ar">جراديفي</span>
       </a>
@@ -21,22 +19,19 @@
         <a data-open="#sec-ai" href="#sec-ai">ذكاء اصطناعي</a>
         <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
         <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
-        <a data-open="#sec-english" href="#sec-english">تعلم الانجليزية</a>
+        <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
         <a data-open="#sec-contact" href="#sec-contact">تواصل</a>
       </nav>
-      <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
     </div>
   </header>
 
-  <div class="aura">
-    <span class="a1"></span><span class="a2"></span><span class="a3"></span>
-  </div>
+  <div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 
   <section class="hero container">
     <div class="hero-inner">
       <div class="hero-text">
-        <h1>تصميم <span class="grad">Aura</span> جديد كليًا</h1>
-        <p class="lead">ألوان زاهية، بطاقات زجاجية، وتوافق كامل مع الجوال والكمبيوتر. الأقسام تظهر فقط عند الحاجة.</p>
+        <h1>منصّة خفيفة وعصرية</h1>
+        <p>ألوان مريحة، تجربة جميلة على الجوال والكمبيوتر، ومحتوى قابل للفتح عند الحاجة.</p>
         <div class="cta">
           <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن</a>
           <a class="btn ghost" href="#sec-ai" data-open="#sec-ai">استكشف الذكاء الاصطناعي</a>
@@ -50,22 +45,17 @@
 
   <main id="content" class="container main">
     <details id="sec-quran" class="section-acc glass">
-      <summary>
-        <div class="s-head">
-          <div class="s-icon">🕋</div>
-          <h2>القرآن الكريم</h2>
-          <span class="hint">اضغط للفتح</span>
-        </div>
-      </summary>
+      <summary><div class="s-head"><div class="s-icon">🕋</div><h2>القرآن الكريم</h2><span class="hint">اضغط للفتح</span></div></summary>
       <div class="section-body">
-        <p class="muted">جلب تلقائي لجميع القرّاء من mp3quran، مع بحث للقارئ والسور ومشغّل سفلي ثابت. (يتم التحميل عند فتح القسم)</p>
         <div class="toolbar">
-          <input id="reciterSearch" class="field" type="search" placeholder="ابحث عن قارئ" aria-label="بحث عن قارئ" disabled>
-          <select id="reciterSelect" class="field" aria-label="قائمة القراء" disabled></select>
-          <select id="moshafSelect" class="field" aria-label="قائمة المصاحف" disabled></select>
+          <input id="qSearchReader" class="field" placeholder="ابحث عن قارئ (إبراهيم، عبدالباسط…)">
+          <input id="qSearchSurah" class="field" placeholder="ابحث داخل السور (اسم أو رقم)">
         </div>
-        <input id="surahSearch" class="field" type="search" placeholder="بحث داخل السور (اسم/رقم)" aria-label="بحث داخل السور" disabled>
-        <div id="surahList" class="surahs" aria-live="polite"></div>
+        <div id="quranList" class="grid cards">
+          <article class="card"><h3>الفاتحة</h3><p class="muted">مثال تجريبي — اربط روابط mp3 لاحقًا.</p><button class="btn small" disabled>تشغيل</button></article>
+          <article class="card"><h3>البقرة</h3><p class="muted">مثال تجريبي.</p><button class="btn small" disabled>تشغيل</button></article>
+        </div>
+        <p class="muted">* للحفظ النهائي سأربط لك mp3quran لجميع القراء لاحقًا إذا رغبت.</p>
       </div>
     </details>
 
@@ -92,21 +82,49 @@
 
     <details id="sec-english" class="section-acc glass">
       <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body"><div id="englishGrid" class="grid cards"></div></div>
+      <div class="section-body">
+        <h3 class="sub">1) الاستماع</h3><div id="engListen" class="grid cards"></div>
+        <h3 class="sub">2) التحدث</h3><div id="engSpeak" class="grid cards"></div>
+        <h3 class="sub">3) بودكاست</h3><div id="engPod" class="grid cards"></div>
+        <h3 class="sub">4) مواقع شاملة</h3><div id="engAll" class="grid cards"></div>
+        <h3 class="sub">5) مواقع مدفوعة تستحق</h3><div id="engPaid" class="grid cards"></div>
+      </div>
     </details>
 
     <details id="sec-contact" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">✉️</div><h2>تواصل</h2><span class="hint">اضغط للفتح</span></div></summary>
+      <summary>
+        <div class="s-head">
+          <div class="s-icon">✉️</div>
+          <h2>تواصل معنا</h2>
+          <span class="hint">الدعم الفني:
+            <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a>
+          </span>
+        </div>
+      </summary>
       <div class="section-body">
         <div class="grid two">
-          <div class="card glass"><h3>راسلنا</h3><p>hello@gradifysa.com</p></div>
           <div class="card glass">
-            <h3>روابط سريعة</h3>
-            <ul class="list">
-              <li><a data-open="#sec-quran" href="#sec-quran">القرآن الكريم</a></li>
-              <li><a data-open="#sec-ai" href="#sec-ai">أدوات الذكاء الاصطناعي</a></li>
-              <li><a data-open="#sec-tuts" href="#sec-tuts">الشروحات</a></li>
-            </ul>
+            <h3>نموذج الاتصال</h3>
+            <form id="contactForm" class="form" novalidate>
+              <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
+              <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
+              <input class="field" type="text" name="subject" placeholder="الموضوع" required>
+              <textarea class="field" name="message" rows="6" placeholder="اكتب رسالتك هنا..." required></textarea>
+              <label style="display:flex;align-items:center;gap:.4rem;margin:.3rem 0">
+                <input id="agree" type="checkbox" required>
+                <span>أوافق على إرسال هذه البيانات لغرض التواصل</span>
+              </label>
+              <div class="row" style="gap:.6rem">
+                <button id="sendBtn" class="btn primary" type="submit">إرسال</button>
+                <a class="btn small ghost" id="mailtoFallback" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
+              </div>
+              <div id="formMsg" class="muted" role="status" aria-live="polite" style="margin-top:.3rem"></div>
+            </form>
+          </div>
+
+          <div class="card glass">
+            <h3>الدعم الفني</h3>
+            <p>راسلنا على: <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a><br>نرد عادة خلال 24 ساعة.</p>
           </div>
         </div>
       </div>
@@ -119,17 +137,6 @@
       <a class="to-top" href="#top">↑</a>
     </div>
   </footer>
-
-  <div id="playerBar" class="player glass" aria-live="polite">
-    <button class="p-btn" id="pToggle" aria-label="تشغيل/إيقاف">⏯</button>
-    <div class="p-meta"><div class="p-title">لا يوجد تشغيل</div><div class="p-sub muted">—</div></div>
-    <div class="p-actions">
-      <button class="p-btn" id="pStop" aria-label="إيقاف">⏹</button>
-      <input type="range" id="pSeek" min="0" max="100" value="0" aria-label="شريط التقدم">
-      <a id="openSrc" class="btn small ghost" target="_blank" rel="noopener">فتح المصدر</a>
-    </div>
-    <audio id="audio" preload="none"></audio>
-  </div>
 
   <script src="script.js" defer></script>
 </body>
