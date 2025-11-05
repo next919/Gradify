@@ -1,15 +1,13 @@
-body {font-family: sans-serif; margin:0; background:#f6fcff; color:#002;}
-header {display:flex; justify-content:space-between; align-items:center; padding:10px 20px; background:white; position:sticky; top:0; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-.logo {font-size:20px; font-weight:bold; cursor:pointer;}
-.logo span {color:#00a3c8;}
-.menu-toggle {display:none; background:none; border:none; font-size:22px;}
-nav a {margin:0 10px; text-decoration:none; color:#003;}
-.hero {text-align:center; padding:60px 20px; background:#dff8ff;}
-.section {padding:40px 20px;}
-.card-list {list-style:none; padding:0;}
-.card {background:white; padding:15px; margin:10px 0; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-.contact a {color:#0077aa;}
-@media(max-width:600px){
-  nav {display:none; flex-direction:column; background:#fff; padding:10px;}
-  .menu-toggle {display:block;}
-}
+:root{--bg:#f7fbff;--ink:#0f172a;--muted:#60728f;--ring:#e2edf7;--brand:#22c1c3;--brand2:#0ea5b7}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,'Segoe UI',Tahoma,Arial,'Cairo',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+.container{width:100%;max-width:1100px;margin:auto;padding:18px}
+.bar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--ring);display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px}
+.brand{text-decoration:none;color:var(--ink);font-weight:900}.brand span{color:var(--brand2);margin-inline-start:.4rem}
+.nav a{color:var(--muted);text-decoration:none;margin-inline:.4rem}
+.hero{padding:40px 0}.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{background:linear-gradient(120deg,var(--brand),var(--brand2));color:#083344;text-decoration:none;border:none;border-radius:12px;padding:.7rem 1.1rem;display:inline-block;font-weight:800}
+.btn.ghost{background:transparent;border:1px solid var(--ring);color:var(--ink)}
+.card{background:#fff;border:1px solid var(--ring);border-radius:16px;margin:12px 0;padding:16px}
+.field{width:100%;padding:.7rem 1rem;border:1px solid var(--ring);border-radius:10px;margin:6px 0;background:#fff}
+.footer{border-top:1px solid var(--ring);padding:16px;text-align:center;color:var(--muted)}
+.muted{color:var(--muted);margin-inline-start:.6rem}

@@ -1,54 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gradify | جـراديـفي</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>جراديفي | Gradify — Aura v3.1</title>
+  <meta name="description" content="نسخة خفيفة ومتوافقة من واجهة Gradify (Aura v3.1).">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header class="bar">
+    <a class="brand" href="#top"><b>Gradify</b> <span>جراديفي</span></a>
+    <nav class="nav">
+      <a href="#quran">القرآن</a>
+      <a href="#ai">ذكاء اصطناعي</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+  </header>
 
-<header>
-  <div class="logo" onclick="scrollToTop()">Gradify <span>جـراديـفي</span></div>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  <nav id="navMenu">
-    <a href="#quran">القرآن الكريم</a>
-    <a href="#ai">مواقع الذكاء الاصطناعي</a>
-    <a href="#english">تعلم الإنجليزية</a>
-    <a href="#contact">تواصل</a>
-  </nav>
-</header>
+  <main class="container">
+    <section id="hero" class="hero">
+      <h1>منصة خفيفة وعصرية</h1>
+      <p>هذه نسخة متوافقة 100٪ مع GitHub Pages.</p>
+      <div class="cta">
+        <a class="btn" href="#quran">ابدأ الآن</a>
+        <a class="btn ghost" href="#ai">استكشف الذكاء الاصطناعي</a>
+      </div>
+    </section>
 
-<section class="hero">
-  <h1>منصة بسيطة وسهلة</h1>
-  <p>تجربة استخدام مريحة على الجوال والكمبيوتر</p>
-</section>
+    <section id="quran" class="card">
+      <h2>القرآن الكريم</h2>
+      <p>تم الاحتفاظ بالمحتوى — بإمكاننا إعادة ربط mp3quran لاحقًا.</p>
+    </section>
 
-<section id="quran" class="section">
-  <h2>القرآن الكريم</h2>
-  <p>سيتم إضافة المشغل لاحقاً.</p>
-</section>
+    <section id="ai" class="card">
+      <h2>مواقع الذكاء الاصطناعي</h2>
+      <ul>
+        <li><a href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT</a> — محادثة وتوليد نصوص.</li>
+        <li><a href="https://gemini.google.com" target="_blank" rel="noopener">Google Gemini</a> — مساعد متعدد الوسائط.</li>
+      </ul>
+    </section>
 
-<section id="ai" class="section">
-  <h2>مواقع الذكاء الاصطناعي</h2>
-  <ul class="card-list">
-    <li class="card"><strong>ChatGPT</strong><p>محادثة ذكية وتوليد نصوص.</p><a href="https://chat.openai.com" target="_blank">زيارة</a></li>
-    <li class="card"><strong>Midjourney</strong><p>إنشاء صور باستخدام الذكاء الاصطناعي.</p><a href="https://midjourney.com" target="_blank">زيارة</a></li>
-  </ul>
-</section>
+    <section id="contact" class="card">
+      <h2>تواصل معنا</h2>
+      <form id="contactForm">
+        <input class="field" name="name" placeholder="الاسم" required>
+        <input class="field" type="email" name="email" placeholder="البريد" required>
+        <textarea class="field" name="message" rows="5" placeholder="رسالتك" required></textarea>
+        <button class="btn" type="submit" id="sendBtn">إرسال</button>
+        <span id="msg" class="muted"></span>
+      </form>
+      <p>أو راسلنا مباشرة: <a href="mailto:support@gradifysa.com">support@gradifysa.com</a></p>
+    </section>
+  </main>
 
-<section id="english" class="section">
-  <h2>تعلم اللغة الإنجليزية</h2>
-  <ul class="card-list">
-    <li class="card"><strong>BBC Learning English</strong><p>محتوى تعليمي شامل.</p><a href="https://www.bbc.co.uk/learningenglish" target="_blank">زيارة</a></li>
-  </ul>
-</section>
-
-<section id="contact" class="section contact">
-  <h2>تواصل معنا</h2>
-  <p>راسلنا على البريد: <a href="mailto:support@gradifysa.com">support@gradifysa.com</a></p>
-</section>
-
-<script src="script.js"></script>
+  <footer class="footer">© <span id="year"></span> Gradify</footer>
+  <script src="script.js"></script>
 </body>
 </html>
