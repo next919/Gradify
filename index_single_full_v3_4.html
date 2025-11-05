@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>جراديفي | Gradify — موقع موحّد (ملف واحد)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7faff;--ink:#0f172a;--muted:#5b6b86;--brand:#22c1c3;--brand2:#8a2be2;--brand3:#00d2ff;--card:#fff;--ring:#dbe4f1;--glass:rgba(255,255,255,.55);--shadow:0 10px 30px rgba(17,24,39,.10)}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0b1220;--ink:#e6eefc;--muted:#aab7d4;--card:#0f162a;--ring:#1f2a44;--glass:rgba(14,22,41,.55);--shadow:0 10px 30px rgba(0,0,0,.35)}
+}
+html{scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.9;font-size:16px;overflow-x:hidden}
+.container{width:100%;max-width:1200px;margin-inline:auto;padding-inline:clamp(16px,4vw,28px)}
+.header{position:sticky;top:0;z-index:60;background:var(--glass);backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid var(--ring)}
+.header-wrap{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:.6rem 0}
+.brand-link{display:flex;align-items:baseline;gap:.5rem;text-decoration:none}
+.brand-en{font-weight:900;font-size:clamp(1.25rem,4vw,1.8rem);background:linear-gradient(90deg,var(--brand3),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-sep{opacity:.45}
+.brand-ar{font-weight:900;font-size:clamp(1rem,3vw,1.4rem);color:var(--ink)}
+.nav{display:flex;gap:.4rem;flex-wrap:wrap}
+.nav a{color:var(--muted);text-decoration:none;padding:.4rem .7rem;border-radius:12px}
+.nav a:hover{background:rgba(34,193,195,.15)}
+.aura{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.aura .a1,.aura .a2,.aura .a3{position:absolute;width:45vmax;height:45vmax;filter:blur(80px);opacity:.35;border-radius:50%}
+.aura .a1{background:radial-gradient(closest-corner,var(--brand3),transparent 70%);top:-20vmax;inset-inline-start:-10vmax}
+.aura .a2{background:radial-gradient(closest-corner,var(--brand),transparent 70%);bottom:-15vmax;inset-inline-end:-15vmax}
+.aura .a3{background:radial-gradient(closest-corner,var(--brand2),transparent 70%);top:30%;inset-inline:10%}
+.hero{padding:clamp(24px,6vw,56px) 0}
+.hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1rem,3vw,2rem);align-items:center}
+@media (max-width:900px){.hero-inner{grid-template-columns:1fr}}
+.hero h1{margin:0 0 .45rem;font-size:clamp(1.8rem,4.8vw,2.6rem)}
+.lead{margin:0;color:var(--muted)}
+.cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{display:inline-block;padding:.85rem 1.15rem;border-radius:16px;border:1px solid var(--ring);background:var(--card);color:var(--ink);text-decoration:none;box-shadow:var(--shadow);font-weight:800}
+.btn.primary{background:linear-gradient(120deg,var(--brand3),var(--brand));color:#05313a;border-color:transparent}
+.btn.small{padding:.55rem .8rem}
+.btn.ghost{background:transparent}
+.hero-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.hc{height:110px;border-radius:20px}
+.glass{background:var(--glass);backdrop-filter:blur(10px) saturate(140%);border:1px solid var(--ring);box-shadow:var(--shadow)}
+.main{padding:clamp(20px,4.5vw,40px) 0 100px}
+.section-acc{border-radius:20px;margin:0 0 16px;overflow:hidden}
+summary{list-style:none}summary::-webkit-details-marker{display:none}
+.section-acc>summary{cursor:pointer;padding:1rem 1rem;display:flex;align-items:center}
+.section-acc[open]>summary{border-bottom:1px solid var(--ring)}
+.s-head{display:flex;align-items:center;gap:.9rem;justify-content:space-between;width:100%}
+.s-icon{font-size:1.2rem;opacity:.85}
+.s-head h2{margin:0;font-size:clamp(1.2rem,4.8vw,2rem)}
+.hint{color:var(--muted);white-space:nowrap}
+.section-body{padding:1rem 1rem 1.2rem}
+.sub{margin:.2rem 0 .7rem}
+.muted{color:var(--muted)}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.grid.two{grid-template-columns:1.1fr .9fr}
+@media (max-width:980px){.grid.two{grid-template-columns:1fr}}
+.card{border-radius:16px;padding:1rem;border:1px solid var(--ring);background:var(--card);box-shadow:var(--shadow)}
+.field,select,input,button,textarea{font-size:16px}
+.field{inline-size:min(420px,100%);padding:.8rem 1rem;border-radius:12px;border:1px solid var(--ring);background:#fff;color:#111}
+.row{display:flex;gap:.6rem;flex-wrap:wrap}
+.toolbar{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.7rem 0 1rem}
+.surahs{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.surah{display:flex;align-items:center;gap:.9rem;border:1px solid var(--ring);border-radius:14px;padding:.9rem 1rem;background:linear-gradient(180deg,rgba(34,193,195,.10),rgba(255,255,255,.85))}
+@media (prefers-color-scheme: dark){.surah{background:linear-gradient(180deg,rgba(34,193,195,.18),rgba(16,24,40,.25))}}
+.surah .num{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand3),var(--brand2));color:#fff;font-weight:900}
+.surah .meta small{color:var(--muted)}
+.surah .play{margin-inline-start:auto}
+.footer{border-top:1px solid var(--ring);padding:1rem 0;text-align:center}
+.to-top{color:var(--muted);text-decoration:none}
+.email{color:var(--ink);text-decoration:underline}
+.email:hover{opacity:.85}
+</style>
+</head>
+<body id="top">
+<header class="header">
+  <div class="container header-wrap">
+    <a class="brand-link" href="#top"><span class="brand-en">Gradify</span><span class="brand-sep">•</span><span class="brand-ar">جراديفي</span></a>
+    <nav class="nav">
+      <a data-open="#sec-quran" href="#sec-quran">القرآن</a>
+      <a data-open="#sec-ai" href="#sec-ai">ذكاء اصطناعي</a>
+      <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
+      <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
+      <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
+      <a data-open="#sec-contact" href="#sec-contact">تواصل</a>
+    </nav>
+  </div>
+</header>
+
+<div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+
+<section class="hero container">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>منصّة خفيفة وعصرية</h1>
+      <p class="lead">ألوان مريحة، تجربة جميلة على الجوال والكمبيوتر، ومحتوى منظم يُفتح عند الحاجة.</p>
+      <div class="cta">
+        <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن</a>
+        <a class="btn ghost" href="#sec-ai" data-open="#sec-ai">استكشف أدوات الذكاء الاصطناعي</a>
+      </div>
+    </div>
+    <div class="hero-cards" aria-hidden="true">
+      <div class="hc glass"></div><div class="hc glass"></div><div class="hc glass"></div>
+    </div>
+  </div>
+</section>
+
+<main id="content" class="container main">
+  <details id="sec-quran" class="section-acc glass">
+    <summary><div class="s-head"><div class="s-icon">🕋</div><h2>القرآن الكريم</h2><span class="hint">اضغط للفتح</span></div></summary>
+    <div class="section-body">
+      <p class="muted">اختر قارئًا وسورة للتشغيل (روابط MP3 مباشرة). فيها بحث داخلي للسور.</p>
+      <div class="toolbar">
+        <select id="reciterSelect" class="field"></select>
+        <input id="surahSearch" class="field" type="search" placeholder="بحث داخل السور (اسم/رقم)">
+      </div>
+      <div id="surahList" class="surahs" aria-live="polite"></div>
+    </div>
+  </details>
+
+  <details id="sec-ai" class="section-acc glass">
+    <summary><div class="s-head"><div class="s-icon">✨</div><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">+10 أدوات مع نبذة</span></div></summary>
+    <div class="section-body"><div id="aiGrid" class="grid cards"></div></div>
+  </details>
+
+  <details id="sec-tuts" class="section-acc glass">
+    <summary><div class="s-head"><div class="s-icon">📚</div><h2>الشروحات</h2><span class="hint">روابط مفيدة</span></div></summary>
+    <div class="section-body"><div id="tutorialsGrid" class="grid cards"></div></div>
+  </details>
+
+  <details id="sec-useful" class="section-acc glass">
+    <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">مختارات موثوقة</span></div></summary>
+    <div class="section-body"><div id="usefulGrid" class="grid cards"></div></div>
+  </details>
+
+  <details id="sec-english" class="section-acc glass">
+    <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية</h2><span class="hint">مقسّم حسب النوع</span></div></summary>
+    <div class="section-body">
+      <h3 class="sub">1) الاستماع</h3><div id="engListen" class="grid cards"></div>
+      <h3 class="sub">2) التحدث</h3><div id="engSpeak" class="grid cards"></div>
+      <h3 class="sub">3) بودكاست</h3><div id="engPod" class="grid cards"></div>
+      <h3 class="sub">4) مواقع شاملة</h3><div id="engAll" class="grid cards"></div>
+      <h3 class="sub">5) مواقع مدفوعة تستحق</h3><div id="engPaid" class="grid cards"></div>
+    </div>
+  </details>
+
+  <details id="sec-contact" class="section-acc glass">
+    <summary><div class="s-head"><div class="s-icon">✉️</div><h2>تواصل معنا</h2><span class="hint">الدعم الفني: <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a></span></div></summary>
+    <div class="section-body">
+      <div class="grid two">
+        <div class="card glass">
+          <h3>نموذج الاتصال</h3>
+          <form id="contactForm" class="form" action="https://formspree.io/f/myzbrgpb" method="POST" novalidate>
+            <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
+            <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
+            <input class="field" type="text" name="subject" placeholder="الموضوع" required>
+            <textarea class="field" name="message" rows="6" placeholder="اكتب رسالتك هنا..." required></textarea>
+            <label style="display:flex;align-items:center;gap:.5rem;margin:.3rem 0">
+              <input id="agree" type="checkbox" required> <span>أوافق على إرسال هذه البيانات لغرض التواصل</span>
+            </label>
+            <input type="text" name="hp" id="hp" style="display:none" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="loaded_at" id="loaded_at" value="">
+            <div class="row" style="gap:.6rem"><button id="submitBtn" class="btn primary" type="submit">إرسال</button></div>
+            <div id="messageStatus" class="muted" role="status" aria-live="polite" style="margin-top:.4rem"></div>
+          </form>
+        </div>
+        <div class="card glass">
+          <h3>الدعم الفني</h3>
+          <p>راسلنا على: <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a><br>نرد عادة خلال 24 ساعة.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>© <span id="year"></span> <strong>جراديفي | Gradify</strong></p>
+    <a class="to-top" href="#top">↑</a>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+
+  // Quran demo
+  const reciters=[
+    {id:'abdelbasset',name:'الشيخ عبدالباسط (مجود)',base:'https://download.quranicaudio.com/quran/abdul_basit/mujawwad/'},
+    {id:'alafasy',name:'الشيخ مشاري العفاسي',base:'https://server12.mp3quran.net/afs/'}
+  ];
+  const reciterSelect=document.getElementById('reciterSelect');
+  const surahSearch=document.getElementById('surahSearch');
+  const surahList=document.getElementById('surahList');
+  const surahNames=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الإنفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+  const two=n=>String(n).padStart(3,'0');
+  function buildReciters(){reciters.forEach(r=>{const o=document.createElement('option');o.value=r.id;o.textContent=r.name;reciterSelect.appendChild(o)});reciterSelect.value=reciters[0].id;renderSurahs();}
+  function current(){return reciters.find(r=>r.id===reciterSelect.value)||reciters[0]}
+  function renderSurahs(){
+    surahList.innerHTML='';
+    const r=current(); const term=(surahSearch.value||'').trim();
+    surahNames.forEach((name,i)=>{
+      const num=i+1; if(term && !(name.includes(term)||String(num).includes(term))) return;
+      const url=r.base+two(num)+'.mp3';
+      const d=document.createElement('div'); d.className='surah';
+      d.innerHTML=`<div class="num">${String(num).padStart(2,'0')}</div>
+                   <div class="meta"><strong>${name}</strong><br><small>${r.name}</small></div>
+                   <audio class="play" controls preload="none" src="${url}"></audio>`;
+      surahList.appendChild(d);
+    });
+  }
+  reciterSelect.addEventListener('change',renderSurahs);
+  surahSearch.addEventListener('input',renderSurahs);
+  buildReciters();
+
+  // AI / Useful / Tutorials / English
+  const aiTools=[
+    {title:'ChatGPT',url:'https://chat.openai.com',desc:'مساعد ذكي للمحادثة والبرمجة.'},
+    {title:'Claude',url:'https://claude.ai',desc:'محادث آمن بفهم عميق.'},
+    {title:'Perplexity',url:'https://www.perplexity.ai',desc:'بحث ذكي مع مصادر.'},
+    {title:'Midjourney',url:'https://www.midjourney.com',desc:'توليد صور بالنص.'},
+    {title:'Leonardo',url:'https://leonardo.ai',desc:'مولد صور احترافي.'},
+    {title:'Runway',url:'https://runwayml.com',desc:'فيديو وذكاء اصطناعي.'},
+    {title:'Codeium',url:'https://codeium.com',desc:'مكمل كود مجاني.'},
+    {title:'GitHub Copilot',url:'https://github.com/features/copilot',desc:'مساعد برمجي داخل VS Code.'},
+    {title:'Notion AI',url:'https://www.notion.so/product/ai',desc:'مساعدة وتلخيص داخل Notion.'},
+    {title:'Tome',url:'https://tome.app',desc:'عروض تقديمية تلقائية.'},
+    {title:'ElevenLabs',url:'https://elevenlabs.io',desc:'نص إلى صوت واقعي.'},
+    {title:'Descript',url:'https://www.descript.com',desc:'تحرير صوت/فيديو.'}
+  ];
+  const useful=[
+    {title:'Archive.org',url:'https://archive.org',desc:'أرشيف الكتب والملفات.'},
+    {title:'Libgen',url:'https://libgen.li',desc:'محرك بحث للكتب.'},
+    {title:'Unsplash',url:'https://unsplash.com',desc:'صور مجانية عالية الجودة.'},
+    {title:'TinyPNG',url:'https://tinypng.com',desc:'ضغط الصور بجودة ممتازة.'},
+    {title:'Remove.bg',url:'https://remove.bg',desc:'إزالة الخلفية آليًا.'},
+    {title:'Canva',url:'https://www.canva.com',desc:'تصميم سريع.'}
+  ];
+  const tuts=[
+    {title:'رفع موقعك على GitHub Pages',url:'https://pages.github.com',desc:'خطوات بسيطة لنشر HTML.'},
+    {title:'أساسيات Tailwind CSS',url:'https://tailwindcss.com/docs',desc:'مرجع للأدوات.'},
+    {title:'تعلم Git بسرعة',url:'https://learngitbranching.js.org',desc:'تدريب تفاعلي.'}
+  ];
+  const eng={
+    listen:[
+      {title:'BBC Learning English',url:'https://www.bbc.co.uk/learningenglish',desc:'مقاطع يومية وتمارين.'},
+      {title:'VOA Learning English',url:'https://learningenglish.voanews.com',desc:'أخبار مبسطة.'},
+      {title:'ELLLO',url:'https://elllo.org',desc:'مكتبة ضخمة للاستماع.'}
+    ],
+    speak:[
+      {title:'TalkEnglish',url:'https://www.talkenglish.com',desc:'حوارات وتمارين نطق.'},
+      {title:'YouGlish',url:'https://youglish.com',desc:'نطق من اليوتيوب.'},
+      {title:'Elsa Speak (مدفوع)',url:'https://elsaspeak.com',desc:'تدريب نطق بالذكاء الاصطناعي.'}
+    ],
+    pod:[
+      {title:'The English We Speak',url:'https://www.bbc.co.uk/programmes/p02pc9zn/episodes/downloads',desc:'تعبيرات شائعة.'},
+      {title:'6 Minute English',url:'https://www.bbc.co.uk/programmes/p02pc9ny/episodes/downloads',desc:'بودكاست قصير.'},
+      {title:'All Ears English',url:'https://www.allearsenglish.com',desc:'محادثات عملية.'}
+    ],
+    all:[
+      {title:'Duolingo',url:'https://www.duolingo.com',desc:'تعلم مجاني تدريجي.'},
+      {title:'Lingoda (مدفوع)',url:'https://www.lingoda.com',desc:'حصص مباشرة.'},
+      {title:'Coursera English',url:'https://www.coursera.org',desc:'كورسات وشهادات.'}
+    ],
+    paid:[
+      {title:'Udemy English',url:'https://www.udemy.com/courses/language/english',desc:'دورات رخيصة وقت العروض.'},
+      {title:'Cambly',url:'https://www.cambly.com',desc:'محادثة مع متحدثين أصليين.'},
+      {title:'italki',url:'https://www.italki.com',desc:'دروس واحد-لواحد.'}
+    ]
+  };
+  const cardHTML=i=>`<article class="card"><h3>${i.title}</h3><p>${i.desc||''}</p><a class="btn small" href="${i.url}" target="_blank" rel="noopener">زيارة</a></article>`;
+  const fillGrid=(id,list)=>{const el=document.getElementById(id); if(!el) return; el.innerHTML=list.map(cardHTML).join('')};
+  fillGrid('aiGrid',aiTools); fillGrid('usefulGrid',useful); fillGrid('tutorialsGrid',tuts);
+  fillGrid('engListen',eng.listen); fillGrid('engSpeak',eng.speak); fillGrid('engPod',eng.pod); fillGrid('engAll',eng.all); fillGrid('engPaid',eng.paid);
+
+  // Contact via Formspree
+  const tsInput=document.getElementById('loaded_at'); if(tsInput) tsInput.value=String(Date.now());
+  const form=document.getElementById('contactForm'), submitBtn=document.getElementById('submitBtn'), messageStatus=document.getElementById('messageStatus'), agree=document.getElementById('agree');
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(!agree.checked){messageStatus.textContent='يرجى الموافقة على إرسال البيانات.';return;}
+    if(!form.checkValidity()){messageStatus.textContent='تحقق من الحقول المطلوبة.';return;}
+    const honey=document.getElementById('hp'); const loaded=parseInt((tsInput&&tsInput.value)||'0',10);
+    if(honey&&honey.value.trim()!==''){messageStatus.textContent='تم رفض الإرسال.';return;}
+    if(Date.now()-loaded<3000){messageStatus.textContent='يرجى الانتظار لحظة ثم حاول مرة أخرى.';return;}
+    submitBtn.disabled=true; const original=submitBtn.textContent; submitBtn.textContent='جاري الإرسال...';
+    try{
+      const res=await fetch('https://formspree.io/f/myzbrgpb',{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)});
+      if(res.ok){messageStatus.textContent='✅ تم إرسال رسالتك بنجاح!'; form.reset(); if(tsInput) tsInput.value=String(Date.now());}
+      else{messageStatus.textContent='⚠️ تعذّر الإرسال. حاول لاحقًا.';}
+    }catch(_){messageStatus.textContent='❌ خطأ في الشبكة.';}
+    finally{submitBtn.disabled=false; submitBtn.textContent=original;}
+  });
+
+  // Open section when clicking nav CTA
+  document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',()=>{
+    const sel=a.getAttribute('data-open'); const d=sel&&document.querySelector(sel);
+    if(d){ d.open=true; setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),40); }
+  }));
+});
+</script>
+</body>
+</html>
