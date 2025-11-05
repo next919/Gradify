@@ -1,155 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>جراديفي | Gradify — v3.4</title>
-  <meta name="description" content="منصة خفيفة تجمع القرآن، مواقع الذكاء الاصطناعي، الشروحات، مواقع مفيدة، وتعّلم الإنجليزية.">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradify | جراديفي</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-<body id="top">
-  <header class="header">
-    <div class="container header-wrap">
-      <a class="brand-link" href="#top" aria-label="الرئيسية">
-        <span class="brand-en">Gradify</span><span class="brand-sep">•</span><span class="brand-ar">جراديفي</span>
-      </a>
-      <nav class="nav" id="mainNav" aria-label="القائمة">
-        <a data-open="#sec-quran" href="#sec-quran">القرآن</a>
-        <a data-open="#sec-ai" href="#sec-ai">ذكاء اصطناعي</a>
-        <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
-        <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
-        <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
-        <a data-open="#sec-contact" href="#sec-contact">تواصل</a>
-      </nav>
-    </div>
-  </header>
+<body>
 
-  <div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<header>
+  <h1>جراديفي | Gradify</h1>
+  <nav>
+    <a href="#quran">القرآن الكريم</a>
+    <a href="#ai">مواقع الذكاء الاصطناعي</a>
+    <a href="#english">تعلم الإنجليزية</a>
+    <a href="#contact">تواصل معنا</a>
+  </nav>
+</header>
 
-  <section class="hero container">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1>منصّة خفيفة وعصرية</h1>
-        <p class="lead">ألوان مريحة، تجربة جميلة على الجوال والكمبيوتر، ومحتوى منظم يُفتح عند الحاجة.</p>
-        <div class="cta">
-          <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن</a>
-          <a class="btn ghost" href="#sec-ai" data-open="#sec-ai">استكشف أدوات الذكاء الاصطناعي</a>
-        </div>
-      </div>
-      <div class="hero-cards" aria-hidden="true">
-        <div class="hc glass"></div><div class="hc glass"></div><div class="hc glass"></div>
-      </div>
-    </div>
-  </section>
+<section id="quran" class="box">
+  <h2>القرآن الكريم</h2>
+  <select id="reciterSelect"></select>
+  <input type="text" id="surahSearch" placeholder="بحث عن سورة ...">
+  <div id="surahList"></div>
+  <audio id="player" controls></audio>
+</section>
 
-  <main id="content" class="container main">
-    <!-- القرآن -->
-    <details id="sec-quran" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🕋</div><h2>القرآن الكريم</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body">
-        <p class="muted">نسخة خفيفة للتجربة: اختر قارئًا وسورة للتشغيل (روابط MP3 مباشرة). يمكننا لاحقًا ربطها آليًا بمصدر mp3quran API.</p>
-        <div class="toolbar">
-          <select id="reciterSelect" class="field" aria-label="قائمة القرّاء"></select>
-          <input id="surahSearch" class="field" type="search" placeholder="بحث داخل السور (اسم/رقم)">
-        </div>
-        <div id="surahList" class="surahs" aria-live="polite"></div>
-      </div>
-    </details>
+<section id="ai" class="box">
+  <h2>مواقع الذكاء الاصطناعي</h2>
+  <ul>
+    <li><a href="https://chat.openai.com" target="_blank">ChatGPT</a> - مولد نصوص ذكي.</li>
+    <li><a href="https://copilot.microsoft.com" target="_blank">Copilot AI</a> - مساعد مهام شامل.</li>
+  </ul>
+</section>
 
-    <!-- AI -->
-    <details id="sec-ai" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">✨</div><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">+10 أدوات مع نبذة</span></div></summary>
-      <div class="section-body">
-        <div id="aiGrid" class="grid cards"></div>
-      </div>
-    </details>
+<section id="english" class="box">
+  <h2>تعلم اللغة الإنجليزية</h2>
+  <ul>
+    <li><a href="https://www.britishcouncil.sa" target="_blank">British Council</a> - موقع شامل.</li>
+  </ul>
+</section>
 
-    <!-- Tutorials -->
-    <details id="sec-tuts" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">📚</div><h2>الشروحات</h2><span class="hint">محتوى مختصر</span></div></summary>
-      <div class="section-body">
-        <div id="tutorialsGrid" class="grid cards"></div>
-      </div>
-    </details>
+<section id="contact" class="box">
+  <h2>تواصل معنا</h2>
+  <form action="https://formspree.io/f/myzbrgpb" method="POST">
+    <input name="name" placeholder="الاسم الكامل" required>
+    <input name="email" type="email" placeholder="البريد الإلكتروني" required>
+    <textarea name="message" placeholder="اكتب رسالتك هنا" required></textarea>
+    <button type="submit">إرسال</button>
+  </form>
+  <p>الدعم الفني: <a href="mailto:support@gradifysa.com">support@gradifysa.com</a></p>
+</section>
 
-    <!-- Useful -->
-    <details id="sec-useful" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">مختارات موثوقة</span></div></summary>
-      <div class="section-body">
-        <div id="usefulGrid" class="grid cards"></div>
-      </div>
-    </details>
-
-    <!-- English -->
-    <details id="sec-english" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">مقسمة حسب النوع</span></div></summary>
-      <div class="section-body">
-        <h3 class="sub">1) الاستماع</h3>
-        <div id="engListen" class="grid cards"></div>
-        <h3 class="sub">2) التحدث</h3>
-        <div id="engSpeak" class="grid cards"></div>
-        <h3 class="sub">3) بودكاست</h3>
-        <div id="engPod" class="grid cards"></div>
-        <h3 class="sub">4) مواقع شاملة</h3>
-        <div id="engAll" class="grid cards"></div>
-        <h3 class="sub">5) مواقع مدفوعة تستحق</h3>
-        <div id="engPaid" class="grid cards"></div>
-      </div>
-    </details>
-
-    <!-- Contact -->
-    <details id="sec-contact" class="section-acc glass">
-      <summary>
-        <div class="s-head">
-          <div class="s-icon">✉️</div>
-          <h2>تواصل معنا</h2>
-          <span class="hint">الدعم الفني:
-            <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a>
-          </span>
-        </div>
-      </summary>
-      <div class="section-body">
-        <div class="grid two">
-          <div class="card glass">
-            <h3>نموذج الاتصال</h3>
-            <form id="contactForm" class="form" action="https://formspree.io/f/myzbrgpb" method="POST" novalidate>
-              <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
-              <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
-              <input class="field" type="text" name="subject" placeholder="الموضوع" required>
-              <textarea class="field" name="message" rows="6" placeholder="اكتب رسالتك هنا..." required></textarea>
-              <label style="display:flex;align-items:center;gap:.5rem;margin:.3rem 0">
-                <input id="agree" type="checkbox" required> <span>أوافق على إرسال هذه البيانات لغرض التواصل</span>
-              </label>
-              <!-- Anti-spam -->
-              <input type="text" name="hp" id="hp" style="display:none" tabindex="-1" autocomplete="off">
-              <input type="hidden" name="loaded_at" id="loaded_at" value="">
-              <div class="row" style="gap:.6rem">
-                <button id="submitBtn" class="btn primary" type="submit">إرسال</button>
-              </div>
-              <div id="messageStatus" class="muted" role="status" aria-live="polite" style="margin-top:.4rem"></div>
-            </form>
-          </div>
-          <div class="card glass">
-            <h3>الدعم الفني</h3>
-            <p>
-              راسلنا على:
-              <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a><br>
-              نرد عادة خلال 24 ساعة.
-            </p>
-          </div>
-        </div>
-      </div>
-    </details>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <p>© <span id="year"></span> <strong>جراديفي | Gradify</strong></p>
-      <a class="to-top" href="#top">↑</a>
-    </div>
-  </footer>
-
-  <script src="script.js" defer></script>
+<script src="script.js" defer></script>
 </body>
 </html>
