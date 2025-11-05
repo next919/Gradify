@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>جراديفي | Gradify — Aura v3.2</title>
-  <meta name="description" content="تصميم Aura مع نموذج تواصل يعمل عبر Formspree وبديل mailto.">
+  <title>جراديفي | Gradify — Aura v3.3</title>
+  <meta name="description" content="تصميم Aura مع نموذج تواصل عبر Formspree وحماية مضادّة للسبام.">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -28,72 +28,7 @@
 
   <div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 
-  <section class="hero container">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1>منصّة خفيفة وعصرية</h1>
-        <div class="cta">
-          <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن</a>
-          <a class="btn ghost" href="#sec-ai" data-open="#sec-ai">استكشف الذكاء الاصطناعي</a>
-        </div>
-      </div>
-      <div class="hero-cards" aria-hidden="true">
-        <div class="hc glass"></div><div class="hc glass"></div><div class="hc glass"></div>
-      </div>
-    </div>
-  </section>
-
   <main id="content" class="container main">
-    <details id="sec-quran" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🕋</div><h2>القرآن الكريم</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body">
-        <div class="toolbar">
-          <input id="reciterSearch" class="field" type="search" placeholder="ابحث عن قارئ" aria-label="بحث عن قارئ" disabled>
-          <select id="reciterSelect" class="field" aria-label="قائمة القراء" disabled></select>
-          <select id="moshafSelect" class="field" aria-label="قائمة المصاحف" disabled></select>
-        </div>
-        <input id="surahSearch" class="field" type="search" placeholder="بحث داخل السور (اسم/رقم)" aria-label="بحث داخل السور" disabled>
-        <div id="surahList" class="surahs" aria-live="polite"></div>
-      </div>
-    </details>
-
-    <details id="sec-ai" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">✨</div><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body"><div id="aiGrid" class="grid cards"></div></div>
-    </details>
-
-    <details id="sec-tuts" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">📚</div><h2>الشروحات</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body">
-        <div id="tutorialsGrid" class="grid cards">
-          <article class="card"><h3>شرح 1 (قريبًا)</h3><p>مكان للدروس القصيرة.</p><a class="btn small" href="#">تفاصيل</a></article>
-          <article class="card"><h3>شرح 2 (قريبًا)</h3><p>دليل خطوة بخطوة.</p><a class="btn small" href="#">تفاصيل</a></article>
-          <article class="card"><h3>شرح 3 (قريبًا)</h3><p>روابط خارجية أو قنوات.</p><a class="btn small" href="#">تفاصيل</a></article>
-        </div>
-      </div>
-    </details>
-
-    <details id="sec-useful" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body"><div id="usefulGrid" class="grid cards"></div></div>
-    </details>
-
-    <details id="sec-english" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">اضغط للفتح</span></div></summary>
-      <div class="section-body">
-        <h3 class="sub">1) الاستماع</h3>
-        <div id="engListen" class="grid cards"></div>
-        <h3 class="sub">2) التحدث</h3>
-        <div id="engSpeak" class="grid cards"></div>
-        <h3 class="sub">3) بودكاست</h3>
-        <div id="engPod" class="grid cards"></div>
-        <h3 class="sub">4) مواقع شاملة</h3>
-        <div id="engAll" class="grid cards"></div>
-        <h3 class="sub">5) مواقع مدفوعة تستحق</h3>
-        <div id="engPaid" class="grid cards"></div>
-      </div>
-    </details>
-
     <details id="sec-contact" class="section-acc glass" open>
       <summary>
         <div class="s-head">
@@ -116,12 +51,16 @@
               <label style="display:flex;align-items:center;gap:.5rem;margin:.3rem 0">
                 <input id="agree" type="checkbox" required> <span>أوافق على إرسال هذه البيانات لغرض التواصل</span>
               </label>
-              <input type="hidden" id="formEndpoint" value="https://formspree.io/f/your-id-here">
+
+              <!-- Anti-spam -->
+              <input type="text" name="hp" id="hp" style="display:none" tabindex="-1" autocomplete="off">
+              <input type="hidden" name="loaded_at" id="loaded_at" value="">
+
               <div class="row" style="gap:.6rem">
-                <button id="sendBtn" class="btn primary" type="submit">إرسال</button>
-                <a class="btn small ghost" id="mailtoFallback" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
+                <button id="submitBtn" class="btn primary" type="submit">إرسال</button>
+                <a class="btn small ghost" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
               </div>
-              <div id="formMsg" class="muted" role="status" aria-live="polite" style="margin-top:.4rem"></div>
+              <div id="messageStatus" class="muted" role="status" aria-live="polite" style="margin-top:.4rem"></div>
             </form>
           </div>
           <div class="card glass">
