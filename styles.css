@@ -1,33 +1,14 @@
-body {
-  font-family: 'Tahoma', sans-serif;
-  background: #f0f7fb;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-header {
-  background: #ffffff;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-}
-nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #0077b6;
-}
-.box {
-  background: white;
-  margin: 20px auto;
-  padding: 20px;
-  width: 90%;
-  max-width: 800px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-#surahList div {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
+:root{--bg:#f7faff;--ink:#0f172a;--muted:#5b6b86;--brand:#22c1c3;--brand2:#8a2be2;--brand3:#00d2ff;--card:#fff;--ring:#dbe4f1;--glass:rgba(255,255,255,.55);--shadow:0 10px 30px rgba(17,24,39,.10)}
+body{margin:0;font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.container{max-width:1100px;margin-inline:auto;padding:18px}
+.header{position:sticky;top:0;background:var(--glass);backdrop-filter:blur(10px);border-bottom:1px solid var(--ring)}
+.header-wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.4rem}
+.brand-link{justify-self:center;display:flex;gap:.5rem;text-decoration:none}.brand-en{font-weight:900}.brand-ar{font-weight:900}
+.nav{justify-self:end;display:flex;gap:.4rem}.nav a{color:var(--muted);text-decoration:none}.nav-toggle{justify-self:start}
+.section-acc{border:1px solid var(--ring);border-radius:16px;margin:16px 0;background:var(--glass)}
+.section-acc>summary{padding:12px;cursor:pointer;display:flex;align-items:center;border-bottom:1px solid var(--ring)}
+.section-body{padding:14px}.grid{display:grid;gap:1rem}.grid.two{grid-template-columns:1fr 1fr}.card{background:#fff;border:1px solid var(--ring);border-radius:14px;padding:1rem}
+.field{width:100%;padding:.8rem 1rem;border:1px solid var(--ring);border-radius:12px;margin:.3rem 0}
+.btn{display:inline-block;padding:.75rem 1rem;border-radius:12px;border:1px solid var(--ring);text-decoration:none;background:var(--card);color:var(--ink)}
+.btn.primary{background:linear-gradient(120deg,var(--brand3),var(--brand));color:#05313a;border-color:transparent}
+.muted{color:var(--muted)}.row{display:flex;gap:.6rem;flex-wrap:wrap}.email{color:var(--ink);text-decoration:underline}
