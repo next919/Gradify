@@ -3,51 +3,13 @@
 const SURAH_NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
 
 
-// ===================== Dynamic Reciters (ALL) =====================
-// MP3Quran APIs (v3 + legacy) -> build full reciters list with all moshaf/riwayat.
-// Fallback to a local short list if APIs are unavailable.
-const RECITERS = [];
-let RECITERS_READY = false;
-function addReciterVariant(recId, recName, mushafName, server){
-  if(!server) return;
-  let base = server; if(!base.endsWith('/')) base += '/';
-  RECITERS.push({ id: recId + '__' + (mushafName||'').replace(/\s+/g,'_'), name: recName + (mushafName ? ' — ' + mushafName : ''), base: base, ext: '.mp3' });
-}
-async function fetchRecitersAll(){
-  try{
-    const res = await fetch('https://www.mp3quran.net/api/v3/reciters?language=ar', {cache:'no-store'});
-    if(res.ok){
-      const data = await res.json();
-      if(data && Array.isArray(data.reciters) && data.reciters.length){
-        data.reciters.forEach(r=>{ const rname=r.name||'قارئ'; Array.isArray(r.moshaf)&&r.moshaf.forEach(m=>addReciterVariant(String(r.id), rname, m.name||'', m.server)); });
-        return true;
-      }
-    }
-  }catch(e){}
-  try{
-    const res2 = await fetch('https://www.mp3quran.net/api/_arabic.json', {cache:'no-store'});
-    if(res2.ok){
-      const data2 = await res2.json();
-      if(data2 && Array.isArray(data2.reciters)){
-        data2.reciters.forEach(r=>{
-          const rname=r.name||'قارئ';
-          if(Array.isArray(r.moshaf)){ r.moshaf.forEach(m=>addReciterVariant(String(r.id||rname), rname, m.name||'', m.server||r.Server)); }
-          else { addReciterVariant(String(r.id||rname), rname, r.rewaya||'', r.Server); }
-        });
-        return true;
-      }
-    }
-  }catch(e){}
-  return false;
-}
-const FALLBACK_RECITERS = [
-  { id:"abdul_basit_mujawwad", name:"عبدالباسط — مجود", base:"https://download.quranicaudio.com/quran/abdul_basit/mujawwad/", ext:".mp3" },
-  { id:"abdul_basit_murattal", name:"عبدالباسط — مرتل", base:"https://download.quranicaudio.com/quran/abdul_basit/murattal/", ext:".mp3" },
-  { id:"husary_mujawwad", name:"الحصري — مجود", base:"https://download.quranicaudio.com/quran/husary/mujawwad/", ext:".mp3" },
+// Reciters (curated, reliable HTTPS on quranicaudio.com)
+const RECITERS = [
   { id:"husary_murattal", name:"الحصري — مرتل", base:"https://download.quranicaudio.com/quran/husary/murattal/", ext:".mp3" },
-  { id:"minshawi_mujawwad", name:"المنشاوي — مجود", base:"https://download.quranicaudio.com/quran/minshawi/mujawwad/", ext:".mp3" },
   { id:"minshawi_murattal", name:"المنشاوي — مرتل", base:"https://download.quranicaudio.com/quran/minshawi/murattal/", ext:".mp3" },
-  { id:"maher", name:"ماهر المعيقلي", base:"https://download.quranicaudio.com/quran/maher_al_muaiqly/", ext:".mp3" },
+  { id:"abdul_basit_murattal", name:"عبدالباسط — مرتل", base:"https://download.quranicaudio.com/quran/abdul_basit/murattal/", ext:".mp3" },
+  { id:"abdul_basit_mujawwad", name:"عبدالباسط — مجود", base:"https://download.quranicaudio.com/quran/abdul_basit/mujawwad/", ext:".mp3" },
+  { id:"minshawi_mujawwad", name:"المنشاوي — مجود", base:"https://download.quranicaudio.com/quran/minshawi/mujawwad/", ext:".mp3" },
   { id:"sudais", name:"عبدالرحمن السديس", base:"https://download.quranicaudio.com/quran/abdulrahman_al_sudais/", ext:".mp3" },
   { id:"afasy", name:"مشاري العفاسي", base:"https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/", ext:".mp3" },
   { id:"shuraym", name:"سعود الشريم", base:"https://download.quranicaudio.com/quran/saud_alshuraim/", ext:".mp3" },
@@ -55,7 +17,6 @@ const FALLBACK_RECITERS = [
   { id:"basfar", name:"عبدالله بصفر", base:"https://download.quranicaudio.com/quran/abdullah_basfar/", ext:".mp3" },
   { id:"huthaify", name:"علي الحذيفي", base:"https://download.quranicaudio.com/quran/ali_al_huthaify/", ext:".mp3" }
 ];
-async function ensureReciters(){ if(RECITERS_READY) return; const ok=await fetchRecitersAll(); if(!ok){ RECITERS.push(...FALLBACK_RECITERS); } RECITERS_READY=true; }
 
 
 // 20+ AI sites
@@ -152,9 +113,8 @@ function renderCards(containerId, items){
 }
 
 // ===== Quran: Listening Player =====
-async function initQuran(){
+function initQuran(){
   const readerSel = $('#readerSelect');
-  await ensureReciters();
   RECITERS.forEach(r => {
     const o = document.createElement('option');
     o.value = r.id; o.textContent = r.name; readerSel.appendChild(o);

@@ -24,7 +24,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}*,*::before,*::after{b
 .footer{border-top:1px solid var(--ring);padding:1rem 0}.to-top{color:var(--muted);text-decoration:none}.email{color:var(--ink);text-decoration:underline}.email:hover{opacity:.85}
 .consent{display:flex;align-items:center;gap:.4rem;margin:.4rem 0}
 
-@keyframes floatA { 0%{transform:translate3d(0,0,0)} 50%{transform:translate3d(20px,-10px,0)} 100%{transform:translate3d(0,0,0)} }
+@keyframes floatA { 0%{transform:translate3d(0,0,0)} 50%{transform:translate3d(22px,-12px,0)} 100%{transform:translate3d(0,0,0)} }
 .aura .a1{animation:floatA 14s ease-in-out infinite}
 .aura .a2{animation:floatA 18s ease-in-out infinite reverse}
 .aura .a3{animation:floatA 22s ease-in-out infinite}
