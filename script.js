@@ -2,6 +2,24 @@
 // Surah names
 const SURAH_NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
 // ---- Reader/Mushaf helpers ----
+
+// === Failsafe Bootstrap Reciters (shows instantly) ===
+const RECITERS_BOOTSTRAP = [
+  { id:"husary", name:"محمود الحصري", moshaf:[{name:"مرتل", server:"https://download.quranicaudio.com/quran/husary/murattal/"}] },
+  { id:"minshawi", name:"محمد صديق المنشاوي", moshaf:[{name:"مرتل", server:"https://download.quranicaudio.com/quran/minshawi/murattal/"},{name:"مجود", server:"https://download.quranicaudio.com/quran/minshawi/mujawwad/"}] },
+  { id:"abdul_basit", name:"عبدالباسط عبدالصمد", moshaf:[{name:"مرتل", server:"https://download.quranicaudio.com/quran/abdul_basit/murattal/"},{name:"مجود", server:"https://download.quranicaudio.com/quran/abdul_basit/mujawwad/"}] },
+  { id:"sudais", name:"عبدالرحمن السديس", moshaf:[{name:"حفص/مرتل", server:"https://download.quranicaudio.com/quran/abdulrahman_al_sudais/"}] },
+  { id:"afasy", name:"مشاري العفاسي", moshaf:[{name:"حفص/مرتل", server:"https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/"}] }
+];
+function useBootstrapReciters(){
+  try{
+    RECITERS_FULL = RECITERS_BOOTSTRAP.slice();
+    renderReaders(document.getElementById('readerSelect'));
+    const mushSel = document.getElementById('mushafSelect');
+    if(mushSel) renderMushaf(mushSel, document.getElementById('readerSelect').value);
+  }catch(_){}
+}
+
 function renderReaders(readerSel){
   readerSel.innerHTML = (RECITERS_FULL||[]).map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
 }
@@ -124,7 +142,21 @@ async function fetchRecitersFull(){
 
 async function ensureRecitersFull(){
   if(RECITERS_READY) return;
-  await fetchRecitersFull();
+  // show bootstrap immediately so the UI is never empty
+  useBootstrapReciters();
+  // fetch with timeout
+  const controller = new AbortController();
+  const tm = setTimeout(()=>controller.abort(), 6000);
+  try{
+    const ok = await fetchRecitersFull();
+    if(ok){
+      // replace lists with full set
+      const rSel = document.getElementById('readerSelect');
+      const mSel = document.getElementById('mushafSelect');
+      if(rSel){ renderReaders(rSel); if(mSel) renderMushaf(mSel, rSel.value); }
+    }
+  }catch(_){ /* ignore */ }
+  clearTimeout(tm);
   RECITERS_READY = true;
 }
 
@@ -238,6 +270,7 @@ function renderCards(containerId, items){
 
 // ===== Quran: Listening Player =====
 async function initQuran(){
+  await ensureRecitersFull();
   try{ if(!Array.isArray(RECITERS) || RECITERS.length===0){ throw new Error('no reciters'); } }catch(e){ /* handled by fallback above */ }
   const readerSel = $('#readerSelect'); const mushafSel = $('#mushafSelect');
   await ensureRecitersFull();
@@ -272,9 +305,21 @@ async function initQuran(){
 
   const player = $('#player');
   function buildUrl(){
-    const r = RECITERS.find(x=>x.id===readerSel.value) || RECITERS[0];
-    const s = surahSel.value;
-    return `${r.base}${s}${r.ext}`;
+    const readerSel = document.getElementById('readerSelect');
+    const mushafSel = document.getElementById('mushafSelect');
+    const surahSel  = document.getElementById('surahSelect');
+    const surah = surahSel ? surahSel.value : '001';
+    if(readerSel && mushafSel){
+      const picked = findVariant(readerSel.value, mushafSel.value);
+      if(picked){ return `${picked.base}${surah}.mp3`; }
+    }
+    // fallback to first available
+    try{
+      const R = (RECITERS_FULL && RECITERS_FULL[0]) ? RECITERS_FULL[0] : null;
+      const M = (R && R.moshaf && R.moshaf[0]) ? R.moshaf[0] : null;
+      if(M && M.server){ let b = M.server.endsWith('/')? M.server : M.server+'/'; return `${b}${surah}.mp3`; }
+    }catch(_){}
+    return '';
   }
   $('#playBtn').addEventListener('click', ()=>{
     player.src = buildUrl();
