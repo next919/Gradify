@@ -32,4 +32,144 @@
 <body>
 <header class="head container">
   <div class="brand">Gradify</div>
-  <nav class="nav"><a href="#quran">القرآن</a><a href="#
+  <nav class="nav"><a href="#quran">القرآن</a><a href="#ai">ذكاء</a><a href="#english">الإنجليزية</a></nav>
+  <div class="site-search">
+    <input id="siteSearchInput" class="field" placeholder="ابحث في القرّاء/السور/الأقسام… (الحصري، البقرة، ChatGPT)">
+    <button id="siteSearchAdvBtn" class="btn small" aria-expanded="false">خيارات</button>
+    <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
+  </div>
+</header>
+
+<main class="container">
+  <section id="quran" class="card" aria-labelledby="quran-title">
+    <h2 id="quran-title">القرآن الكريم — استماع</h2>
+    <div class="row">
+      <label class="field-wrap"><span>القارئ</span>
+        <select id="reader" class="field" aria-label="اختيار القارئ"></select>
+      </label>
+      <label class="field-wrap"><span>الرواية/المصحف</span>
+        <select id="mushaf" class="field" aria-label="اختيار الرواية"></select>
+      </label>
+      <label class="field-wrap"><span>السورة</span>
+        <select id="surah" class="field" aria-label="اختيار السورة"></select>
+      </label>
+      <button id="playBtn" class="btn">تشغيل</button>
+    </div>
+    <audio id="player" class="player" controls preload="none"></audio>
+    <p class="muted">روابط HTTPS مباشرة من quranicaudio.com — عند فشل مصدر اختر مصحفًا آخر.</p>
+  </section>
+
+  <section id="ai" class="card">
+    <h2>مواقع الذكاء الاصطناعي</h2>
+    <div id="aiList" class="row"></div>
+  </section>
+
+  <section id="english" class="card">
+    <h2>تعلم الإنجليزية مجانًا</h2>
+    <div id="enList" class="row"></div>
+  </section>
+
+  <footer class="footer">R1+ (single-file v2) — بعد الرفع حدّث الصفحة بقوة: Ctrl+F5 / Cmd+Shift+R</footer>
+</main>
+
+<div class="mini-player">
+  <button id="miniPlayBtn" class="btn small">▶</button>
+  <div id="miniNowLabel" class="mini-label">—</div>
+  <a class="btn small" href="#quran">فتح القرآن</a>
+</div>
+
+<script>
+/*** بيانات ثابتة (القوائم) ***/
+const RECITERS = [
+  { id:"husary", name:"محمود الحصري", moshaf:[
+    {name:"مرتل (حفص)", base:"https://download.quranicaudio.com/quran/husary/murattal/"},
+    {name:"مجود",       base:"https://download.quranicaudio.com/quran/husary/mujawwad/"}
+  ]},
+  { id:"minshawi", name:"محمد صديق المنشاوي", moshaf:[
+    {name:"مرتل", base:"https://download.quranicaudio.com/quran/minshawi/murattal/"},
+    {name:"مجود", base:"https://download.quranicaudio.com/quran/minshawi/mujawwad/"}
+  ]},
+  { id:"abdul_basit", name:"عبدالباسط عبدالصمد", moshaf:[
+    {name:"مرتل", base:"https://download.quranicaudio.com/quran/abdul_basit/murattal/"},
+    {name:"مجود", base:"https://download.quranicaudio.com/quran/abdul_basit/mujawwad/"}
+  ]},
+  { id:"sudais", name:"عبدالرحمن السديس", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/abdulrahman_al_sudais/"}
+  ]},
+  { id:"afasy", name:"مشاري العفاسي", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/"}
+  ]},
+  { id:"shuraym", name:"سعود الشريم", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/saud_alshuraim/"}
+  ]},
+  { id:"ajamy", name:"أحمد العجمي", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/ahmed_ibn_ali_al_ajamy/"}
+  ]},
+  { id:"huthaify", name:"علي الحذيفي", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/ali_al_huthaify/"}
+  ]},
+  { id:"basfar", name:"عبدالله بصفر", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/abdullah_basfar/"}
+  ]}
+];
+
+const SURAH_NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+
+/*** أدوات ***/
+const $ = s=>document.querySelector(s);
+const pad3 = n=>String(n).padStart(3,'0');
+function normAr(s){ if(!s) return ''; const d=/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g; return s.replace(d,'').replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ٱ/g,'ا').toLowerCase(); }
+
+/*** تعبئة القوائم ***/
+function fillReaders(){ $('#reader').innerHTML = RECITERS.map(r=>`<option value="${r.id}">${r.name}</option>`).join(''); }
+function fillMushaf(){ const R=RECITERS.find(x=>x.id===$('#reader').value); $('#mushaf').innerHTML=(R?.moshaf||[]).map(m=>`<option value="${m.base}">${m.name}</option>`).join(''); }
+function fillSurah(){ $('#surah').innerHTML= SURAH_NAMES.map((n,i)=>`<option value="${pad3(i+1)}">${i+1} — ${n}</option>`).join(''); }
+
+/*** بناء الرابط ***/
+function currentSrc(){ let b=$('#mushaf').value||''; if(b && !b.endsWith('/')) b+='/'; return b + ($('#surah').value||'001') + '.mp3'; }
+
+/*** بحث ذكي بسيط ***/
+function buildIndex(){
+  const idx=[];
+  SURAH_NAMES.forEach((n,i)=>idx.push({t:'quran',k:`${i+1} ${n}`,act:()=>{location.hash='#quran';$('#surah').value=pad3(i+1);updateMini();}}));
+  RECITERS.forEach(r=>idx.push({t:'reciter',k:r.name,act:()=>{location.hash='#quran';$('#reader').value=r.id;fillMushaf();updateMini();}}));
+  [{name:"ChatGPT",url:"https://chat.openai.com"},{name:"Claude",url:"https://claude.ai"}].forEach(a=>idx.push({t:'ai',k:a.name,url:a.url}));
+  [{name:"BBC Learning English",url:"https://www.bbc.co.uk/learningenglish"},{name:"ESL Fast",url:"https://eslfast.com"}].forEach(e=>idx.push({t:'english',k:e.name,url:e.url}));
+  return idx;
+}
+function doSearch(q,idx){const qq=normAr(q.trim());if(!qq)return[];const out=[];for(const it of idx){if(normAr(it.k).includes(qq)){out.push(it);if(out.length>=30)break;}}return out;}
+function renderSearch(list){
+  const box=$('#siteSearchResults'); if(!list.length){box.classList.remove('show');box.innerHTML='';return;}
+  const label=t=>({quran:'سورة',reciter:'قارئ',ai:'ذكاء',english:'إنجليزي'})[t]||t;
+  box.innerHTML=list.map(it=>`<div class="item"><span>${it.k}</span><small>${label(it.t)}</small></div>`).join('');
+  box.classList.add('show');
+  [...box.children].forEach((el,i)=>el.addEventListener('click',()=>{const row=list[i];box.classList.remove('show');box.innerHTML='';if(row.act){row.act();} if(row.url){window.open(row.url,'_blank');}}));
+}
+
+/*** تهيئة ***/
+function updateMini(){
+  const r=RECITERS.find(x=>x.id===$('#reader').value);
+  const mush=$('#mushaf').selectedOptions[0]?.textContent||''; const s=parseInt($('#surah').value||'1',10);
+  $('#miniNowLabel').textContent=`${r?r.name:'—'} — ${mush} — ${s} ${SURAH_NAMES[s-1]||''}`;
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  fillReaders(); fillMushaf(); fillSurah(); updateMini();
+  $('#reader').addEventListener('change',()=>{fillMushaf();updateMini();});
+  $('#mushaf').addEventListener('change',updateMini);
+  $('#surah').addEventListener('change',updateMini);
+  $('#playBtn').addEventListener('click',()=>{const p=$('#player'); p.src=currentSrc(); p.play().catch(()=>{});});
+  $('#miniPlayBtn').addEventListener('click',()=>{const p=$('#player'); if(p.paused)p.play().catch(()=>{}); else p.pause();});
+
+  // قوائم المواقع
+  $('#aiList').innerHTML=['ChatGPT','Claude'].map((n,i)=>`<a class="field" target="_blank" href="${i? 'https://claude.ai':'https://chat.openai.com'}">${n}</a>`).join(' ');
+  $('#enList').innerHTML=['BBC Learning English','ESL Fast'].map((n,i)=>`<a class="field" target="_blank" href="${i? 'https://eslfast.com':'https://www.bbc.co.uk/learningenglish'}">${n}</a>`).join(' ');
+
+  // البحث
+  const idx=buildIndex(); const inp=$('#siteSearchInput'); const box=$('#siteSearchResults'); const advBtn=$('#siteSearchAdvBtn');
+  inp.addEventListener('input',()=>renderSearch(doSearch(inp.value,idx)));
+  document.addEventListener('click',(e)=>{ if(!e.target.closest('.site-search')) box.classList.remove('show'); });
+  advBtn.addEventListener('click',()=>{ /* مساحة للخيارات لاحقًا */ });
+});
+</script>
+</body>
+</html>
