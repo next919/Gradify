@@ -1,6 +1,35 @@
 // ===== Data =====
 // Surah names
 const SURAH_NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+// ---- Filters for Listen tab ----
+let ALL_RECITERS = RECITERS.slice();
+function renderReaderOptions(filter=""){
+  const readerSel = $('#readerSelect');
+  const q = (filter||"").trim();
+  let list = ALL_RECITERS;
+  if(q){
+    const qn = q.replace(/[^\d]/g,'').trim();
+    list = ALL_RECITERS.filter(r => (r.name||"").includes(q));
+  }
+  const prev = readerSel.value;
+  readerSel.innerHTML = list.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+  // keep previous selection if still present
+  if(list.some(r=>r.id===prev)) readerSel.value = prev;
+}
+
+function renderSurahOptions(filter=""){
+  const surahSel = $('#surahSelect');
+  const q = (filter||"").trim();
+  let items = SURAH_NAMES.map((n,i)=>({name:n, idx:i+1}));
+  if(q){
+    const num = parseInt(q,10);
+    items = items.filter(x => (!isNaN(num) && (x.idx===num || String(x.idx).padStart(3,'0').includes(String(num)))) || x.name.includes(q));
+  }
+  const prev = surahSel.value;
+  surahSel.innerHTML = items.map(x=>`<option value="${String(x.idx).padStart(3,'0')}">${x.idx} — ${x.name}</option>`).join('');
+  if(items.some(x=>String(x.idx).padStart(3,'0')===prev)) surahSel.value = prev;
+}
+
 
 
 // Reciters (curated, reliable HTTPS on quranicaudio.com)
@@ -115,17 +144,23 @@ function renderCards(containerId, items){
 // ===== Quran: Listening Player =====
 function initQuran(){
   const readerSel = $('#readerSelect');
-  RECITERS.forEach(r => {
+  ALL_RECITERS = RECITERS.slice();
+  renderReaderOptions();
+  document.getElementById('readerSearch').addEventListener('input', e=> renderReaderOptions(e.target.value));
+  // old: populate
+  /*RECITERS.forEach(r => {*/
     const o = document.createElement('option');
-    o.value = r.id; o.textContent = r.name; readerSel.appendChild(o);
-  });
+    o.value = r.id; o.textContent = r.name; /*readerSel.appendChild(o);
+  });*/
 
   const surahSel = $('#surahSelect');
-  SURAH_NAMES.forEach((n, i) => {
+  renderSurahOptions();
+  document.getElementById('surahFilter').addEventListener('input', e=> renderSurahOptions(e.target.value));
+  /*SURAH_NAMES.forEach((n, i) => {*/
     const o = document.createElement('option');
     o.value = (i+1).toString().padStart(3,'0');
-    o.textContent = `${i+1} — ${n}`; surahSel.appendChild(o);
-  });
+    o.textContent = `${i+1} — ${n}`; /*surahSel.appendChild(o);
+  });*/
 
   const player = $('#player');
   function buildUrl(){
