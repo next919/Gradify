@@ -10,6 +10,11 @@
 <body id="top">
   <header class="header">
     <div class="container header-wrap">
+      <div class="site-search">
+        <input id="siteSearchInput" class="field" placeholder="ابحث في الموقع (مثال: البقرة، الحصري، ChatGPT، Grammar)"/>
+        <button id="siteSearchAdvBtn" class="btn small ghost" aria-expanded="false" aria-controls="siteSearchAdvanced">خيارات</button>
+        <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
+      </div>
       <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
       <a class="brand-link" href="#top" aria-label="الرئيسية">
         <span class="brand-en">Gradify</span><span class="brand-sep">•</span><span class="brand-ar">جراديفي</span>
@@ -27,6 +32,21 @@
 
   <div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 
+  <section id="siteSearchAdvanced" class="search-advanced container" hidden>
+    <div class="card glass">
+      <h3 style="margin-top:0">بحث متقدّم</h3>
+      <div class="row" style="gap:.6rem">
+        <label><input type="checkbox" class="adv-src" value="quran" checked> القرآن</label>
+        <label><input type="checkbox" class="adv-src" value="reciters" checked> القرّاء</label>
+        <label><input type="checkbox" class="adv-src" value="ai" checked> الذكاء الاصطناعي</label>
+        <label><input type="checkbox" class="adv-src" value="english" checked> الإنجليزية</label>
+        <label><input type="checkbox" class="adv-src" value="useful" checked> مواقع مفيدة</label>
+      </div>
+      <p class="muted" style="margin:.4rem 0 0">تلميحات: استخدم @q للقرآن، @ai للذكاء، @en للإنجليزية، @us للمواقع.</p>
+    </div>
+  </section>
+
+
   <section class="hero container">
     <div class="hero-inner">
       <div class="hero-text">
@@ -40,25 +60,6 @@
       <div class="hero-cards" aria-hidden="true">
         <div class="hc glass"></div><div class="hc glass"></div><div class="hc glass"></div>
       </div>
-    </div>
-  </section>
-
-  <section class="quick-player container">
-    <div class="qp-wrap glass">
-      <div class="qp-head">
-        <div class="qp-title">🎧 مشغّل القرآن السريع</div>
-        <a class="btn small ghost" href="#sec-quran" data-open="#sec-quran">فتح قسم القرآن</a>
-      </div>
-      <div class="qp-controls">
-        <label class="field-wrap"><span>القارئ</span>
-          <select id="quickReader" class="field"></select>
-        </label>
-        <label class="field-wrap"><span>السورة</span>
-          <select id="quickSurah" class="field"></select>
-        </label>
-        <button id="quickPlay" class="btn primary small">تشغيل</button>
-      </div>
-      <audio id="player" controls class="player" preload="none"></audio>
     </div>
   </section>
 
@@ -76,16 +77,17 @@
         <!-- استماع -->
         <div id="listenTab" class="tab-pane active">
           <div class="toolbar">
+            <label class="consent"><input type="checkbox" id="readingModeToggle"> <span>وضع القراءة</span></label>
             <label class="field-wrap"><span>بحث القارئ</span>
               <input id="readerSearch" class="field" placeholder="اكتب اسم القارئ (مثال: الحصري)">
             </label>
-            <label class="field-wrap"><span>القارئ</span>
+            <label class="field-wrap"><span class="visually-hidden">القارئ</span>
               <select id="readerSelect" class="field"></select>
             </label>
             <label class="field-wrap"><span>بحث السورة</span>
               <input id="surahFilter" class="field" placeholder="اكتب اسم السورة أو رقمها (مثال: 2 أو البقرة)">
             </label>
-            <label class="field-wrap"><span>السورة</span>
+            <label class="field-wrap"><span class="visually-hidden">السورة</span>
               <select id="surahSelect" class="field"></select>
             </label>
             <button id="playBtn" class="btn small primary">تشغيل</button>
@@ -180,7 +182,27 @@
       </div>
     </details>
 
-  </main>
+  
+  <section class="quick-player container">
+    <div class="qp-wrap glass">
+      <div class="qp-head">
+        <div class="qp-title">🎧 مشغّل القرآن</div>
+        <a class="btn small ghost" href="#sec-quran" data-open="#sec-quran">فتح قسم القرآن</a>
+      </div>
+      <div class="qp-controls">
+        <label class="field-wrap"><span class="visually-hidden">القارئ</span>
+          <select id="quickReader" class="field"></select>
+        </label>
+        <label class="field-wrap"><span class="visually-hidden">السورة</span>
+          <select id="quickSurah" class="field"></select>
+        </label>
+        <button id="quickPlay" class="btn primary small">تشغيل</button>
+      </div>
+      <audio id="player" controls class="player" preload="none"></audio>
+    </div>
+  </section>
+
+</main>
 
   <footer class="footer">
     <div class="container">
@@ -190,5 +212,12 @@
   </footer>
 
   <script src="script.js" defer></script>
+
+  <div id="miniPlayerBar" class="mini-player glass" role="region" aria-label="مشغل مختصر">
+    <button id="miniPlayBtn" class="btn small">تشغيل/إيقاف</button>
+    <div class="mini-label" id="miniNowLabel">—</div>
+    <button id="miniGotoBtn" class="btn small ghost" data-open="#sec-quran">فتح قسم القرآن</button>
+  </div>
+
 </body>
 </html>
