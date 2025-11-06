@@ -1,71 +1,264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradify Aura R1+ — بحث ذكي</title>
-<link rel="stylesheet" href="styles.css?v=S1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gradify — Aura R1+ (Single file fix)</title>
+
+<style>
+:root{
+  --bg:#0b0f17; --card:#0e1624; --ring:#24324d; --ink:#eaf2ff;
+  --muted:#9fb1d4; --accent:#5ee7df;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#071018 0%,#0b0f17 60%);color:var(--ink)}
+.container{max-width:980px;margin:10px auto;padding:12px}
+.head{position:sticky;top:0;background:rgba(11,17,30,.8);backdrop-filter:blur(6px);z-index:50;padding:10px;border-bottom:1px solid rgba(255,255,255,.02);display:flex;gap:12px;align-items:center}
+.brand{font-weight:800;margin-inline-end:8px}
+.nav a{color:var(--muted);text-decoration:none;margin-inline:6px}
+.site-search{margin-inline-start:auto;position:relative;display:flex;align-items:center;gap:.6rem}
+.field{background:#0f1a33;color:var(--ink);border:1px solid var(--ring);border-radius:10px;padding:.6rem .9rem;min-width:220px}
+.btn{background:#12323b;color:var(--ink);border:1px solid var(--ring);border-radius:10px;padding:.5rem .9rem;cursor:pointer}
+.btn.small{padding:.35rem .6rem}
+.card{background:var(--card);border:1px solid var(--ring);border-radius:14px;padding:16px;margin:14px 0;box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.field-wrap{display:flex;flex-direction:column;gap:6px}
+.player{width:100%;margin-top:8px}
+.muted{opacity:.75}
+.search-results{position:absolute;top:calc(100% + 8px);right:0;display:none;background:var(--card);border:1px solid var(--ring);border-radius:10px;min-width:360px;max-height:45vh;overflow:auto;z-index:120}
+.search-results.show{display:block}
+.search-results .item{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.02);cursor:pointer;display:flex;justify-content:space-between}
+.search-results .item small{opacity:.7}
+.mini-player{position:fixed;bottom:10px;left:10px;right:10px;display:flex;gap:8px;align-items:center;padding:.6rem;border-radius:12px;background:rgba(10,14,20,.8);border:1px solid rgba(255,255,255,.03)}
+.mini-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.footer{opacity:.7;text-align:center;padding:18px;margin-top:12px}
+</style>
 </head>
 <body>
-<header class="head">
+<header class="head container" role="banner">
   <div class="brand">Gradify</div>
-  <nav class="nav">
+  <nav class="nav" aria-label="الرئيسية">
     <a href="#quran">القرآن</a>
     <a href="#ai">ذكاء</a>
     <a href="#english">الإنجليزية</a>
   </nav>
-  <div class="site-search">
+
+  <div class="site-search" role="search" aria-label="بحث الموقع">
     <input id="siteSearchInput" class="field" placeholder="ابحث في القرّاء/السور/الأقسام… (مثال: الحصري، البقرة، ChatGPT)">
-    <button id="siteSearchAdvBtn" class="btn small ghost" aria-expanded="false" aria-controls="siteSearchAdvanced">خيارات</button>
+    <button id="siteSearchAdvBtn" class="btn small" aria-expanded="false">خيارات</button>
     <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
   </div>
 </header>
 
-<section id="siteSearchAdvanced" class="search-advanced container" hidden>
-  <div class="card">
-    <strong>تحديد المصادر</strong>
-    <label><input type="checkbox" class="adv-src" value="quran" checked> القرآن (السور)</label>
-    <label><input type="checkbox" class="adv-src" value="reciters" checked> القرّاء</label>
-    <label><input type="checkbox" class="adv-src" value="ai" checked> الذكاء الاصطناعي</label>
-    <label><input type="checkbox" class="adv-src" value="english" checked> الإنجليزية</label>
-  </div>
-</section>
+<main class="container" id="main">
+  <section id="quran" class="card" aria-labelledby="quran-title">
+    <h2 id="quran-title">القرآن الكريم — استماع</h2>
+    <div class="row" role="region" aria-label="أدوات الاستماع">
+      <label class="field-wrap"><span>القارئ</span>
+        <select id="reader" class="field" aria-label="اختيار القارئ"></select>
+      </label>
 
-<main class="container">
-  <section id="quran" class="card">
-    <h2>القرآن الكريم — استماع</h2>
-    <div class="row">
-      <label class="field-wrap">
-        <span>القارئ</span>
-        <select id="reader" class="field"></select>
+      <label class="field-wrap"><span>الرواية/المصحف</span>
+        <select id="mushaf" class="field" aria-label="اختيار الرواية"></select>
       </label>
-      <label class="field-wrap">
-        <span>الرواية/المصحف</span>
-        <select id="mushaf" class="field"></select>
+
+      <label class="field-wrap"><span>السورة</span>
+        <select id="surah" class="field" aria-label="اختيار السورة"></select>
       </label>
-      <label class="field-wrap">
-        <span>السورة</span>
-        <select id="surah" class="field"></select>
-      </label>
-      <button id="playBtn" class="btn">تشغيل</button>
+
+      <button id="playBtn" class="btn" aria-label="تشغيل">تشغيل</button>
     </div>
-    <audio id="player" controls class="player" preload="none"></audio>
-    <p class="note">روابط HTTPS مباشرة من quranicaudio.com — عند فشل مصدر سيبقى بإمكانك اختيار مصحف آخر.</p>
+
+    <audio id="player" class="player" controls preload="none" aria-label="مشغل القرآن"></audio>
+    <p class="muted" style="margin-top:10px">المصادر: روابط HTTPS مباشرة من quranicaudio.com — عند فشل مصدر يمكنك اختيار مصحف آخر.</p>
   </section>
 
   <section id="ai" class="card">
     <h2>مواقع الذكاء الاصطناعي</h2>
-    <ul class="list two" id="aiList"></ul>
+    <div id="aiList" class="row"></div>
   </section>
 
   <section id="english" class="card">
     <h2>تعلم الإنجليزية مجاناً</h2>
-    <ul class="list two" id="enList"></ul>
+    <div id="enList" class="row"></div>
   </section>
+
+  <footer class="footer">نسخة إنقاذ R1+ (single-file) — بعد الرفع اضغط Ctrl+F5 لتفريغ الكاش</footer>
 </main>
 
-<footer class="foot">R1+ مع بحث ذكي — لا يعتمد على API خارجي</footer>
+<div class="mini-player" role="status" aria-live="polite">
+  <button id="miniPlayBtn" class="btn small" aria-label="تشغيل/إيقاف">▶</button>
+  <div id="miniNowLabel" class="mini-label">—</div>
+  <a class="btn small" href="#quran">فتح القرآن</a>
+</div>
 
-<script src="script.js?v=S1"></script>
+<script>
+/* ======== بيانات ثابتة (مضمنة) ======== */
+const RECITERS = [
+  { id:"husary", name:"محمود الحصري", moshaf:[
+    {name:"مرتل (حفص)", base:"https://download.quranicaudio.com/quran/husary/murattal/"},
+    {name:"مجود", base:"https://download.quranicaudio.com/quran/husary/mujawwad/"}
+  ]},
+  { id:"minshawi", name:"محمد صديق المنشاوي", moshaf:[
+    {name:"مرتل", base:"https://download.quranicaudio.com/quran/minshawi/murattal/"},
+    {name:"مجود", base:"https://download.quranicaudio.com/quran/minshawi/mujawwad/"}
+  ]},
+  { id:"abdul_basit", name:"عبدالباسط عبدالصمد", moshaf:[
+    {name:"مرتل", base:"https://download.quranicaudio.com/quran/abdul_basit/murattal/"},
+    {name:"مجود", base:"https://download.quranicaudio.com/quran/abdul_basit/mujawwad/"}
+  ]},
+  { id:"sudais", name:"عبدالرحمن السديس", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/abdulrahman_al_sudais/"}
+  ]},
+  { id:"afasy", name:"مشاري العفاسي", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/"}
+  ]},
+  { id:"shuraym", name:"سعود الشريم", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/saud_alshuraim/"}
+  ]},
+  { id:"ajamy", name:"أحمد العجمي", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/ahmed_ibn_ali_al_ajamy/"}
+  ]},
+  { id:"huthaify", name:"علي الحذيفي", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/ali_al_huthaify/"}
+  ]},
+  { id:"basfar", name:"عبدالله بصفر", moshaf:[
+    {name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/abdullah_basfar/"
+  ] }
+];
+
+/* كامل أسماء السور (114) */
+const SURAH_NAMES = [
+"الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"
+];
+
+/* مواقع جاهزة */
+const AI_SITES = [
+  {name:"ChatGPT", url:"https://chat.openai.com", desc:"محادثة ذكية"},
+  {name:"Claude", url:"https://claude.ai", desc:"مساعد نصي"}
+];
+const ENGLISH = [
+  {name:"BBC Learning English", url:"https://www.bbc.co.uk/learningenglish", desc:"دروس ومهارات"},
+  {name:"ESL Fast", url:"https://eslfast.com", desc:"قصص ومحادثات"}
+];
+
+/* ======== مساعدات ======== */
+const $ = s => document.querySelector(s);
+const pad3 = n => String(n).padStart(3,'0');
+function normAr(s){ if(!s) return ''; const d=/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g; return s.replace(d,'').replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ٱ/g,'ا').toLowerCase(); }
+
+/* ======== تعبئة القوائم ======== */
+function fillReaders(){
+  const el = $('#reader');
+  el.innerHTML = RECITERS.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+}
+function fillMushaf(){
+  const rid = $('#reader').value;
+  const R = RECITERS.find(x=>x.id===rid);
+  const el = $('#mushaf');
+  el.innerHTML = (R && R.moshaf) ? R.moshaf.map(m=>`<option value="${m.base}">${m.name}</option>`).join('') : '<option value="">(لا توجد روايات)</option>';
+}
+function fillSurah(){
+  $('#surah').innerHTML = SURAH_NAMES.map((n,i)=>`<option value="${pad3(i+1)}">${i+1} — ${n}</option>`).join('');
+}
+
+/* ======== بناء رابط التشغيل ======== */
+function currentSrc(){
+  let base = $('#mushaf').value || '';
+  if(base && !base.endsWith('/')) base += '/';
+  const s = $('#surah').value || '001';
+  return base + s + '.mp3';
+}
+
+/* ======== البحث الذكي (أوفلاين) ======== */
+function buildIndex(){
+  const idx = [];
+  SURAH_NAMES.forEach((n,i)=> idx.push({t:'quran', k:`${i+1} ${n}`, act:()=>{ location.hash='#quran'; $('#surah').value = pad3(i+1); }}));
+  RECITERS.forEach(r=> idx.push({t:'reciters', k:r.name, act:()=>{ location.hash='#quran'; $('#reader').value = r.id; fillMushaf(); }}));
+  AI_SITES.forEach(a=> idx.push({t:'ai', k:`${a.name} ${a.desc||''}`, url:a.url}));
+  ENGLISH.forEach(e=> idx.push({t:'english', k:`${e.name} ${e.desc||''}`, url:e.url}));
+  return idx;
+}
+function doSearch(q, idx, allowed){
+  const qq = normAr(q.trim()); if(!qq) return [];
+  const out = [];
+  for(const it of idx){
+    if(!allowed.has(it.t)) continue;
+    if(normAr(it.k).includes(qq)){ out.push(it); if(out.length>=30) break; }
+  }
+  return out;
+}
+function renderSearch(list){
+  const box = $('#siteSearchResults');
+  if(!list.length){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const label = t=> ({quran:'سورة', reciters:'قارئ', ai:'ذكاء', english:'إنجليزي'})[t] || t;
+  box.innerHTML = list.map(it=>`<div class="item"><span>${it.k}</span><small>${label(it.t)}</small></div>`).join('');
+  box.classList.add('show');
+  [...box.children].forEach((el,i)=> el.addEventListener('click', ()=>{
+    const row = list[i]; box.classList.remove('show'); box.innerHTML='';
+    if(row.act){ row.act(); }
+    if(row.url){ window.open(row.url,'_blank'); }
+  }));
+}
+
+/* ======== تهيئة الصفحة ======== */
+function initUI(){
+  fillReaders(); fillMushaf(); fillSurah();
+  $('#reader').addEventListener('change', ()=>{ fillMushaf(); updateMini(); });
+  $('#mushaf').addEventListener('change', updateMini);
+  $('#surah').addEventListener('change', updateMini);
+
+  $('#playBtn').addEventListener('click', ()=>{
+    const src = currentSrc();
+    const p = $('#player');
+    if(!src || src.endsWith('.mp3')===false){ alert('لا يوجد مصدر صالح'); return; }
+    p.src = src;
+    p.play().catch(()=>{});
+    updateMini();
+  });
+
+  // Mini
+  $('#miniPlayBtn').addEventListener('click', ()=>{ const p = $('#player'); if(p.paused) p.play().catch(()=>{}); else p.pause(); });
+
+  // lists
+  $('#aiList').innerHTML = AI_SITES.map(a=>`<a class="field" href="${a.url}" target="_blank" style="display:inline-block;margin:.2rem .4rem">${a.name}</a>`).join('');
+  $('#enList').innerHTML = ENGLISH.map(e=>`<a class="field" href="${e.url}" target="_blank" style="display:inline-block;margin:.2rem .4rem">${e.name}</a>`).join('');
+
+  // Search
+  const idx = buildIndex(); const allowed = new Set(['quran','reciters','ai','english']);
+  const inp = $('#siteSearchInput'); const box = $('#siteSearchResults'); const advBtn = $('#siteSearchAdvBtn');
+  inp.addEventListener('input', ()=> renderSearch(doSearch(inp.value, idx, allowed)));
+  document.addEventListener('click',(e)=>{ if(!e.target.closest('.site-search')) box.classList.remove('show'); });
+
+  advBtn.addEventListener('click', ()=>{
+    const adv = document.getElementById('siteSearchAdvanced');
+    const show = adv.hasAttribute('hidden');
+    if(show) adv.removeAttribute('hidden'); else adv.setAttribute('hidden','');
+    advBtn.setAttribute('aria-expanded', String(show));
+  });
+}
+
+/* ======== تحديث الملصق الصغير ======== */
+function updateMini(){
+  const rid = RECITERS.find(r=>r.id===$('#reader').value);
+  const mush = $('#mushaf').selectedOptions[0]?.textContent || '';
+  const s = parseInt($('#surah').value||'1',10);
+  $('#miniNowLabel').textContent = `${rid?rid.name:'—'} — ${mush} — ${s} ${SURAH_NAMES[s-1]||''}`;
+}
+
+/* ======== تشغيل عند الجاهزية ======== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  try{
+    initUI();
+    updateMini();
+    // small safeguard: if lists are empty, re-fill
+    if(!document.querySelectorAll('#reader option').length) fillReaders();
+    if(!document.querySelectorAll('#surah option').length) fillSurah();
+  }catch(err){
+    console.error('Init error', err);
+    alert('حدث خطأ أثناء تهيئة الواجهة — افتح Console للمزيد');
+  }
+});
+</script>
 </body>
 </html>
