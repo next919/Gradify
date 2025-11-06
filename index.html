@@ -1,66 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradify — Aura Dark (Rescue)</title>
-<link rel="stylesheet" href="styles.css?v=R1">
+<meta charset="UTF-8">
+<title>Gradify Aura R1+</title>
+<link rel="stylesheet" href="styles.css?v=R1P">
 </head>
 <body>
-<header class="header">
-  <div class="container header-wrap">
-    <div class="brand">Gradify</div>
-    <nav class="nav"><a href="#quran">القرآن</a><a href="#ai">ذكاء اصطناعي</a><a href="#english">تعلم الإنجليزية</a><a href="#useful">مواقع مفيدة</a></nav>
-    <div class="site-search">
-      <input id="siteSearchInput" class="field" placeholder="ابحث في القرآن/القراء/المواقع… (مثال: البقرة، الحصري، ChatGPT)">
-      <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
-    </div>
-  </div>
+<header>
+  <h1>القرآن الكريم</h1>
 </header>
 
-<main class="container">
-  <section id="quran" class="card">
-    <h2>القرآن الكريم — استماع</h2>
-    <div class="toolbar">
-      <label class="field-wrap"><span>القارئ</span>
-        <select id="readerSelect" class="field"></select>
-      </label>
-      <label class="field-wrap"><span>الرواية/المصحف</span>
-        <select id="mushafSelect" class="field"></select>
-      </label>
-      <label class="field-wrap"><span>السورة</span>
-        <select id="surahSelect" class="field"></select>
-      </label>
-      <button id="playBtn" class="btn primary">تشغيل</button>
-    </div>
-    <audio id="player" controls class="player" preload="none"></audio>
-    <p class="muted">المصادر: quranicaudio.com (روابط HTTPS مباشرة). في حال تعذّر تشغيل مصدر، سيُجرب مصدرًا احتياطيًا تلقائيًا.</p>
-  </section>
+<section id="quran">
+  <label>القارئ</label>
+  <select id="reciter">
+    <option value="https://download.quranicaudio.com/quran/mahmood_al_husary/">محمود الحصري - حفص</option>
+    <option value="https://download.quranicaudio.com/quran/abdulrahman_alsudais/">السديس</option>
+    <option value="https://download.quranicaudio.com/quran/mishary_rashid_alafasy/">المعيقلي</option>
+  </select>
 
-  <section id="ai" class="card">
-    <h2>مواقع الذكاء الاصطناعي</h2>
-    <ul id="aiList" class="list"></ul>
-  </section>
+  <label>السورة</label>
+  <select id="surah"></select>
 
-  <section id="english" class="card">
-    <h2>تعلم الإنجليزية مجانًا</h2>
-    <ul id="enList" class="list"></ul>
-  </section>
+  <button onclick="playSurah()">تشغيل</button>
+  <audio id="player" controls></audio>
+</section>
 
-  <section id="useful" class="card">
-    <h2>مواقع مفيدة</h2>
-    <ul id="usefulList" class="list"></ul>
-  </section>
-</main>
+<section>
+<h2>مواقع الذكاء الاصطناعي</h2>
+<ul>
+<li><a href="https://chat.openai.com">ChatGPT</a></li>
+<li><a href="https://claude.ai">Claude</a></li>
+</ul>
+</section>
 
-<footer class="footer container">نسخة إنقاذ R1 — لتجاوز مشاكل الكاش والـ API.</footer>
+<section>
+<h2>تعلم الإنجليزية مجاناً</h2>
+<ul>
+<li><a href="https://eslfast.com">ESL Fast</a></li>
+<li><a href="https://bbc.co.uk/learningenglish">BBC Learning English</a></li>
+</ul>
+</section>
 
-<div id="miniPlayerBar" class="mini-player glass">
-  <button id="miniPlayBtn" class="btn small">تشغيل/إيقاف</button>
-  <div class="mini-label" id="miniNowLabel">—</div>
-  <a class="btn small ghost" href="#quran">فتح قسم القرآن</a>
-</div>
+<footer>
+نسخة R1+ مستقرة بدون اعتماد على API
+</footer>
 
-<script src="script.js?v=R1"></script>
+<script src="script.js?v=R1P"></script>
 </body>
 </html>
