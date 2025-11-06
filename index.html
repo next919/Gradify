@@ -3,55 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradify Aura R1+ (Fixed Reciters)</title>
-<link rel="stylesheet" href="styles.css?v=R1P2">
+<title>Gradify Aura R1+ — بحث ذكي</title>
+<link rel="stylesheet" href="styles.css?v=S1">
 </head>
 <body>
 <header class="head">
-  <h1>القرآن الكريم — استماع</h1>
-  <small class="tag">R1+ v2</small>
+  <div class="brand">Gradify</div>
+  <nav class="nav">
+    <a href="#quran">القرآن</a>
+    <a href="#ai">ذكاء</a>
+    <a href="#english">الإنجليزية</a>
+  </nav>
+  <div class="site-search">
+    <input id="siteSearchInput" class="field" placeholder="ابحث في القرّاء/السور/الأقسام… (مثال: الحصري، البقرة، ChatGPT)">
+    <button id="siteSearchAdvBtn" class="btn small ghost" aria-expanded="false" aria-controls="siteSearchAdvanced">خيارات</button>
+    <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
+  </div>
 </header>
 
-<main>
-<section id="quran" class="card">
-  <div class="row">
-    <label class="field-wrap">
-      <span>القارئ</span>
-      <select id="reader" class="field"></select>
-    </label>
-    <label class="field-wrap">
-      <span>الرواية/المصحف</span>
-      <select id="mushaf" class="field"></select>
-    </label>
-    <label class="field-wrap">
-      <span>السورة</span>
-      <select id="surah" class="field"></select>
-    </label>
-    <button id="playBtn" class="btn">تشغيل</button>
+<section id="siteSearchAdvanced" class="search-advanced container" hidden>
+  <div class="card">
+    <strong>تحديد المصادر</strong>
+    <label><input type="checkbox" class="adv-src" value="quran" checked> القرآن (السور)</label>
+    <label><input type="checkbox" class="adv-src" value="reciters" checked> القرّاء</label>
+    <label><input type="checkbox" class="adv-src" value="ai" checked> الذكاء الاصطناعي</label>
+    <label><input type="checkbox" class="adv-src" value="english" checked> الإنجليزية</label>
   </div>
-  <audio id="player" controls class="player" preload="none"></audio>
-  <p class="note">روابط HTTPS مباشرة من quranicaudio.com — عند فشل مصدر سيبقى بإمكانك اختيار مصحف آخر.</p>
 </section>
 
-<section class="card">
-  <h2>مواقع الذكاء الاصطناعي</h2>
-  <ul class="list two">
-    <li><a href="https://chat.openai.com" target="_blank">ChatGPT</a></li>
-    <li><a href="https://claude.ai" target="_blank">Claude</a></li>
-  </ul>
-</section>
+<main class="container">
+  <section id="quran" class="card">
+    <h2>القرآن الكريم — استماع</h2>
+    <div class="row">
+      <label class="field-wrap">
+        <span>القارئ</span>
+        <select id="reader" class="field"></select>
+      </label>
+      <label class="field-wrap">
+        <span>الرواية/المصحف</span>
+        <select id="mushaf" class="field"></select>
+      </label>
+      <label class="field-wrap">
+        <span>السورة</span>
+        <select id="surah" class="field"></select>
+      </label>
+      <button id="playBtn" class="btn">تشغيل</button>
+    </div>
+    <audio id="player" controls class="player" preload="none"></audio>
+    <p class="note">روابط HTTPS مباشرة من quranicaudio.com — عند فشل مصدر سيبقى بإمكانك اختيار مصحف آخر.</p>
+  </section>
 
-<section class="card">
-  <h2>تعلم الإنجليزية مجاناً</h2>
-  <ul class="list two">
-    <li><a href="https://www.bbc.co.uk/learningenglish" target="_blank">BBC Learning English</a></li>
-    <li><a href="https://eslfast.com" target="_blank">ESL Fast</a></li>
-  </ul>
-</section>
+  <section id="ai" class="card">
+    <h2>مواقع الذكاء الاصطناعي</h2>
+    <ul class="list two" id="aiList"></ul>
+  </section>
+
+  <section id="english" class="card">
+    <h2>تعلم الإنجليزية مجاناً</h2>
+    <ul class="list two" id="enList"></ul>
+  </section>
 </main>
 
-<footer class="foot">نسخة ثابتة — لا تعتمد على أي API خارجي</footer>
+<footer class="foot">R1+ مع بحث ذكي — لا يعتمد على API خارجي</footer>
 
-<script src="script.js?v=R1P2"></script>
+<script src="script.js?v=S1"></script>
 </body>
 </html>
