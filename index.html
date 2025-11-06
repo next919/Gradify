@@ -387,8 +387,8 @@
       versesBox.innerHTML = '<div class="text-sm text-gray-400">جارٍ التحميل...</div>';
       try {
         const [textRes, audioRes] = await Promise.all([
-          fetch(`https://api.alquran.cloud/v1/surah/${id}/quran-uthmani`),
-          fetch(`https://api.alquran.cloud/v1/surah/${id}/${audioEdition.value}`)
+          fetch(\`https://api.alquran.cloud/v1/surah/\${id}/quran-uthmani\`),
+          fetch(\`https://api.alquran.cloud/v1/surah/\${id}/\${audioEdition.value}\`)
         ]);
         const textJson = await textRes.json();
         const audioJson = await audioRes.json();
@@ -396,7 +396,7 @@
         const audioAyat = audioJson?.data?.ayahs || [];
 
         currentSurahTitle.textContent = allSurahs.find(s => s.number === id)?.name || 'سورة';
-        currentSurahMeta.textContent = `آيات: ${ayat.length}`;
+        currentSurahMeta.textContent = \`آيات: \${ayat.length}\`;
 
         versesBox.innerHTML = ayat.map((a, idx) => {
           const audioUrl = audioAyat[idx]?.audio || '';
@@ -434,7 +434,7 @@
       if (!q) return;
       versesBox.innerHTML = '<div class="text-sm text-gray-400">جارٍ البحث...</div>';
       try {
-        const r = await fetch(`https://api.alquran.cloud/v1/search/${encodeURIComponent(q)}/all/ar`);
+        const r = await fetch(\`https://api.alquran.cloud/v1/search/\${encodeURIComponent(q)}/all/ar\`);
         const j = await r.json();
         const matches = j?.data?.matches || [];
         if (!matches.length) {
