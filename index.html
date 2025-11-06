@@ -1,223 +1,66 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>جراديفي | Gradify — Aura Dark Premium</title>
-  <meta name="description" content="منصة خفيفة وعصرية — القرآن (استماع وقراءة)، مواقع الذكاء الاصطناعي، تعلّم الإنجليزية، مواقع مفيدة، وشروحات.">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gradify — Aura Dark (Rescue)</title>
+<link rel="stylesheet" href="styles.css?v=R1">
 </head>
-<body id="top">
-  <header class="header">
-    <div class="container header-wrap">
-      <div class="site-search">
-        <input id="siteSearchInput" class="field" placeholder="ابحث في الموقع (مثال: البقرة، الحصري، ChatGPT، Grammar)"/>
-        <button id="siteSearchAdvBtn" class="btn small ghost" aria-expanded="false" aria-controls="siteSearchAdvanced">خيارات</button>
-        <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
-      </div>
-      <button class="nav-toggle" aria-expanded="false" aria-label="فتح/إغلاق القائمة">☰</button>
-      <a class="brand-link" href="#top" aria-label="الرئيسية">
-        <span class="brand-en">Gradify</span><span class="brand-sep">•</span><span class="brand-ar">جراديفي</span>
-      </a>
-      <nav class="nav" id="mainNav" aria-label="القائمة">
-        <a data-open="#sec-quran" href="#sec-quran">القرآن</a>
-        <a data-open="#sec-ai" href="#sec-ai">ذكاء اصطناعي</a>
-        <a data-open="#sec-english" href="#sec-english">تعلم الإنجليزية</a>
-        <a data-open="#sec-useful" href="#sec-useful">مواقع مفيدة</a>
-        <a data-open="#sec-tuts" href="#sec-tuts">شروحات</a>
-        <a data-open="#sec-contact" href="#sec-contact">اتصل بنا</a>
-      </nav>
+<body>
+<header class="header">
+  <div class="container header-wrap">
+    <div class="brand">Gradify</div>
+    <nav class="nav"><a href="#quran">القرآن</a><a href="#ai">ذكاء اصطناعي</a><a href="#english">تعلم الإنجليزية</a><a href="#useful">مواقع مفيدة</a></nav>
+    <div class="site-search">
+      <input id="siteSearchInput" class="field" placeholder="ابحث في القرآن/القراء/المواقع… (مثال: البقرة، الحصري، ChatGPT)">
+      <div id="siteSearchResults" class="search-results" role="listbox" aria-label="نتائج البحث"></div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <div class="aura"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
-
-  <section id="siteSearchAdvanced" class="search-advanced container" hidden>
-    <div class="card glass">
-      <h3 style="margin-top:0">بحث متقدّم</h3>
-      <div class="row" style="gap:.6rem">
-        <label><input type="checkbox" class="adv-src" value="quran" checked> القرآن</label>
-        <label><input type="checkbox" class="adv-src" value="reciters" checked> القرّاء</label>
-        <label><input type="checkbox" class="adv-src" value="ai" checked> الذكاء الاصطناعي</label>
-        <label><input type="checkbox" class="adv-src" value="english" checked> الإنجليزية</label>
-        <label><input type="checkbox" class="adv-src" value="useful" checked> مواقع مفيدة</label>
-      </div>
-      <p class="muted" style="margin:.4rem 0 0">تلميحات: استخدم @q للقرآن، @ai للذكاء، @en للإنجليزية، @us للمواقع.</p>
+<main class="container">
+  <section id="quran" class="card">
+    <h2>القرآن الكريم — استماع</h2>
+    <div class="toolbar">
+      <label class="field-wrap"><span>القارئ</span>
+        <select id="readerSelect" class="field"></select>
+      </label>
+      <label class="field-wrap"><span>الرواية/المصحف</span>
+        <select id="mushafSelect" class="field"></select>
+      </label>
+      <label class="field-wrap"><span>السورة</span>
+        <select id="surahSelect" class="field"></select>
+      </label>
+      <button id="playBtn" class="btn primary">تشغيل</button>
     </div>
+    <audio id="player" controls class="player" preload="none"></audio>
+    <p class="muted">المصادر: quranicaudio.com (روابط HTTPS مباشرة). في حال تعذّر تشغيل مصدر، سيُجرب مصدرًا احتياطيًا تلقائيًا.</p>
   </section>
 
-
-  <section class="hero container">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1>منصّة Aura Dark Premium</h1>
-        <p>تصميم زجاجي أنيق، الوضع الداكن الفاخر، وتجربة سريعة على الجوال والكمبيوتر.</p>
-        <div class="cta">
-          <a class="btn primary" href="#sec-quran" data-open="#sec-quran">ابدأ من القرآن</a>
-          <a class="btn ghost" href="#sec-ai" data-open="#sec-ai">استكشف الذكاء الاصطناعي</a>
-        </div>
-      </div>
-      <div class="hero-cards" aria-hidden="true">
-        <div class="hc glass"></div><div class="hc glass"></div><div class="hc glass"></div>
-      </div>
-    </div>
+  <section id="ai" class="card">
+    <h2>مواقع الذكاء الاصطناعي</h2>
+    <ul id="aiList" class="list"></ul>
   </section>
 
-  <main id="content" class="container main">
-
-    <!-- Quran -->
-    <details id="sec-quran" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🕋</div><h2>القرآن الكريم</h2><span class="hint">استماع / قراءة</span></div></summary>
-      <div class="section-body">
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="listenTab">استماع</button>
-          <button class="tab-btn" data-tab="readTab">تصفح وقراءة</button>
-        </div>
-
-        <!-- استماع -->
-        <div id="listenTab" class="tab-pane active">
-          <div class="toolbar">
-            <label class="consent"><input type="checkbox" id="readingModeToggle"> <span>وضع القراءة</span></label>
-            <label class="field-wrap"><span>بحث القارئ</span>
-              <input id="readerSearch" class="field" placeholder="اكتب اسم القارئ (مثال: الحصري)">
-            </label>
-            <label class="field-wrap"><span class="visually-hidden">القارئ</span>
-              <select id="readerSelect" class="field"></select>
-            </label>
-            <label class="field-wrap"><span>بحث السورة</span>
-              <input id="surahFilter" class="field" placeholder="اكتب اسم السورة أو رقمها (مثال: 2 أو البقرة)">
-            </label>
-            <label class="field-wrap"><span class="visually-hidden">السورة</span>
-              <select id="surahSelect" class="field"></select>
-            </label>
-            <button id="playBtn" class="btn small primary">تشغيل</button>
-          </div>
-          <audio id="player" controls class="player" preload="none"></audio>
-          <p class="muted">* روابط MP3 مباشرة من quranicaudio.com — في حال لم تعمل سورة لقارئ معيّن جرّب قارئًا آخر.</p>
-        </div>
-
-        <!-- تصفح وقراءة -->
-        <div id="readTab" class="tab-pane">
-          <div class="toolbar">
-            <input id="surahSearch" class="field" placeholder="ابحث باسم السورة (مثال: البقرة)">
-          </div>
-          <div id="readGrid" class="grid cards"></div>
-          <p class="muted">زر <b>قراءة</b> يفتح السورة على quran.com، وزر <b>استماع</b> يشغّل السورة لدى القارئ المختار أعلاه.</p>
-        </div>
-      </div>
-    </details>
-
-    <!-- AI Sites -->
-    <details id="sec-ai" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">✨</div><h2>مواقع الذكاء الاصطناعي</h2><span class="hint">تمت الإضافة: 20+</span></div></summary>
-      <div class="section-body">
-        <div id="aiGrid" class="grid cards featured-layout"></div>
-      </div>
-    </details>
-
-    <!-- English -->
-    <details id="sec-english" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🇬🇧</div><h2>تعلم الإنجليزية مجانًا</h2><span class="hint">مقسّم حسب المهارات</span></div></summary>
-      <div class="section-body">
-        <h3 class="sub">1) الاستماع</h3><div id="engListen" class="grid cards"></div>
-        <h3 class="sub">2) مواقع شاملة</h3><div id="engAll" class="grid cards"></div>
-        <h3 class="sub">3) الكتابة والمفردات</h3><div id="engWrite" class="grid cards"></div>
-        <h3 class="sub">4) للأطفال</h3><div id="engKids" class="grid cards"></div>
-        <h3 class="sub">5) لغات أخرى (الأكثر شعبية)</h3><div id="otherLangs" class="grid cards"></div>
-      </div>
-    </details>
-
-    <!-- Useful -->
-    <details id="sec-useful" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">🧭</div><h2>مواقع مفيدة</h2><span class="hint">أدوات إنتاجية</span></div></summary>
-      <div class="section-body"><div id="usefulGrid" class="grid cards"></div></div>
-    </details>
-
-    <!-- Tutorials -->
-    <details id="sec-tuts" class="section-acc glass">
-      <summary><div class="s-head"><div class="s-icon">📚</div><h2>الشروحات</h2><span class="hint">قريبًا</span></div></summary>
-      <div class="section-body">
-        <div id="tutorialsGrid" class="grid cards">
-          <article class="card"><h3>شرح 1 (قريبًا)</h3><p>مكان للدروس القصيرة.</p><a class="btn small" href="#">تفاصيل</a></article>
-          <article class="card"><h3>شرح 2 (قريبًا)</h3><p>دليل خطوة بخطوة.</p><a class="btn small" href="#">تفاصيل</a></article>
-          <article class="card"><h3>شرح 3 (قريبًا)</h3><p>روابط خارجية أو قنوات.</p><a class="btn small" href="#">تفاصيل</a></article>
-        </div>
-      </div>
-    </details>
-
-    <!-- Contact -->
-    <details id="sec-contact" class="section-acc glass">
-      <summary>
-        <div class="s-head">
-          <div class="s-icon">✉️</div>
-          <h2>اتصل بنا</h2>
-          <span class="hint">الدعم:
-            <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a>
-          </span>
-        </div>
-      </summary>
-      <div class="section-body">
-        <div class="grid two">
-          <div class="card glass">
-            <h3>نموذج التواصل</h3>
-            <form id="contactForm" class="form" novalidate>
-              <input class="field" type="text" name="name" placeholder="الاسم الكامل" required>
-              <input class="field" type="email" name="email" placeholder="بريدك الإلكتروني" required>
-              <input class="field" type="text" name="subject" placeholder="الموضوع" required>
-              <textarea class="field" name="message" rows="6" placeholder="اكتب رسالتك هنا..." required></textarea>
-              <label class="consent"><input id="agree" type="checkbox" required><span>أوافق على إرسال هذه البيانات لغرض التواصل</span></label>
-              <div class="row" style="gap:.6rem">
-                <button id="sendBtn" class="btn primary" type="submit">إرسال</button>
-                <a class="btn small ghost" id="mailtoFallback" href="mailto:support@gradifysa.com">الإرسال عبر البريد</a>
-              </div>
-              <div id="formMsg" class="muted" role="status" aria-live="polite" style="margin-top:.3rem"></div>
-            </form>
-          </div>
-
-          <div class="card glass">
-            <h3>الدعم الفني</h3>
-            <p>راسلنا على: <a class="email" href="mailto:support@gradifysa.com">support@gradifysa.com</a><br>نرد عادة خلال 24 ساعة.</p>
-          </div>
-        </div>
-      </div>
-    </details>
-
-  
-  <section class="quick-player container">
-    <div class="qp-wrap glass">
-      <div class="qp-head">
-        <div class="qp-title">🎧 مشغّل القرآن</div>
-        <a class="btn small ghost" href="#sec-quran" data-open="#sec-quran">فتح قسم القرآن</a>
-      </div>
-      <div class="qp-controls">
-        <label class="field-wrap"><span class="visually-hidden">القارئ</span>
-          <select id="quickReader" class="field"></select>
-        </label>
-        <label class="field-wrap"><span class="visually-hidden">السورة</span>
-          <select id="quickSurah" class="field"></select>
-        </label>
-        <button id="quickPlay" class="btn primary small">تشغيل</button>
-      </div>
-      <audio id="player" controls class="player" preload="none"></audio>
-    </div>
+  <section id="english" class="card">
+    <h2>تعلم الإنجليزية مجانًا</h2>
+    <ul id="enList" class="list"></ul>
   </section>
 
+  <section id="useful" class="card">
+    <h2>مواقع مفيدة</h2>
+    <ul id="usefulList" class="list"></ul>
+  </section>
 </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p>© <span id="year"></span> <strong>جراديفي | Gradify</strong></p>
-      <a class="to-top" href="#top">↑</a>
-    </div>
-  </footer>
+<footer class="footer container">نسخة إنقاذ R1 — لتجاوز مشاكل الكاش والـ API.</footer>
 
-  <script src="script.js" defer></script>
+<div id="miniPlayerBar" class="mini-player glass">
+  <button id="miniPlayBtn" class="btn small">تشغيل/إيقاف</button>
+  <div class="mini-label" id="miniNowLabel">—</div>
+  <a class="btn small ghost" href="#quran">فتح قسم القرآن</a>
+</div>
 
-  <div id="miniPlayerBar" class="mini-player glass" role="region" aria-label="مشغل مختصر">
-    <button id="miniPlayBtn" class="btn small">تشغيل/إيقاف</button>
-    <div class="mini-label" id="miniNowLabel">—</div>
-    <button id="miniGotoBtn" class="btn small ghost" data-open="#sec-quran">فتح قسم القرآن</button>
-  </div>
-
+<script src="script.js?v=R1"></script>
 </body>
 </html>
