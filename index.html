@@ -1,174 +1,535 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gradify — القرآن (نسخة صفحة واحدة مستقرة)</title>
-<style>
-:root{--bg:#0b0f17;--card:#0e1624;--ring:#23314e;--ink:#eaf2ff;--muted:#9fb1d4}
-*{box-sizing:border-box}html,body{margin:0;padding:0;background:#0b0f17;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
-.container{max-width:980px;margin:12px auto;padding:12px}
-.head{position:sticky;top:0;z-index:50;background:#0b0f17bd;backdrop-filter:blur(6px);border-bottom:1px solid #ffffff14}
-.head .wrap{display:flex;gap:10px;align-items:center;padding:10px 12px}
-.brand{font-weight:800}
-.nav a{color:var(--muted);text-decoration:none;margin:0 6px}
-.card{background:var(--card);border:1px solid var(--ring);border-radius:14px;padding:14px;margin:12px 0}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
-.field{background:#0f1a33;color:var(--ink);border:1px solid var(--ring);border-radius:10px;padding:.6rem .9rem;min-width:200px}
-.field-wrap{display:flex;flex-direction:column;gap:6px}
-.btn{background:#143543;color:var(--ink);border:1px solid var(--ring);border-radius:10px;padding:.6rem 1rem;cursor:pointer}
-.player{width:100%;margin-top:8px}
-.muted{opacity:.75}
-.badge{display:inline-block;background:#123; border:1px solid #234; border-radius:9px;padding:.25rem .5rem;margin-inline-start:.5rem;opacity:.85}
-.list a{display:inline-block;margin:.25rem .35rem;padding:.45rem .7rem;border-radius:10px;background:#0f1a33;border:1px solid var(--ring);text-decoration:none;color:var(--ink)}
-.footer{opacity:.7;text-align:center;padding:16px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gradify Aura</title>
+  <meta name="description" content="Gradify Aura — تعلّم، ذكاء اصطناعي، قرّاء القرآن، تواصل" />
+  <!-- Tailwind CSS CDN (no build needed) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: '#0b0b0d',
+            rosegold: {
+              50: '#fff7f7',
+              100: '#ffeaea',
+              200: '#ffd5d9',
+              300: '#ffb3b8',
+              400: '#f39aa1',
+              500: '#d98c92',
+              600: '#c37980',
+              700: '#a3656b',
+              800: '#7d4d53',
+              900: '#5b383e'
+            }
+          },
+          boxShadow: {
+            glow: '0 0 0 1px rgba(255, 204, 204, 0.06), 0 10px 40px rgba(217, 140, 146, 0.18)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { background: #0b0b0d; color: #ddd; }
+    .glass { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.03); }
+    .rg-gradient { background: linear-gradient(135deg, #d98c92 0%, #ffb3b8 50%, #ffd5d9 100%); }
+    .rg-text { background: linear-gradient(135deg, #ffd5d9, #ffb3b8, #d98c92); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .section-title { border-inline-start: 4px solid #d98c92; padding-inline-start: .75rem; }
+    .card { border: 1px solid rgba(255, 255, 255, 0.06); }
+    .linkish { text-decoration: underline; text-decoration-color: rgba(217, 140, 146, 0.6); }
+  </style>
 </head>
-<body>
-<header class="head">
-  <div class="wrap container">
-    <div class="brand">Gradify</div>
-    <nav class="nav"><a href="#quran">القرآن</a> <a href="#ai">ذكاء</a> <a href="#english">الإنجليزية</a></nav>
-    <div style="margin-inline-start:auto"></div>
-  </div>
-</header>
-
-<main class="container">
-
-  <!-- ===== القرآن (يظهر كاملاً حتى بدون JS) ===== -->
-  <section id="quran" class="card" aria-labelledby="quran-title">
-    <h2 id="quran-title">القرآن الكريم — استماع <span class="badge">نسخة ثابتة</span></h2>
-
-    <div class="row" role="region" aria-label="أدوات الاستماع">
-      <label class="field-wrap"><span>القارئ</span>
-        <!-- تعبئة أولية ثابتة تعمل بدون JS -->
-        <select id="reader" class="field">
-          <option value="husary">محمود الحصري</option>
-          <option value="minshawi">محمد صديق المنشاوي</option>
-          <option value="abdul_basit">عبدالباسط عبدالصمد</option>
-          <option value="sudais">عبدالرحمن السديس</option>
-          <option value="afasy">مشاري العفاسي</option>
-          <option value="shuraym">سعود الشريم</option>
-          <option value="ajamy">أحمد العجمي</option>
-          <option value="huthaify">علي الحذيفي</option>
-          <option value="basfar">عبدالله بصفر</option>
-        </select>
-      </label>
-
-      <label class="field-wrap"><span>الرواية/المصحف</span>
-        <!-- مصحف افتراضي يعمل مباشرة -->
-        <select id="mushaf" class="field">
-          <option value="https://download.quranicaudio.com/quran/husary/murattal/">مرتل (حفص)</option>
-          <option value="https://download.quranicaudio.com/quran/husary/mujawwad/">مجود</option>
-        </select>
-      </label>
-
-      <label class="field-wrap"><span>السورة</span>
-        <!-- أول 10 سور ثابتة كنسخة احتياطية ثم سيضيف JS كل الـ 114 -->
-        <select id="surah" class="field">
-          <option value="001">1 — الفاتحة</option>
-          <option value="002">2 — البقرة</option>
-          <option value="003">3 — آل عمران</option>
-          <option value="004">4 — النساء</option>
-          <option value="005">5 — المائدة</option>
-          <option value="006">6 — الأنعام</option>
-          <option value="007">7 — الأعراف</option>
-          <option value="008">8 — الأنفال</option>
-          <option value="009">9 — التوبة</option>
-          <option value="010">10 — يونس</option>
-        </select>
-      </label>
-
-      <button id="playBtn" class="btn">تشغيل</button>
+<body class="min-h-screen font-sans">
+  <!-- Header / Hero -->
+  <header class="relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20 pointer-events-none rg-gradient blur-3xl"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <nav class="flex items-center justify-between">
+        <div class="text-2xl rg-text font-extrabold tracking-tight">Gradify <span class="opacity-80">Aura</span></div>
+        <div class="hidden sm:flex gap-4 text-sm text-gray-300">
+          <a href="#contact" class="hover:text-white">تواصل</a>
+          <a href="#reciters" class="hover:text-white">القراء</a>
+          <a href="#quran" class="hover:text-white">القرآن</a>
+          <a href="#ai" class="hover:text-white">مواقع الذكاء</a>
+          <a href="#english" class="hover:text-white">تعلم الإنجليزية</a>
+        </div>
+      </nav>
+      <div class="mt-10 grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+            تصميم داكن × <span class="rg-text">Gold&nbsp;Rose</span>
+          </h1>
+          <p class="mt-4 text-gray-300 max-w-prose">
+            منصة مدمجة: نموذج تواصل يعمل دون فتح الإيميل، جميع القرّاء مع كل الروايات، قراءة وبحث واستماع للقرآن، وأكثر من 20 موقع ذكاء مع نبذات، وقسم كامل لتعلّم الإنجليزية.
+          </p>
+          <div class="mt-6 flex gap-3">
+            <a href="#quran" class="px-5 py-3 rounded-2xl glass shadow-glow border border-rosegold-800 hover:border-rosegold-600 transition">ابدأ القراءة</a>
+            <a href="#contact" class="px-5 py-3 rounded-2xl rg-gradient text-black font-semibold shadow-glow">تواصل الآن</a>
+          </div>
+        </div>
+        <div class="glass rounded-3xl p-6 shadow-glow">
+          <div class="text-sm text-gray-400">نظرة سريعة</div>
+          <ul class="mt-3 grid grid-cols-2 sm:grid-cols-2 gap-3">
+            <li class="card rounded-xl p-4">
+              <div class="text-xs text-gray-400">نموذج</div>
+              <div class="font-semibold">Web3Forms</div>
+              <div class="text-xs mt-1 text-gray-400">بدون فتح البريد</div>
+            </li>
+            <li class="card rounded-xl p-4">
+              <div class="text-xs text-gray-400">القرّاء</div>
+              <div class="font-semibold">جلب تلقائي</div>
+              <div class="text-xs mt-1 text-gray-400">مع الروايات + بحث</div>
+            </li>
+            <li class="card rounded-xl p-4">
+              <div class="text-xs text-gray-400">القرآن</div>
+              <div class="font-semibold">تصفح + استماع</div>
+              <div class="text-xs mt-1 text-gray-400">بحث سريع</div>
+            </li>
+            <li class="card rounded-xl p-4">
+              <div class="text-xs text-gray-400">الذكاء</div>
+              <div class="font-semibold">20+ موقع</div>
+              <div class="text-xs mt-1 text-gray-400">نبذة قصيرة</div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <audio id="player" class="player" controls preload="none"></audio>
-    <p class="muted">روابط HTTPS مباشرة من quranicaudio.com — إن فشل مصدر اختر مصحفًا آخر.</p>
+  <!-- Contact -->
+  <section id="contact" class="py-14">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="section-title text-2xl md:text-3xl font-bold">نموذج التواصل</h2>
+      <p class="mt-2 text-gray-400">يُرسل مباشرة عبر Web3Forms دون الحاجة لفتح برنامج البريد.</p>
+      <form id="contactForm" class="mt-6 grid gap-4 md:grid-cols-2 card p-6 rounded-2xl glass">
+        <input type="hidden" name="access_key" value="219a1c52-9eb6-449d-b48a-a1b06dc3f95e" />
+        <input type="hidden" name="subject" value="رسالة جديدة من Gradify Aura" />
+        <input type="text" name="name" required placeholder="الاسم" class="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 focus:outline-none focus:border-rosegold-400" />
+        <input type="email" name="email" required placeholder="البريد" class="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 focus:outline-none focus:border-rosegold-400" />
+        <input type="text" name="phone" placeholder="الهاتف (اختياري)" class="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 focus:outline-none focus:border-rosegold-400" />
+        <input type="text" name="_honey" class="hidden" aria-hidden="true" />
+        <textarea name="message" required placeholder="اكتب رسالتك..." rows="5" class="md:col-span-2 w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 focus:outline-none focus:border-rosegold-400"></textarea>
+        <div class="md:col-span-2 flex items-center gap-3">
+          <button type="submit" class="px-6 py-3 rounded-2xl rg-gradient text-black font-semibold shadow-glow">إرسال</button>
+          <span id="contactStatus" class="text-sm text-gray-400"></span>
+        </div>
+      </form>
+    </div>
   </section>
 
-  <section id="ai" class="card">
-    <h2>مواقع الذكاء الاصطناعي</h2>
-    <div class="list" id="aiList">
-      <!-- روابط ثابتة تعمل بدون JS -->
-      <a href="https://chat.openai.com" target="_blank">ChatGPT</a>
-      <a href="https://claude.ai" target="_blank">Claude</a>
+  <!-- Reciters -->
+  <section id="reciters" class="py-14">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="section-title text-2xl md:text-3xl font-bold">جميع القرّاء + الروايات</h2>
+      <div class="mt-4 grid md:grid-cols-3 gap-4">
+        <div class="md:col-span-1 card rounded-2xl p-4 glass">
+          <label class="block text-sm text-gray-400 mb-2">بحث عن قارئ</label>
+          <input id="reciterSearch" type="text" placeholder="اكتب اسم القارئ..." class="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-2 focus:outline-none focus:border-rosegold-400" />
+          <label class="block text-sm text-gray-400 mt-4 mb-2">فلترة بحسب الرواية</label>
+          <select id="riwayaFilter" class="w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:border-rosegold-400"></select>
+          <p class="text-xs text-gray-500 mt-3">يتم الجلب تلقائيًا من API.
+          </p>
+        </div>
+        <div class="md:col-span-2">
+          <div id="recitersGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="recitersEmpty" class="hidden text-gray-400 text-sm mt-4">لا توجد نتائج مطابقة.</div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="english" class="card">
-    <h2>تعلم الإنجليزية مجانًا</h2>
-    <div class="list" id="enList">
-      <a href="https://www.bbc.co.uk/learningenglish" target="_blank">BBC Learning English</a>
-      <a href="https://eslfast.com" target="_blank">ESL Fast</a>
+  <!-- Quran Reader -->
+  <section id="quran" class="py-14">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="section-title text-2xl md:text-3xl font-bold">القرآن الكريم — تصفح / بحث / استماع</h2>
+      <div class="mt-4 grid lg:grid-cols-3 gap-4">
+        <!-- Surah list -->
+        <div class="card rounded-2xl p-4 glass lg:col-span-1">
+          <div class="flex items-center gap-2 mb-3">
+            <input id="surahSearch" type="text" placeholder="ابحث عن سورة..." class="w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:border-rosegold-400" />
+          </div>
+          <ul id="surahList" class="max-h-[480px] overflow-auto space-y-1 text-sm"></ul>
+        </div>
+        <!-- Verses & audio -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="card rounded-2xl p-4 glass">
+            <div class="flex items-center justify-between">
+              <div>
+                <div id="currentSurahTitle" class="font-semibold">اختر سورة</div>
+                <div id="currentSurahMeta" class="text-xs text-gray-400"></div>
+              </div>
+              <div class="flex items-center gap-2">
+                <label class="text-xs text-gray-400">الصوت:</label>
+                <select id="audioEdition" class="rounded-xl bg-black/30 border border-white/10 px-3 py-1.5 text-sm focus:outline-none focus:border-rosegold-400">
+                  <option value="ar.alafasy">العفاسي</option>
+                  <option value="ar.husary">الحصري</option>
+                  <option value="ar.minshawi">المنشاوي</option>
+                  <option value="ar.shaatree">الشاطري</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card rounded-2xl p-4 glass">
+            <div class="flex items-center gap-2 mb-3">
+              <input id="ayahSearch" type="text" placeholder="بحث في الآيات..." class="w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:border-rosegold-400" />
+              <button id="ayahSearchBtn" class="px-4 py-2 rounded-xl border border-white/10 hover:border-rosegold-400">بحث</button>
+            </div>
+            <div id="verses" class="space-y-3 max-h-[520px] overflow-auto text-lg leading-loose"></div>
+            <audio id="audioPlayer" class="w-full mt-4" controls></audio>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <p class="footer">صفحة واحدة — تعمل حتى لو تعطّل الجافاسكربت. بعد الرفع: Ctrl+F5.</p>
-</main>
+  <!-- AI Sites -->
+  <section id="ai" class="py-14">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="section-title text-2xl md:text-3xl font-bold">مواقع الذكاء الاصطناعي (20+)</h2>
+      <p class="mt-2 text-gray-400">قائمة مختصرة مع نبذة لكل موقع.</p>
+      <div id="aiGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </section>
 
-<script>
-/* ===== بيانات كاملة + منطق بسيط ===== */
-const RECITERS = {
-  husary: [
-    {name:"مرتل (حفص)", base:"https://download.quranicaudio.com/quran/husary/murattal/"},
-    {name:"مجود",       base:"https://download.quranicaudio.com/quran/husary/mujawwad/"},
-  ],
-  minshawi: [
-    {name:"مرتل", base:"https://download.quranicaudio.com/quran/minshawi/murattal/"},
-    {name:"مجود", base:"https://download.quranicaudio.com/quran/minshawi/mujawwad/"},
-  ],
-  abdul_basit: [
-    {name:"مرتل", base:"https://download.quranicaudio.com/quran/abdul_basit/murattal/"},
-    {name:"مجود", base:"https://download.quranicaudio.com/quran/abdul_basit/mujawwad/"},
-  ],
-  sudais:   [{name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/abdulrahman_al_sudais/"}],
-  afasy:    [{name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/"}],
-  shuraym:  [{name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/saud_alshuraim/"}],
-  ajamy:    [{name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/ahmed_ibn_ali_al_ajamy/"}],
-  huthaify: [{name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/ali_al_huthaify/"}],
-  basfar:   [{name:"حفص/مرتل", base:"https://download.quranicaudio.com/quran/abdullah_basfar/"}],
-};
+  <!-- English Learning -->
+  <section id="english" class="py-14">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="section-title text-2xl md:text-3xl font-bold">تعلم الإنجليزية</h2>
+      <div class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Listening -->
+        <div class="card rounded-2xl p-5 glass">
+          <div class="font-semibold text-lg mb-2">الاستماع</div>
+          <ul class="space-y-2 text-sm" id="engListening"></ul>
+        </div>
+        <!-- Comprehensive -->
+        <div class="card rounded-2xl p-5 glass">
+          <div class="font-semibold text-lg mb-2">الشامل</div>
+          <ul class="space-y-2 text-sm" id="engComprehensive"></ul>
+        </div>
+        <!-- Writing & Vocab -->
+        <div class="card rounded-2xl p-5 glass">
+          <div class="font-semibold text-lg mb-2">الكتابة والمفردات</div>
+          <ul class="space-y-2 text-sm" id="engWriting"></ul>
+        </div>
+        <!-- Kids -->
+        <div class="card rounded-2xl p-5 glass">
+          <div class="font-semibold text-lg mb-2">الأطفال</div>
+          <ul class="space-y-2 text-sm" id="engKids"></ul>
+        </div>
+        <!-- Other Languages -->
+        <div class="card rounded-2xl p-5 glass">
+          <div class="font-semibold text-lg mb-2">تعلم لغات أخرى</div>
+          <ul class="space-y-2 text-sm" id="otherLangs"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-const SURAH_NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+  <footer class="py-12 border-t border-white/10 mt-8">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm text-gray-400">© <span id="year"></span> Gradify Aura</div>
+      <a href="#contact" class="text-sm linkish">اتصل بنا</a>
+    </div>
+  </footer>
 
-const $ = s => document.querySelector(s);
-const pad3 = n => String(n).padStart(3,'0');
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-function fillMushafByReader(){
-  const rid = $('#reader').value;
-  const list = RECITERS[rid] || [];
-  $('#mushaf').innerHTML = list.map(m => `<option value="${m.base}">${m.name}</option>`).join('');
-}
+    /* =========================
+       Contact (Web3Forms)
+    ========================= */
+    const contactForm = document.getElementById('contactForm');
+    const contactStatus = document.getElementById('contactStatus');
 
-function ensure114Surahs(){
-  const sel = $('#surah');
-  if (sel.options.length >= 114) return; // سبق وتمت
-  let html = "";
-  for (let i=1;i<=114;i++){
-    html += `<option value="${pad3(i)}">${i} — ${SURAH_NAMES[i-1]}</option>`;
-  }
-  sel.innerHTML = html;
-}
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      contactStatus.textContent = 'جارٍ الإرسال...';
 
-function currentUrl(){
-  let base = $('#mushaf').value || "";
-  if (base && !base.endsWith('/')) base += '/';
-  return base + ($('#surah').value || '001') + '.mp3';
-}
+      const formData = new FormData(contactForm);
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data && (data.success || data.message === 'Submission successful')) {
+          contactStatus.textContent = '✓ تم الإرسال بنجاح. شكرًا لك!';
+          contactForm.reset();
+        } else {
+          contactStatus.textContent = 'تعذر الإرسال. حاول لاحقًا.';
+        }
+      } catch (err) {
+        contactStatus.textContent = 'حدث خطأ في الشبكة.';
+      }
+    });
 
-document.addEventListener('DOMContentLoaded', () => {
-  // عند تغيير القارئ، حدّث المصحف
-  $('#reader').addEventListener('change', fillMushafByReader);
-  fillMushafByReader();
-  ensure114Surahs();
+    /* =========================
+       Reciters + Riwayat (mp3quran)
+    ========================= */
+    const recitersGrid = document.getElementById('recitersGrid');
+    const recitersEmpty = document.getElementById('recitersEmpty');
+    const reciterSearch = document.getElementById('reciterSearch');
+    const riwayaFilter = document.getElementById('riwayaFilter');
 
-  // تشغيل
-  $('#playBtn').addEventListener('click', () => {
-    const p = $('#player');
-    p.src = currentUrl();
-    p.play().catch(()=>{});
-  });
-});
-</script>
+    let allReciters = [];
+    let allRiwayat = [];
+
+    async function loadRiwayat() {
+      try {
+        const r = await fetch('https://mp3quran.net/api/v3/riwayat?language=ar');
+        const j = await r.json();
+        allRiwayat = (j?.riwayat || []);
+        riwayaFilter.innerHTML = '<option value="">كل الروايات</option>' +
+          allRiwayat.map(x => `<option value="${x.id}">${x.name}</option>`).join('');
+      } catch (e) {
+        riwayaFilter.innerHTML = '<option value="">تعذر تحميل الروايات</option>';
+      }
+    }
+
+    async function loadReciters() {
+      try {
+        const r = await fetch('https://mp3quran.net/api/v3/reciters?language=ar');
+        const j = await r.json();
+        allReciters = (j?.reciters || []);
+        renderReciters();
+      } catch (e) {
+        recitersGrid.innerHTML = '<div class="text-sm text-gray-400">تعذر تحميل القرّاء.</div>';
+      }
+    }
+
+    function renderReciters() {
+      const q = reciterSearch.value.trim();
+      const rw = riwayaFilter.value;
+      let list = allReciters.slice();
+      if (q) list = list.filter(r => (r.name || '').includes(q));
+      if (rw) list = list.filter(r => (r.riwayat?.some(x => String(x.id) === String(rw))));
+
+      if (!list.length) {
+        recitersGrid.innerHTML = '';
+        recitersEmpty.classList.remove('hidden');
+        return;
+      }
+      recitersEmpty.classList.add('hidden');
+      recitersGrid.innerHTML = list.map(r => {
+        const riw = (r.riwayat || []).map(x => x.name).join('، ');
+        return `
+          <div class="card rounded-2xl p-4 glass">
+            <div class="font-semibold">${r.name || ''}</div>
+            <div class="text-xs text-gray-400 mt-1">${riw || '—'}</div>
+            ${r.moshaf ? `<div class="mt-2 text-xs text-gray-400">مصاحف: ${r.moshaf.length}</div>` : ''}
+            ${r.photo ? `<img alt="${r.name}" src="${r.photo}" class="mt-3 rounded-xl object-cover w-full h-28"/>` : ''}
+            ${r.moshaf?.length ? `<details class="mt-3">
+              <summary class="text-sm cursor-pointer linkish">عرض المصاحف/السور</summary>
+              <div class="mt-2 text-xs space-y-1 max-h-40 overflow-auto">
+                ${r.moshaf.map(m => `<div class="p-2 rounded bg-black/20 border border-white/5">
+                  <div class="font-medium">${m.name || ''}</div>
+                  <div class="opacity-80">${(m.surah_list || '').split(',').length} سورة</div>
+                  ${m.server ? `<a class="linkish" href="${m.server}" target="_blank" rel="noopener">الاستماع على الخادم</a>` : ''}
+                </div>`).join('')}
+              </div>
+            </details>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    reciterSearch.addEventListener('input', renderReciters);
+    riwayaFilter.addEventListener('change', renderReciters);
+
+    /* =========================
+       Quran (alquran.cloud + audio editions)
+    ========================= */
+    const surahList = document.getElementById('surahList');
+    const surahSearch = document.getElementById('surahSearch');
+    const versesBox = document.getElementById('verses');
+    const currentSurahTitle = document.getElementById('currentSurahTitle');
+    const currentSurahMeta = document.getElementById('currentSurahMeta');
+    const audioEdition = document.getElementById('audioEdition');
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    let allSurahs = [];
+    let currentSurahId = null;
+
+    async function loadSurahs() {
+      try {
+        const r = await fetch('https://api.alquran.cloud/v1/surah');
+        const j = await r.json();
+        allSurahs = j?.data || [];
+        renderSurahs();
+      } catch (e) {
+        surahList.innerHTML = '<li class="text-sm text-gray-400">تعذر تحميل السور.</li>';
+      }
+    }
+
+    function renderSurahs() {
+      const q = surahSearch.value.trim();
+      let list = allSurahs.slice();
+      if (q) list = list.filter(s => (s.englishName || '').includes(q) || (s.name || '').includes(q));
+      surahList.innerHTML = list.map(s => `
+        <li>
+          <button class="w-full text-right px-3 py-2 rounded-lg hover:bg-white/5" data-id="${s.number}">
+            <div class="font-medium">${s.number}. ${s.name}</div>
+            <div class="text-xs text-gray-400">${s.englishName} — ${s.englishNameTranslation}</div>
+          </button>
+        </li>`).join('');
+
+      surahList.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => loadSurah(parseInt(btn.dataset.id, 10)));
+      });
+    }
+
+    async function loadSurah(id) {
+      currentSurahId = id;
+      versesBox.innerHTML = '<div class="text-sm text-gray-400">جارٍ التحميل...</div>';
+      try {
+        const [textRes, audioRes] = await Promise.all([
+          fetch(`https://api.alquran.cloud/v1/surah/${id}/quran-uthmani`),
+          fetch(`https://api.alquran.cloud/v1/surah/${id}/${audioEdition.value}`)
+        ]);
+        const textJson = await textRes.json();
+        const audioJson = await audioRes.json();
+        const ayat = textJson?.data?.ayahs || [];
+        const audioAyat = audioJson?.data?.ayahs || [];
+
+        currentSurahTitle.textContent = allSurahs.find(s => s.number === id)?.name || 'سورة';
+        currentSurahMeta.textContent = `آيات: ${ayat.length}`;
+
+        versesBox.innerHTML = ayat.map((a, idx) => {
+          const audioUrl = audioAyat[idx]?.audio || '';
+          return `<div class="p-3 rounded-lg hover:bg-white/5 transition group">
+              <div class="flex items-start justify-between gap-3">
+                <div class="leading-9">${a.text}</div>
+                ${audioUrl ? `<button class="ml-2 shrink-0 px-3 py-1.5 rounded-xl border border-white/10 group-hover:border-rosegold-400 text-xs" data-audio="${audioUrl}">تشغيل</button>` : ''}
+              </div>
+              <div class="text-xs text-gray-500 mt-1">[${a.numberInSurah}]</div>
+            </div>`;
+        }).join('');
+
+        versesBox.querySelectorAll('button[data-audio]').forEach(b => {
+          b.addEventListener('click', () => {
+            audioPlayer.src = b.dataset.audio;
+            audioPlayer.play();
+          });
+        });
+      } catch (e) {
+        versesBox.innerHTML = '<div class="text-sm text-gray-400">تعذر تحميل السورة.</div>';
+      }
+    }
+
+    surahSearch.addEventListener('input', renderSurahs);
+    audioEdition.addEventListener('change', () => { if (currentSurahId) loadSurah(currentSurahId); });
+
+    // Ayah Search (global)
+    const ayahSearch = document.getElementById('ayahSearch');
+    const ayahSearchBtn = document.getElementById('ayahSearchBtn');
+    ayahSearchBtn.addEventListener('click', () => doAyahSearch());
+    ayahSearch.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doAyahSearch(); }});
+
+    async function doAyahSearch() {
+      const q = ayahSearch.value.trim();
+      if (!q) return;
+      versesBox.innerHTML = '<div class="text-sm text-gray-400">جارٍ البحث...</div>';
+      try {
+        const r = await fetch(`https://api.alquran.cloud/v1/search/${encodeURIComponent(q)}/all/ar`);
+        const j = await r.json();
+        const matches = j?.data?.matches || [];
+        if (!matches.length) {
+          versesBox.innerHTML = '<div class="text-sm text-gray-400">لا توجد نتائج.</div>';
+          return;
+        }
+        versesBox.innerHTML = matches.slice(0, 100).map(m => `
+          <div class="p-3 rounded-lg hover:bg-white/5 transition">
+            <div class="leading-9">${m.text}</div>
+            <div class="text-xs text-gray-500 mt-1">${m.surah.name} — آية ${m.numberInSurah}</div>
+          </div>`).join('');
+      } catch (e) {
+        versesBox.innerHTML = '<div class="text-sm text-gray-400">تعذر تنفيذ البحث.</div>';
+      }
+    }
+
+    /* =========================
+       AI Sites (20+ with blurbs)
+    ========================= */
+    const aiSites = [
+      { name: 'ChatGPT', url: 'https://chat.openai.com', note: 'مساعد ذكي متعدد الاستخدامات للمحادثة والكتابة والبرمجة.' },
+      { name: 'Claude', url: 'https://claude.ai', note: 'نموذج لغوي متقدم للمهام المعرفية والتحليل.' },
+      { name: 'Perplexity', url: 'https://www.perplexity.ai', note: 'بحث ذكي مع مراجع مباشرة وإجابات فورية.' },
+      { name: 'Google Gemini', url: 'https://gemini.google.com', note: 'مولد نصوص وصور من جوجل مع تكامل خدماتها.' },
+      { name: 'Microsoft Copilot', url: 'https://copilot.microsoft.com', note: 'مساعد إنتاجية متكامل مع منتجات مايكروسوفت.' },
+      { name: 'Midjourney', url: 'https://www.midjourney.com', note: 'توليد صور فنية عالية الجودة عبر الأوامر.' },
+      { name: 'Stable Diffusion', url: 'https://stability.ai', note: 'نموذج توليد صور مفتوح المصدر للتخصيص.' },
+      { name: 'Canva', url: 'https://www.canva.com', note: 'تصميم سهل مع أدوات ذكاء للتخطيطات والاقتراحات.' },
+      { name: 'Notion AI', url: 'https://www.notion.so/product/ai', note: 'مساعد كتابة وملخصات داخل مساحة العمل.' },
+      { name: 'Grammarly', url: 'https://www.grammarly.com', note: 'تدقيق نحوي وأسلوب كتابة مع اقتراحات ذكية.' },
+      { name: 'Quillbot', url: 'https://quillbot.com', note: 'إعادة صياغة وملخصات وتحسين الأسلوب.' },
+      { name: 'Descript', url: 'https://www.descript.com', note: 'تحرير صوت/فيديو بالذكاء مع تفريغ تلقائي.' },
+      { name: 'Runway', url: 'https://runwayml.com', note: 'تحرير فيديو وصور مع ميزات توليدية.' },
+      { name: 'Khanmigo', url: 'https://www.khanacademy.org', note: 'مساعد تعليمي تفاعلي من خان أكاديمي.' },
+      { name: 'GitHub Copilot', url: 'https://github.com/features/copilot', note: 'إكمال تلقائي للبرمجة واقتراحات كود.' },
+      { name: 'Poe', url: 'https://poe.com', note: 'مجمّع لنماذج متعددة في منصة واحدة.' },
+      { name: 'ElevenLabs', url: 'https://elevenlabs.io', note: 'توليد صوت بشري واقعي بعدة لغات.' },
+      { name: 'Synthesia', url: 'https://www.synthesia.io', note: 'إنشاء فيديوهات بأفاتار ناطق من النص.' },
+      { name: 'Luma AI', url: 'https://lumalabs.ai', note: 'توليد فيديو/3D من لقطات وصور.' },
+      { name: 'Hugging Face', url: 'https://huggingface.co', note: 'مستودع نماذج وواجهات جاهزة للتجربة.' },
+      { name: 'Leonardo AI', url: 'https://leonardo.ai', note: 'منصة تصميم وتوليد صور وعناصر لعب.' },
+      { name: 'Tome', url: 'https://tome.app', note: 'عروض تقديمية مولدة بالذكاء من أفكارك.' },
+      { name: 'Murf AI', url: 'https://murf.ai', note: 'تحويل النص إلى كلام احترافي للعروض والبودكاست.' },
+      { name: 'Replit AI', url: 'https://replit.com', note: 'بيئة تطوير على السحابة مع مساعدين للبرمجة.' }
+    ];
+
+    const aiGrid = document.getElementById('aiGrid');
+    aiGrid.innerHTML = aiSites.map(s => `
+      <a href="${s.url}" target="_blank" rel="noopener" class="card rounded-2xl p-4 glass hover:border-rosegold-400 transition block">
+        <div class="font-semibold">${s.name}</div>
+        <div class="text-sm text-gray-400 mt-1">${s.note}</div>
+        <div class="text-xs mt-2 linkish">فتح الموقع</div>
+      </a>`).join('');
+
+    /* =========================
+       English Learning Links
+    ========================= */
+    const byId = (id) => document.getElementById(id);
+    const L = (arr, ele) => arr.map(x => `<li><a class="linkish" target="_blank" rel="noopener" href="${x[1]}">${x[0]}</a><span class="block text-xs text-gray-500">${x[2]||''}</span></li>`).join('');
+
+    byId('engListening').innerHTML = L([
+      ['BBC Learning English Listen', 'https://www.bbc.co.uk/learningenglish', 'مقاطع صوتية مع نصوص وتمارين.'],
+      ['VOA Learning English', 'https://learningenglish.voanews.com', 'أخبار موجهة للمتعلمين بسرعات مختلفة.'],
+      ['Elllo', 'https://elllo.org', 'حوارات قصيرة مع تفريغ وتمارين.'],
+      ['TED Talks', 'https://www.ted.com/talks', 'فيديوهات ملهمة مع ترجمات.']
+    ]);
+
+    byId('engComprehensive').innerHTML = L([
+      ['British Council', 'https://learnenglish.britishcouncil.org', 'محتوى شامل لجميع المهارات والمستويات.'],
+      ['Coursera English', 'https://www.coursera.org/browse/language-learning/learning-english', 'دورات جامعية منوعة.'],
+      ['Khan Academy Grammar', 'https://www.khanacademy.org/humanities/grammar', 'قواعد مع شروحات وتمارين.']
+    ]);
+
+    byId('engWriting').innerHTML = L([
+      ['Grammarly Handbook', 'https://www.grammarly.com/handbook', 'مقالات شاملة للكتابة والأسلوب.'],
+      ['Hemingway Editor', 'https://hemingwayapp.com', 'تحسين بساطة الأسلوب والوضوح.'],
+      ['Quizlet', 'https://quizlet.com', 'بطاقات مفردات وتدرب ذاتي.']
+    ]);
+
+    byId('engKids').innerHTML = L([
+      ['Starfall', 'https://www.starfall.com/h/ltr-classic/', 'أساسيات القراءة للصغار.'],
+      ['ABCmouse', 'https://www.abcmouse.com', 'منهاج مبكر تفاعلي.'],
+      ['National Geographic Kids', 'https://kids.nationalgeographic.com', 'قراءة علمية ممتعة للأطفال.']
+    ]);
+
+    byId('otherLangs').innerHTML = L([
+      ['Duolingo', 'https://www.duolingo.com', 'تعلّم عشرات اللغات بأسلوب ممتع.'],
+      ['Memrise', 'https://www.memrise.com', 'مفردات بالنطق الحقيقي.'],
+      ['Busuu', 'https://www.busuu.com', 'خطط تعلم مع تقييم من متحدثين أصليين.']
+    ]);
+
+    // Init loaders
+    loadRiwayat();
+    loadReciters();
+    loadSurahs();
+  </script>
 </body>
 </html>
