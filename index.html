@@ -43,6 +43,25 @@
     </div>
   </section>
 
+  <section class="quick-player container">
+    <div class="qp-wrap glass">
+      <div class="qp-head">
+        <div class="qp-title">🎧 مشغّل القرآن السريع</div>
+        <a class="btn small ghost" href="#sec-quran" data-open="#sec-quran">فتح قسم القرآن</a>
+      </div>
+      <div class="qp-controls">
+        <label class="field-wrap"><span>القارئ</span>
+          <select id="quickReader" class="field"></select>
+        </label>
+        <label class="field-wrap"><span>السورة</span>
+          <select id="quickSurah" class="field"></select>
+        </label>
+        <button id="quickPlay" class="btn primary small">تشغيل</button>
+      </div>
+      <audio id="player" controls class="player" preload="none"></audio>
+    </div>
+  </section>
+
   <main id="content" class="container main">
 
     <!-- Quran -->

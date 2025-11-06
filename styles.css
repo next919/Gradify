@@ -29,3 +29,11 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}*,*::before,*::after{b
 .aura .a2{animation:floatA 18s ease-in-out infinite reverse}
 .aura .a3{animation:floatA 22s ease-in-out infinite}
 .hero h1{letter-spacing:.2px}
+/* Quick Player */
+.quick-player { margin: 8px auto 18px; }
+.qp-wrap { border-radius: 18px; padding: 12px; }
+.qp-head { display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.4rem; }
+.qp-title { font-weight:800; }
+.qp-controls { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; }
+.qp-controls .field { min-width:220px; }
+@media (max-width:700px){ .qp-controls .field{ min-width:160px; } }

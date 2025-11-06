@@ -7,16 +7,11 @@ function renderReaderOptions(filter=""){
   const readerSel = $('#readerSelect');
   const q = (filter||"").trim();
   let list = ALL_RECITERS;
-  if(q){
-    const qn = q.replace(/[^\d]/g,'').trim();
-    list = ALL_RECITERS.filter(r => (r.name||"").includes(q));
-  }
+  if(q){ list = ALL_RECITERS.filter(r => (r.name||"").includes(q)); }
   const prev = readerSel.value;
   readerSel.innerHTML = list.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
-  // keep previous selection if still present
   if(list.some(r=>r.id===prev)) readerSel.value = prev;
 }
-
 function renderSurahOptions(filter=""){
   const surahSel = $('#surahSelect');
   const q = (filter||"").trim();
@@ -147,7 +142,6 @@ function initQuran(){
   ALL_RECITERS = RECITERS.slice();
   renderReaderOptions();
   document.getElementById('readerSearch').addEventListener('input', e=> renderReaderOptions(e.target.value));
-  // old: populate
   /*RECITERS.forEach(r => {*/
     const o = document.createElement('option');
     o.value = r.id; o.textContent = r.name; /*readerSel.appendChild(o);
@@ -206,6 +200,34 @@ function initQuran(){
 }
 
 // ===== Contact Form =====
+
+// ===== Quick Player (homepage) =====
+function initQuickPlayer(){
+  const qReader = document.getElementById('quickReader');
+  const qSurah = document.getElementById('quickSurah');
+  const mainReader = document.getElementById('readerSelect');
+  const mainSurah = document.getElementById('surahSelect');
+  const quickPlay = document.getElementById('quickPlay');
+  if(!qReader || !qSurah || !mainReader || !mainSurah) return;
+
+  // populate from main selects
+  qReader.innerHTML = Array.from(mainReader.options).map(o => `<option value="${o.value}">${o.textContent}</option>`).join('');
+  qSurah.innerHTML = Array.from(mainSurah.options).map(o => `<option value="${o.value}">${o.textContent}</option>`).join('');
+
+  // sync both ways
+  qReader.addEventListener('change', ()=>{ mainReader.value = qReader.value; });
+  mainReader.addEventListener('change', ()=>{ if(qReader) qReader.value = mainReader.value; });
+
+  qSurah.addEventListener('change', ()=>{ mainSurah.value = qSurah.value; });
+  mainSurah.addEventListener('change', ()=>{ if(qSurah) qSurah.value = mainSurah.value; });
+
+  // play
+  quickPlay.addEventListener('click', ()=>{
+    const mainPlay = document.getElementById('playBtn');
+    if(mainPlay){ mainPlay.click(); }
+  });
+}
+
 function initContact(){
   const form = $('#contactForm'), msg=$('#formMsg'), sendBtn=$('#sendBtn'), agree=$('#agree'), mailto=$('#mailtoFallback');
   const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
@@ -273,5 +295,5 @@ function initNav(){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  initNav(); initCatalogs(); initQuran(); initContact();
+  initNav(); initCatalogs(); initQuran(); initQuickPlayer(); initContact();
 });
