@@ -1,1 +1,64 @@
-<!doctype html><title>Gradify Aura v2.1</title><h1>Gradify Aura v2.1</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gradify Aura v2.1</title>
+  <meta name="description" content="Gradify Aura v2.1 — lightweight gradient generator" />
+  <style>
+    :root { --bg: #fff; }
+    html,body { height:100%; margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body { display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg,#f6d365 0%,#fda085 100%); color:#111; }
+    main { max-width:720px; padding:2rem; text-align:center; background: rgba(255,255,255,0.6); border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,0.08); }
+    .preview { height:160px; border-radius:8px; margin:1rem 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); }
+    .controls { display:flex; gap:.5rem; justify-content:center; margin-bottom:0.5rem; }
+    button { background:#111; color:#fff; border:0; padding:.6rem 1rem; border-radius:8px; cursor:pointer; }
+    a { color:inherit; text-decoration:underline; }
+    footer.small { margin-top:1rem; font-size:12px; color:rgba(0,0,0,0.65); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Gradify Aura v2.1</h1>
+    <p>A lightweight gradient preview tool.</p>
+
+    <div id="preview" class="preview" title="Gradient preview"></div>
+
+    <div class="controls">
+      <button id="rnd">Randomize</button>
+      <button id="copy">Copy CSS</button>
+    </div>
+
+    <p><a href="https://github.com/next919/Gradify">View source on GitHub</a></p>
+    <div class="small footer">© 2025 Gradify</div>
+  </main>
+
+  <script>
+    function randColor(){ return '#' + Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'); }
+    function setGradient(a,b,deg){
+      const css = `linear-gradient(${deg}deg, ${a} 0%, ${b} 100%)`;
+      const preview = document.getElementById('preview');
+      preview.style.background = css;
+      document.body.style.background = css;
+      preview.dataset.css = css;
+    }
+
+    document.getElementById('rnd').addEventListener('click', () => {
+      setGradient(randColor(), randColor(), Math.floor(Math.random()*360));
+    });
+
+    document.getElementById('copy').addEventListener('click', () => {
+      const css = document.getElementById('preview').dataset.css || getComputedStyle(document.getElementById('preview')).background;
+      const text = `background: ${css};`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(()=> alert('CSS copied to clipboard'));
+      } else {
+        prompt('CSS (copy manually):', text);
+      }
+    });
+
+    // initial gradient
+    setGradient('#f6d365','#fda085',135);
+  </script>
+</body>
+</html>
