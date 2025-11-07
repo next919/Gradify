@@ -4,19 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>جراديڤي — Gradify Aura</title>
-  <meta name="description" content="جراديڤي — Gradify Aura: القرآن (استماع/قراءة/تفسير) + مواقع الذكاء + تعلم الإنجليزية + تواصل" />
+  <meta name="description" content="القرآن (استماع/قراءة/تفسير) + مواقع الذكاء + تعلم الإنجليزية + تواصل" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4a373'/%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      theme: { extend: {
-        colors: {
-          brand: {50:'#fff9f0',100:'#ffefd8',200:'#fde3bf',300:'#f7d5a8',400:'#eec28a',500:'#d4a373',600:'#bb8e62',700:'#9a734d',800:'#7a5b3d',900:'#5f482f'},
-          ink: {50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717'}
-        },
-        boxShadow:{soft:'0 1px 2px rgba(17,17,17,.06), 0 12px 24px rgba(17,17,17,.08)'},
-        borderRadius:{xl2:'1.25rem'}
-      } }
+      theme: { extend: { colors: { brand: {50:'#fff9f0',100:'#ffefd8',200:'#fde3bf',300:'#f7d5a8',400:'#eec28a',500:'#d4a373',600:'#bb8e62',700:'#9a734d',800:'#7a5b3d',900:'#5f482f'}, ink:{50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717'}}, boxShadow:{soft:'0 1px 2px rgba(17,17,17,.06), 0 12px 24px rgba(17,17,17,.08)'}, borderRadius:{xl2:'1.25rem'} } }
     }
   </script>
   <style>
@@ -30,62 +23,57 @@
 <body class="min-h-screen">
   <header class="border-b border-ink-200 bg-white/90 backdrop-blur sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <button id="brand" class="text-xl sm:text-2xl font-extrabold tracking-tight text-ink-900">
-        جرادي<span class="text-brand-600">ڤ</span>ي — <span class="text-ink-700">Gradify Aura</span>
-      </button>
+      <button id="brand" class="text-2xl font-extrabold tracking-tight text-ink-900">جرادي<span class="text-brand-600">ڤ</span>ي</button>
       <nav class="hidden sm:flex gap-5 text-sm text-ink-600">
-        <a class="hover:text-ink-900 navlink" data-target="q-acc" href="#q-acc">القرآن</a>
-        <a class="hover:text-ink-900 navlink" data-target="ai-acc" href="#ai-acc">الذكاء</a>
-        <a class="hover:text-ink-900 navlink" data-target="en-acc" href="#en-acc">الإنجليزية</a>
-        <a class="hover:text-ink-900 navlink" data-target="contact" href="#contact">اتصل بنا</a>
+        <a class="hover:text-ink-900" href="#q-acc">القرآن</a>
+        <a class="hover:text-ink-900" href="#ai-acc">الذكاء</a>
+        <a class="hover:text-ink-900" href="#en-acc">الإنجليزية</a>
+        <a class="hover:text-ink-900" href="#contact">اتصل بنا</a>
       </nav>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
-    <section>
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-ink-900 text-center sm:text-right">
-        واجهة بيضاء أنيقة
-        <span class="text-ink-400 text-2xl sm:text-3xl">— Gradify Aura</span>
-      </h1>
-      <p class="mt-3 text-ink-600 text-center sm:text-right">
-        أقسام مرتبة، تفتح عند الضغط. استماع وقراءة وتفسير للقرآن، مواقع ذكاء مع نبذة، وتعليم الإنجليزية.
-      </p>
+    <section class="grid md:grid-cols-2 gap-6 items-center">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-ink-900">واجهة بيضاء أنيقة — Minimal</h1>
+        <p class="mt-3 text-ink-600">أكورديون نظيف، أيقونات لطيفة، ومحرك بحث ذكي للأقسام. نموذج تواصل يعمل مباشرة عبر Web3Forms.</p>
+        <div class="mt-5 flex gap-3">
+          <a href="#q-acc" class="px-4 py-2 rounded-xl2 border card hover:shadow-soft">ابدأ بالقرآن</a>
+          <a href="#ai-acc" class="px-4 py-2 rounded-xl2 bg-brand-500 text-white hover:bg-brand-600 shadow-soft">استكشف الذكاء</a>
+        </div>
+      </div>
+      <ul class="grid grid-cols-2 gap-3">
+        <li class="card rounded-2xl p-4"><div class="text-xs text-ink-500">النموذج</div><div class="font-semibold">Web3Forms</div></li>
+        <li class="card rounded-2xl p-4"><div class="text-xs text-ink-500">القرّاء</div><div class="font-semibold">كامل + روايات</div></li>
+        <li class="card rounded-2xl p-4"><div class="text-xs text-ink-500">القرآن</div><div class="font-semibold">تصفح + استماع</div></li>
+        <li class="card rounded-2xl p-4"><div class="text-xs text-ink-500">الذكاء</div><div class="font-semibold">20+ موقع</div></li>
+      </ul>
     </section>
 
     <details id="q-acc" class="card rounded-2xl p-4">
       <summary class="flex items-center justify-between cursor-pointer select-none">
         <div class="flex items-center gap-2 font-semibold">
           <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M20 2H8a2 2 0 0 0-2 2v16"/><path d="M9 10h9M9 14h9M9 6h3"/></svg>
-          القرآن الكريم
+          القرآن — أقسام فرعية
         </div>
         <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </summary>
-
       <div class="mt-4 space-y-4">
         <details class="rounded-xl border border-ink-200 p-4">
           <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-2 font-medium">
-              <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5l-7 7 7 7"/><path d="M18 19V5"/></svg>
-              الاستماع — مشغل ذكي + بحث
-            </div>
+            <div class="flex items-center gap-2 font-medium"><svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5l-7 7 7 7"/><path d="M18 19V5"/></svg>الاستماع — مشغل ذكي + بحث</div>
             <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
-
           <div class="mt-4 grid lg:grid-cols-3 gap-4">
             <div class="rounded-xl border border-ink-200 p-4 space-y-3">
               <input id="reciterQuery" class="w-full rounded-lg border border-ink-200 px-3 py-2" placeholder="ابحث باسم القارئ/الرواية..." />
               <div class="grid grid-cols-2 gap-2 text-sm">
                 <select id="listenSurah" class="rounded-lg border border-ink-200 px-3 py-2"></select>
-                <select id="recitationType" class="rounded-lg border border-ink-200 px-3 py-2">
-                  <option value="">كل الأنواع</option>
-                  <option>مجود</option>
-                  <option>مرتل</option>
-                </select>
+                <select id="recitationType" class="rounded-lg border border-ink-200 px-3 py-2"><option value="">كل الأنواع</option><option>مجود</option><option>مرتل</option></select>
               </div>
               <div class="text-xs text-ink-500">المصدر: mp3quran — روابط HTTPS مباشرة.</div>
             </div>
-
             <div class="lg:col-span-2 space-y-3">
               <div class="rounded-xl border border-ink-200 p-4">
                 <div class="flex flex-wrap items-center gap-2 text-sm">
@@ -96,7 +84,6 @@
                 <audio id="proPlayer" class="w-full mt-3" controls></audio>
                 <div class="mt-2 text-xs text-ink-500">اختصارات: Space تشغيل/إيقاف، ←/→ لتقديم/ترجيع 10 ثوانٍ.</div>
               </div>
-
               <div id="recitersWrap" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3"></div>
               <div id="recitersEmpty" class="hidden text-ink-500 text-sm">لا نتائج مطابقة.</div>
             </div>
@@ -105,10 +92,7 @@
 
         <details class="rounded-xl border border-ink-200 p-4">
           <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-2 font-medium">
-              <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M20 2H8a2 2 0 0 0-2 2v16"/><path d="M9 10h9M9 14h9M9 6h3"/></svg>
-              القراءة — مصحف عثماني + بحث ذكي
-            </div>
+            <div class="flex items-center gap-2 font-medium"><svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M20 2H8a2 2 0 0 0-2 2v16"/><path d="M9 10h9M9 14h9M9 6h3"/></svg>القراءة — مصحف عثماني + بحث</div>
             <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
           <div class="mt-4 grid lg:grid-cols-3 gap-4">
@@ -124,37 +108,25 @@
 
         <details class="rounded-xl border border-ink-200 p-4">
           <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-2 font-medium">
-              <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 1 1-4-4"/><path d="M12 3v4M6 8l-2 2 2 2M18 8l2 2-2 2"/></svg>
-              التفسير — الجلالين / الميسر
-            </div>
+            <div class="flex items-center gap-2 font-medium"><svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 1 1-4-4"/><path d="M12 3v4M6 8l-2 2 2 2M18 8l2 2-2 2"/></svg>التفسير — الجلالين / الميسر</div>
             <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
           <div class="mt-4 grid lg:grid-cols-3 gap-4">
             <div class="rounded-xl border border-ink-200 p-4 space-y-3">
               <select id="tafSurah" class="rounded-lg border border-ink-200 px-3 py-2"></select>
               <input id="tafAyah" type="number" min="1" class="w-full rounded-lg border border-ink-200 px-3 py-2" placeholder="رقم الآية" />
-              <select id="tafEdition" class="rounded-lg border border-ink-200 px-3 py-2">
-                <option value="ar.muyassar">الميسر</option>
-                <option value="ar.jalalayn">الجلالين</option>
-              </select>
+              <select id="tafEdition" class="rounded-lg border border-ink-200 px-3 py-2"><option value="ar.muyassar">الميسر</option><option value="ar.jalalayn">الجلالين</option></select>
               <button id="tafFetch" class="px-3 py-2 rounded-lg border card hover:shadow-soft">جلب التفسير</button>
             </div>
-            <div class="lg:col-span-2 rounded-xl border border-ink-200 p-4">
-              <div id="tafBox" class="leading-8"></div>
-            </div>
+            <div class="lg:col-span-2 rounded-xl border border-ink-200 p-4"><div id="tafBox" class="leading-8"></div></div>
           </div>
         </details>
-
       </div>
     </details>
 
     <details id="ai-acc" class="card rounded-2xl p-4">
       <summary class="flex items-center justify-between cursor-pointer select-none">
-        <div class="flex items-center gap-2 font-semibold">
-          <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4"/></svg>
-          مواقع الذكاء الاصطناعي (20+)
-        </div>
+        <div class="flex items-center gap-2 font-semibold"><svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4"/></svg>مواقع الذكاء الاصطناعي (20+)</div>
         <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </summary>
       <div id="aiGrid" class="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -162,10 +134,7 @@
 
     <details id="en-acc" class="card rounded-2xl p-4">
       <summary class="flex items-center justify-between cursor-pointer select-none">
-        <div class="flex items-center gap-2 font-semibold">
-          <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M4 5h16M9 9h6M9 13h6"/></svg>
-          تعلم الإنجليزية
-        </div>
+        <div class="flex items-center gap-2 font-semibold"><svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M4 5h16M9 9h6M9 13h6"/></svg>تعلم الإنجليزية</div>
         <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </summary>
       <div class="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -178,11 +147,8 @@
     </details>
 
     <section id="contact" class="pt-2">
-      <div class="flex items-center gap-3">
-        <button id="toggleContact" class="px-4 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600">تواصل معنا</button>
-        <span id="contactStatus" class="text-xs text-ink-500"></span>
-      </div>
-      <form id="contactForm" class="grid md:grid-cols-3 gap-2 mt-3 hidden">
+      <div class="text-sm text-ink-600 mb-2">تواصل معنا</div>
+      <form id="contactForm" class="grid md:grid-cols-3 gap-2">
         <input type="hidden" name="access_key" value="219a1c52-9eb6-449d-b48a-a1b06dc3f95e" />
         <input type="hidden" name="subject" value="رسالة جديدة من Gradify Aura" />
         <input name="name" required placeholder="الاسم" class="rounded-lg border border-ink-200 px-3 py-2" />
@@ -191,6 +157,7 @@
           <input name="message" required placeholder="رسالتك..." class="flex-1 rounded-lg border border-ink-200 px-3 py-2" />
           <button class="px-4 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600" type="submit">إرسال</button>
         </div>
+        <span id="contactStatus" class="text-xs text-ink-500 md:col-span-3"></span>
       </form>
     </section>
 
@@ -198,37 +165,15 @@
   </main>
 
   <script>
-    function openAndScroll(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      if(el.tagName.toLowerCase()==='details'){ el.setAttribute('open',''); }
-      el.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-    document.querySelectorAll('.navlink').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        const id = a.dataset.target;
-        if(id==='contact'){ document.getElementById('contact').classList.remove('hidden'); }
-        openAndScroll(id);
-      });
-    });
-
     document.getElementById('brand').addEventListener('click', ()=>{
       document.querySelectorAll('details').forEach(d=>d.removeAttribute('open'));
       history.pushState('', document.title, window.location.pathname + window.location.search);
       window.scrollTo({top:0,behavior:'smooth'});
     });
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const toggleBtn = document.getElementById('toggleContact');
     const contactForm = document.getElementById('contactForm');
     const contactStatus = document.getElementById('contactStatus');
-    toggleBtn.addEventListener('click', ()=>{
-      contactForm.classList.toggle('hidden');
-      if(!contactForm.classList.contains('hidden')) contactForm.scrollIntoView({behavior:'smooth'});
-    });
-
     contactForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
       contactStatus.textContent='جارٍ الإرسال...';
@@ -301,7 +246,7 @@
           const sur = parseInt(listenSurah.value)||1;
           if(!m||!m.server){return}
           const base = m.server.endsWith('/')?m.server:m.server+'/';
-          const url = base + String(sur).padStart(3,'0') + '.mp3';
+          const url = base + zero3(sur) + '.mp3';
           proPlayer.src = url; proPlayer.play();
           selReciter.textContent = r.name; selMoshaf.textContent = m.name; selSurah.textContent = SURAHS.find(s=>s.number==sur)?.name||('سورة '+sur);
         });
@@ -414,7 +359,7 @@
       ['Busuu','https://www.busuu.com','تعلم مع متحدثين أصليين.']
     ]);
 
-    loadSurahsShared().then(()=>{});
+    loadSurahsShared().then(()=>{ loadRead(); });
     loadReciters();
   </script>
 </body>
