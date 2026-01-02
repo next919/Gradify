@@ -20,15 +20,16 @@
   const cumGpaEl = $("cumGpa");
   const cumNoteEl = $("cumNote");
 
-  const LS_KEY = "gradify_gpa_seu_v2";
+  const LS_KEY = "gradify_gpa_seu_v3";
   const GRADE_OPTIONS = ["A+","A","B+","B","C+","C","D+","D","F"];
+
+  // قائمة المقررات: 01 إلى 06 (تقدر تزيدها إذا تبغى)
+  const COURSE_OPTIONS = ["مقرر 01","مقرر 02","مقرر 03","مقرر 04","مقرر 05","مقرر 06"];
 
   function getScale() {
     const v = document.querySelector('input[name="scale"]:checked')?.value || "5";
     return Number(v);
   }
-
-  const EXCLUDED = new Set(["NP","NF","IP","IC","W","E"]);
 
   function percentToLetter(p) {
     const n = Number(p);
@@ -47,7 +48,6 @@
   function letterToGpa(letter, scale) {
     const L = (letter || "").toUpperCase().trim();
     if (!L) return NaN;
-    if (EXCLUDED.has(L)) return NaN;
 
     if (scale === 5) {
       const map5 = {"A+":5.00,"A":4.75,"B+":4.50,"B":4.00,"C+":3.50,"C":3.00,"D+":2.50,"D":2.00,"F":1.00};
@@ -70,8 +70,30 @@
       : "اختر التقدير من القائمة: A+ / A / B+ / B / C+ / C / D+ / D / F";
   }
 
-  function optionsHtml(selected) {
-    return GRADE_OPTIONS.map(g => `<option value="${g}" ${g===selected?'selected':''}>${g}</option>`).join("");
+  function optionsHtml(list, selected) {
+    return list.map(v => `<option value="${v}" ${v===selected?'selected':''}>${v}</option>`).join("");
+  }
+
+  function buildCourseSelect(selected) {
+    const sel = selected && COURSE_OPTIONS.includes(selected) ? selected : COURSE_OPTIONS[0];
+    return `
+      <select data-k="course" class="w-full rounded-lg border border-ink-200 px-3 py-2">
+        ${optionsHtml(COURSE_OPTIONS, sel)}
+      </select>
+    `;
+  }
+
+  function buildGradeControl(raw) {
+    if (gradeModeEl.value === "letter") {
+      return `
+        <select data-k="gradeSel" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono">
+          <option value="" disabled ${raw ? "" : "selected"}>اختر</option>
+          ${optionsHtml(GRADE_OPTIONS, raw)}
+        </select>
+      `;
+    }
+    const v = (!isNaN(Number(raw)) ? raw : "");
+    return `<input data-k="gradeIn" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono" placeholder="0 - 100" value="${v}" />`;
   }
 
   function getRowGradeRaw(tr) {
@@ -83,29 +105,17 @@
     return inp ? inp.value.trim() : "";
   }
 
-  function buildGradeControl(raw) {
-    if (gradeModeEl.value === "letter") {
-      return `
-        <select data-k="gradeSel" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono">
-          <option value="" disabled ${raw ? "" : "selected"}>اختر</option>
-          ${optionsHtml(raw)}
-        </select>
-      `;
-    }
-    const v = (!isNaN(Number(raw)) ? raw : "");
-    return `<input data-k="gradeIn" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono" placeholder="0 - 100" value="${v}" />`;
-  }
-
   function rowTemplate(index, data) {
     const num = pad2(index);
-    const name = (data?.name) ? data.name : `مقرر ${num}`;
     const hours = (Number.isFinite(data?.hours) ? data.hours : 3);
     const raw = (data?.gradeRaw || "");
+    const course = (data?.course || `مقرر ${num}`);
+
     return `
       <tr class="border-t border-ink-200">
         <td class="p-3 whitespace-nowrap mono text-ink-700" data-k="num">${num}</td>
         <td class="p-3 min-w-[220px]">
-          <input data-k="name" class="w-full rounded-lg border border-ink-200 px-3 py-2" value="${escapeHtml(name)}" />
+          <div data-k="courseWrap">${buildCourseSelect(course)}</div>
         </td>
         <td class="p-3 min-w-[170px]">
           <div data-k="gradeWrap">${buildGradeControl(raw)}</div>
@@ -120,15 +130,11 @@
     `;
   }
 
-  function escapeHtml(str) {
-    return String(str ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
-  }
-
   function readRows() {
     const scale = getScale();
     const trs = [...rowsEl.querySelectorAll("tr")];
     return trs.map(tr => {
-      const name = tr.querySelector('[data-k="name"]').value.trim();
+      const course = tr.querySelector('[data-k="course"]')?.value || "";
       const hours = parseNumber(tr.querySelector('[data-k="hours"]').value);
       const raw = getRowGradeRaw(tr);
 
@@ -139,11 +145,10 @@
       const gpa = letterToGpa(letter, scale);
       const hrs = isFinite(hours) ? Math.max(0, hours) : NaN;
 
-      const excluded = EXCLUDED.has(letter);
-      const points = (!excluded && isFinite(hrs) && isFinite(gpa)) ? (hrs * gpa) : 0;
-      const countedHours = (!excluded && isFinite(hrs) && isFinite(gpa)) ? hrs : 0;
+      const points = (isFinite(hrs) && isFinite(gpa)) ? (hrs * gpa) : 0;
+      const countedHours = (isFinite(hrs) && isFinite(gpa)) ? hrs : 0;
 
-      return { name, gradeRaw: raw, hours: hrs, letter, gpa, points, countedHours };
+      return { course, gradeRaw: raw, hours: hrs, letter, gpa, points, countedHours };
     });
   }
 
@@ -189,19 +194,17 @@
   function renumberCourses() {
     const trs = [...rowsEl.querySelectorAll("tr")];
     trs.forEach((tr, idx) => {
-      const num = pad2(idx + 1);
-      tr.querySelector('[data-k="num"]').textContent = num;
-      const nameEl = tr.querySelector('[data-k="name"]');
-      if (nameEl && /^مقرر\s+\d{2}$/u.test(nameEl.value.trim())) nameEl.value = `مقرر ${num}`;
+      tr.querySelector('[data-k="num"]').textContent = pad2(idx + 1);
     });
   }
 
   function bindRowEvents(tr) {
-    const nameEl = tr.querySelector('[data-k="name"]');
+    const courseEl = tr.querySelector('[data-k="course"]');
     const hoursEl = tr.querySelector('[data-k="hours"]');
     const gradeEl = tr.querySelector('[data-k="gradeSel"], [data-k="gradeIn"]');
 
-    [nameEl, hoursEl].forEach(el => el.addEventListener("input", calc));
+    if (courseEl) courseEl.addEventListener("change", calc);
+    if (hoursEl) hoursEl.addEventListener("input", calc);
     if (gradeEl) { gradeEl.addEventListener("input", calc); gradeEl.addEventListener("change", calc); }
 
     tr.querySelector(".del").addEventListener("click", () => {
@@ -238,14 +241,21 @@
     prevHoursEl.value = 0;
     prevGpaEl.value = 0;
     localStorage.removeItem(LS_KEY);
-    for (let i=0;i<6;i++) addRow({ hours: 3 });
+
+    for (let i=0;i<6;i++) addRow({ hours: 3, course: COURSE_OPTIONS[i] });
+
     refreshGradeControls();
     calc();
   }
 
   function saveState() {
-    const state = { scale: getScale(), prevHours: prevHoursEl.value, prevGpa: prevGpaEl.value, gradeMode: gradeModeEl.value,
-      rows: readRows().map(r => ({ name: r.name, gradeRaw: r.gradeRaw, hours: r.hours })) };
+    const state = {
+      scale: getScale(),
+      prevHours: prevHoursEl.value,
+      prevGpa: prevGpaEl.value,
+      gradeMode: gradeModeEl.value,
+      rows: readRows().map(r => ({ course: r.course, gradeRaw: r.gradeRaw, hours: r.hours }))
+    };
     try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch {}
   }
 
@@ -264,8 +274,10 @@
       setHint();
 
       rowsEl.innerHTML = "";
-      (s.rows || []).forEach(addRow);
-      if (!(s.rows || []).length) for (let i=0;i<6;i++) addRow({ hours: 3 });
+      (s.rows || []).forEach(r => addRow(r));
+      if (!(s.rows || []).length) {
+        for (let i=0;i<6;i++) addRow({ hours: 3, course: COURSE_OPTIONS[i] });
+      }
 
       refreshGradeControls();
       renumberCourses();
@@ -283,7 +295,7 @@
 
   setHint();
   if (!loadState()) {
-    for (let i=0;i<6;i++) addRow({ hours: 3 });
+    for (let i=0;i<6;i++) addRow({ hours: 3, course: COURSE_OPTIONS[i] });
     refreshGradeControls();
     calc();
   }
