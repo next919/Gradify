@@ -20,10 +20,8 @@
   const cumGpaEl = $("cumGpa");
   const cumNoteEl = $("cumNote");
 
-  const LS_KEY = "gradify_gpa_seu_v3";
+  const LS_KEY = "gradify_gpa_seu_v4";
   const GRADE_OPTIONS = ["A+","A","B+","B","C+","C","D+","D","F"];
-
-  // قائمة المقررات: 01 إلى 06 (تقدر تزيدها إذا تبغى)
   const COURSE_OPTIONS = ["مقرر 01","مقرر 02","مقرر 03","مقرر 04","مقرر 05","مقرر 06"];
 
   function getScale() {
@@ -70,38 +68,40 @@
       : "اختر التقدير من القائمة: A+ / A / B+ / B / C+ / C / D+ / D / F";
   }
 
-  function optionsHtml(list, selected) {
-    return list.map(v => `<option value="${v}" ${v===selected?'selected':''}>${v}</option>`).join("");
+  function optionsHtml(list, selected, placeholder) {
+    const ph = placeholder ? `<option value="" disabled ${selected?"" :"selected"}>${placeholder}</option>` : "";
+    return ph + list.map(v => `<option value="${v}" ${v===selected?'selected':''}>${v}</option>`).join("");
   }
 
   function buildCourseSelect(selected) {
-    const sel = selected && COURSE_OPTIONS.includes(selected) ? selected : COURSE_OPTIONS[0];
+    const sel = (selected || "").trim();
+    const list = COURSE_OPTIONS.includes(sel) ? COURSE_OPTIONS : [sel || COURSE_OPTIONS[0], ...COURSE_OPTIONS.filter(x => x !== sel)];
     return `
-      <select data-k="course" class="w-full rounded-lg border border-ink-200 px-3 py-2">
-        ${optionsHtml(COURSE_OPTIONS, sel)}
+      <select data-k="course" class="w-full rounded-xl border border-ink-200 px-3 py-2">
+        ${optionsHtml(list, sel || list[0], null)}
       </select>
     `;
   }
 
   function buildGradeControl(raw) {
     if (gradeModeEl.value === "letter") {
+      const sel = (raw || "").toUpperCase().trim();
       return `
-        <select data-k="gradeSel" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono">
-          <option value="" disabled ${raw ? "" : "selected"}>اختر</option>
-          ${optionsHtml(GRADE_OPTIONS, raw)}
+        <select data-k="gradeSel" class="w-full rounded-xl border border-ink-200 px-3 py-2 mono">
+          ${optionsHtml(GRADE_OPTIONS, sel, "اختر التقدير")}
         </select>
       `;
     }
     const v = (!isNaN(Number(raw)) ? raw : "");
-    return `<input data-k="gradeIn" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono" placeholder="0 - 100" value="${v}" />`;
+    return `<input data-k="gradeIn" class="w-full rounded-xl border border-ink-200 px-3 py-2 mono" placeholder="0 - 100" value="${v}" inputmode="decimal" />`;
   }
 
-  function getRowGradeRaw(tr) {
+  function getRowGradeRaw(row) {
     if (gradeModeEl.value === "letter") {
-      const sel = tr.querySelector('[data-k="gradeSel"]');
+      const sel = row.querySelector('[data-k="gradeSel"]');
       return sel ? sel.value : "";
     }
-    const inp = tr.querySelector('[data-k="gradeIn"]');
+    const inp = row.querySelector('[data-k="gradeIn"]');
     return inp ? inp.value.trim() : "";
   }
 
@@ -112,31 +112,54 @@
     const course = (data?.course || `مقرر ${num}`);
 
     return `
-      <tr class="border-t border-ink-200">
-        <td class="p-3 whitespace-nowrap mono text-ink-700" data-k="num">${num}</td>
-        <td class="p-3 min-w-[220px]">
-          <div data-k="courseWrap">${buildCourseSelect(course)}</div>
-        </td>
-        <td class="p-3 min-w-[170px]">
-          <div data-k="gradeWrap">${buildGradeControl(raw)}</div>
-        </td>
-        <td class="p-3 min-w-[140px]">
-          <input data-k="hours" type="number" min="0" step="1" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono" value="${hours}" />
-        </td>
-        <td class="p-3 whitespace-nowrap mono text-ink-700"><span data-k="letter">—</span></td>
-        <td class="p-3 whitespace-nowrap mono text-ink-700"><span data-k="points">0.00</span></td>
-        <td class="p-3"><button class="del px-3 py-2 rounded-lg border border-ink-200 hover:shadow-soft">حذف</button></td>
-      </tr>
+      <div class="card rounded-2xl p-4 bg-ink-50/40" data-row>
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-ink-900 text-white mono" data-k="num">${num}</span>
+            <div class="text-sm text-ink-600">مادة</div>
+          </div>
+          <button class="del px-3 py-2 rounded-xl border border-ink-200 bg-white hover:shadow-soft">حذف</button>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+          <div class="lg:col-span-4">
+            <label class="block text-xs text-ink-600 mb-1">اسم المقرر</label>
+            <div data-k="courseWrap">${buildCourseSelect(course)}</div>
+          </div>
+
+          <div class="lg:col-span-4">
+            <label class="block text-xs text-ink-600 mb-1">الدرجة</label>
+            <div data-k="gradeWrap">${buildGradeControl(raw)}</div>
+          </div>
+
+          <div class="lg:col-span-2">
+            <label class="block text-xs text-ink-600 mb-1">عدد الساعات</label>
+            <input data-k="hours" type="number" min="0" step="1" class="w-full rounded-xl border border-ink-200 px-3 py-2 mono bg-white" value="${hours}" inputmode="numeric" />
+          </div>
+
+          <div class="lg:col-span-2 grid grid-cols-2 lg:grid-cols-1 gap-2">
+            <div class="rounded-xl border border-ink-200 bg-white px-3 py-2">
+              <div class="text-[11px] text-ink-500">التقدير</div>
+              <div class="mono text-ink-900" data-k="letter">—</div>
+            </div>
+            <div class="rounded-xl border border-ink-200 bg-white px-3 py-2">
+              <div class="text-[11px] text-ink-500">النقاط</div>
+              <div class="mono text-ink-900" data-k="points">0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
     `;
   }
 
   function readRows() {
     const scale = getScale();
-    const trs = [...rowsEl.querySelectorAll("tr")];
-    return trs.map(tr => {
-      const course = tr.querySelector('[data-k="course"]')?.value || "";
-      const hours = parseNumber(tr.querySelector('[data-k="hours"]').value);
-      const raw = getRowGradeRaw(tr);
+    const rows = [...rowsEl.querySelectorAll('[data-row]')];
+
+    return rows.map(row => {
+      const course = row.querySelector('[data-k="course"]')?.value || "";
+      const hours = parseNumber(row.querySelector('[data-k="hours"]')?.value);
+      const raw = getRowGradeRaw(row);
 
       let letter = "";
       if (gradeModeEl.value === "percent") letter = percentToLetter(parseNumber(raw));
@@ -153,12 +176,12 @@
   }
 
   function renderRowComputed(items) {
-    const trs = [...rowsEl.querySelectorAll("tr")];
-    items.forEach((it,i) => {
-      const tr = trs[i];
-      if (!tr) return;
-      tr.querySelector('[data-k="letter"]').textContent = it.letter || "—";
-      tr.querySelector('[data-k="points"]').textContent = (it.points || 0).toFixed(2);
+    const rows = [...rowsEl.querySelectorAll('[data-row]')];
+    items.forEach((it, i) => {
+      const row = rows[i];
+      if (!row) return;
+      row.querySelector('[data-k="letter"]').textContent = it.letter || "—";
+      row.querySelector('[data-k="points"]').textContent = (it.points || 0).toFixed(2);
     });
   }
 
@@ -191,46 +214,47 @@
     saveState();
   }
 
-  function renumberCourses() {
-    const trs = [...rowsEl.querySelectorAll("tr")];
-    trs.forEach((tr, idx) => {
-      tr.querySelector('[data-k="num"]').textContent = pad2(idx + 1);
+  function renumber() {
+    const rows = [...rowsEl.querySelectorAll('[data-row]')];
+    rows.forEach((row, idx) => {
+      row.querySelector('[data-k="num"]').textContent = pad2(idx + 1);
     });
   }
 
-  function bindRowEvents(tr) {
-    const courseEl = tr.querySelector('[data-k="course"]');
-    const hoursEl = tr.querySelector('[data-k="hours"]');
-    const gradeEl = tr.querySelector('[data-k="gradeSel"], [data-k="gradeIn"]');
-
-    if (courseEl) courseEl.addEventListener("change", calc);
-    if (hoursEl) hoursEl.addEventListener("input", calc);
-    if (gradeEl) { gradeEl.addEventListener("input", calc); gradeEl.addEventListener("change", calc); }
-
-    tr.querySelector(".del").addEventListener("click", () => {
-      tr.remove();
-      renumberCourses();
+  function bindRowEvents(row) {
+    row.querySelector(".del")?.addEventListener("click", () => {
+      row.remove();
+      renumber();
       calc();
     });
+
+    row.querySelector('[data-k="course"]')?.addEventListener("change", calc);
+    row.querySelector('[data-k="hours"]')?.addEventListener("input", calc);
+
+    const gradeEl = row.querySelector('[data-k="gradeSel"], [data-k="gradeIn"]');
+    if (gradeEl) {
+      gradeEl.addEventListener("input", calc);
+      gradeEl.addEventListener("change", calc);
+    }
   }
 
   function addRow(data) {
-    const idx = rowsEl.querySelectorAll("tr").length + 1;
+    const idx = rowsEl.querySelectorAll('[data-row]').length + 1;
     rowsEl.insertAdjacentHTML("beforeend", rowTemplate(idx, data));
-    const tr = rowsEl.querySelector("tr:last-child");
-    if (!tr) return;
-    bindRowEvents(tr);
-    renumberCourses();
+    const row = rowsEl.querySelector('[data-row]:last-child');
+    if (!row) return;
+    bindRowEvents(row);
+    renumber();
     calc();
   }
 
   function refreshGradeControls() {
-    const trs = [...rowsEl.querySelectorAll("tr")];
-    trs.forEach(tr => {
-      const wrap = tr.querySelector('[data-k="gradeWrap"]');
-      const raw = getRowGradeRaw(tr);
+    const rows = [...rowsEl.querySelectorAll('[data-row]')];
+    rows.forEach(row => {
+      const wrap = row.querySelector('[data-k="gradeWrap"]');
+      const raw = getRowGradeRaw(row);
       wrap.innerHTML = buildGradeControl(raw);
-      bindRowEvents(tr);
+      bindRowEvents(row);
     });
     calc();
   }
@@ -243,7 +267,6 @@
     localStorage.removeItem(LS_KEY);
 
     for (let i=0;i<6;i++) addRow({ hours: 3, course: COURSE_OPTIONS[i] });
-
     refreshGradeControls();
     calc();
   }
@@ -275,17 +298,21 @@
 
       rowsEl.innerHTML = "";
       (s.rows || []).forEach(r => addRow(r));
+
       if (!(s.rows || []).length) {
         for (let i=0;i<6;i++) addRow({ hours: 3, course: COURSE_OPTIONS[i] });
       }
 
       refreshGradeControls();
-      renumberCourses();
+      renumber();
       calc();
       return true;
-    } catch { return false; }
+    } catch {
+      return false;
+    }
   }
 
+  // events
   document.querySelectorAll('input[name="scale"]').forEach(r => r.addEventListener("change", calc));
   [prevHoursEl, prevGpaEl].forEach(el => el.addEventListener("input", calc));
   gradeModeEl.addEventListener("change", () => { setHint(); refreshGradeControls(); });
