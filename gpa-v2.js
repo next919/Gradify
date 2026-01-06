@@ -1,11 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   const coursesEl = document.getElementById('courses');
   const addBtn = document.getElementById('add');
-  const gpaEl = document.getElementById('gpa');
-  const hoursTotalEl = document.getElementById('hoursTotal');
-  const pointsTotalEl = document.getElementById('pointsTotal');
+
   const prevHoursEl = document.getElementById('prevHours');
   const prevGpaEl = document.getElementById('prevGpa');
+
+  // نتائج
+  const semGpaEl = document.getElementById('semGpa');
+  const semHoursEl = document.getElementById('semHours');
+  const semPointsEl = document.getElementById('semPoints');
+
+  const cumGpaEl = document.getElementById('cumGpa');
+  const cumHoursEl = document.getElementById('cumHours');
+  const cumPointsEl = document.getElementById('cumPoints');
 
   const MAP = {"A+":4,"A":3.75,"B+":3.5,"B":3,"C+":2.5,"C":2,"D+":1.5,"D":1,"F":0};
   const grades = ["A+","A","B+","B","C+","C","D+","D","F"];
@@ -19,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function card(i){
     return `
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" data-card>
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-soft overflow-hidden" data-card>
         <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div class="title font-extrabold">مادة ${pad2(i)}</div>
           <button type="button" class="remove text-sm font-semibold text-red-600">حذف</button>
@@ -62,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function recalc(){
     let semPoints = 0, semHours = 0;
+
     [...coursesEl.querySelectorAll('[data-card]')].forEach(cardEl => {
       const g = cardEl.querySelector('.grade').value;
       const h = num(cardEl.querySelector('.hrs').value);
@@ -75,15 +83,23 @@ document.addEventListener('DOMContentLoaded', () => {
       semHours += h;
     });
 
+    const semGpa = semHours ? (semPoints / semHours) : 0;
+
     const prevH = Math.max(0, num(prevHoursEl.value));
     const prevG = Math.min(4, Math.max(0, num(prevGpaEl.value)));
+    const prevPoints = prevH * prevG;
 
-    const totalHours = prevH + semHours;
-    const totalPoints = prevH * prevG + semPoints;
+    const cumHours = prevH + semHours;
+    const cumPoints = prevPoints + semPoints;
+    const cumGpa = cumHours ? (cumPoints / cumHours) : 0;
 
-    gpaEl.textContent = totalHours ? (totalPoints / totalHours).toFixed(2) : '0.00';
-    hoursTotalEl.textContent = totalHours.toFixed(0);
-    pointsTotalEl.textContent = totalPoints.toFixed(2);
+    semGpaEl.textContent = semGpa.toFixed(2);
+    semHoursEl.textContent = semHours.toFixed(0);
+    semPointsEl.textContent = semPoints.toFixed(2);
+
+    cumGpaEl.textContent = cumGpa.toFixed(2);
+    cumHoursEl.textContent = cumHours.toFixed(0);
+    cumPointsEl.textContent = cumPoints.toFixed(2);
   }
 
   function bind(cardEl){
@@ -103,13 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
     recalc();
   }
 
-  // زر الإضافة
   addBtn.addEventListener('click', addCard);
-
-  // بيانات سابقة
   prevHoursEl.addEventListener('input', recalc);
   prevGpaEl.addEventListener('input', recalc);
 
-  // 5 خانات جاهزة
+  // 5 مواد جاهزة
   for (let i=0;i<5;i++) addCard();
 });
