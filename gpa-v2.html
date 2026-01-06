@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حاسبة المعدل</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{primary:'#0f172a',accent:'#2563eb'}}}}
+</script>
+<style>
+input,select,button{font-size:16px}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<main class="max-w-md mx-auto px-4 py-6 space-y-4">
+
+<section id="courses" class="space-y-3"></section>
+
+<button id="add"
+class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-accent text-white text-3xl shadow-lg">+</button>
+
+<section class="mt-6 border-t pt-4">
+<div class="flex justify-between text-lg font-bold">
+<span>المعدل</span>
+<span id="gpa">0.00</span>
+</div>
+</section>
+
+</main>
+<script src="gpa-v2.js"></script>
+</body>
+</html>
