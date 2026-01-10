@@ -1,5 +1,5 @@
 (() => {
-  const LS_KEY='gpa_app_v1';
+  const LS_KEY='gpa_app_v3';
   const MAP={"A+":4,"A":3.75,"B+":3.5,"B":3,"C+":2.5,"C":2,"D+":1.5,"D":1,"F":0};
   const GRADES=["A+","A","B+","B","C+","C","D+","D","F"];
   const $=(id)=>document.getElementById(id);
@@ -18,13 +18,27 @@
   const newGrade=$('newGrade'), newHours=$('newHours');
 
   const toggleTheme=$('toggleTheme'), sun=$('sun'), moon=$('moon');
+  const toast=$('toast'), toastText=$('toastText');
+  let lastToastAt=0;
 
   const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
   const num=(v)=>{const x=Number(String(v??'').replace(',','.')); return Number.isFinite(x)?x:0;}
   const pad2=(n)=>String(n).padStart(2,'0');
 
-  const fmtGpa=(v)=> (Math.abs(v-Math.round(v))<1e-9) ? String(Math.round(v)) : v.toFixed(2);
-  const fmtNum=(v)=> (Math.abs(v)<1e-9) ? '0' : (Math.abs(v-Math.round(v))<1e-9 ? String(Math.round(v)) : v.toFixed(2));
+  // robust rounding against floating errors (e.g., 3.625 becoming 3.62)
+  const roundN = (x, n) => {
+    const p = 10 ** n;
+    return Math.round((x + 1e-12) * p) / p;
+  };
+  const fmtGpa = (v) => {
+    const r = roundN(v, 2);
+    return (Math.abs(r - Math.round(r)) < 1e-12) ? String(Math.round(r)) : r.toFixed(2);
+  };
+  const fmtNum = (v) => {
+    const r = roundN(v, 2);
+    if (Math.abs(r) < 1e-12) return '0';
+    return (Math.abs(r - Math.round(r)) < 1e-12) ? String(Math.round(r)) : r.toFixed(2);
+  };
 
   function setTheme(mode){
     const isDark = mode==='dark';
@@ -35,6 +49,35 @@
 
   function openSheet(){sheetBackdrop.classList.remove('hidden'); sheet.classList.remove('translate-y-full');}
   function closeSheetFn(){sheetBackdrop.classList.add('hidden'); sheet.classList.add('translate-y-full');}
+
+  function showToast(msg){
+    const now=Date.now();
+    if(now-lastToastAt<1800) return;
+    lastToastAt=now;
+    toastText.textContent=msg;
+    toast.classList.remove('hidden');
+    toast.animate([{transform:'translate(-50%, 10px)',opacity:0},{transform:'translate(-50%, 0)',opacity:1}],{duration:180,easing:'ease-out',fill:'both'});
+    setTimeout(()=>{toast.animate([{opacity:1},{opacity:0}],{duration:220,fill:'both'}).onfinish=()=>toast.classList.add('hidden');},1400);
+  }
+
+  function burst(){
+    const root=document.body, count=16;
+    for(let i=0;i<count;i++){
+      const p=document.createElement('div');
+      p.style.position='fixed'; p.style.left='50%'; p.style.top='18%';
+      p.style.width='8px'; p.style.height='8px'; p.style.borderRadius='999px';
+      p.style.background=`hsl(${Math.random()*360} 90% 60%)`;
+      p.style.zIndex='60';
+      const angle=(Math.PI*2)*(i/count)+(Math.random()*0.25);
+      const dist=90+Math.random()*60;
+      const dx=Math.cos(angle)*dist, dy=Math.sin(angle)*dist;
+      root.appendChild(p);
+      p.animate([{transform:`translate(-50%,-50%) translate(0,0)`,opacity:1},
+                 {transform:`translate(-50%,-50%) translate(${dx}px,${dy}px) rotate(${Math.random()*360}deg)`,opacity:0}],
+                {duration:650+Math.random()*250,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+      setTimeout(()=>p.remove(),1000);
+    }
+  }
 
   function save(){
     const state={
@@ -47,17 +90,14 @@
       })),
       theme: document.documentElement.classList.contains('dark')?'dark':'light'
     };
-    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    localStorage.setItem('gpa_app_v3_state', JSON.stringify(state));
   }
-
-  function load(){
-    try{const raw=localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):null;}catch{return null;}
-  }
+  function load(){ try{const raw=localStorage.getItem('gpa_app_v3_state'); return raw?JSON.parse(raw):null;}catch{return null;} }
 
   function card(index, initGrade='A', initHours=3, open=false){
     const n=pad2(index);
     return `
-    <div class="bg-white dark:bg-slate-900/80 rounded-2xl shadow-soft border border-slate-200/70 dark:border-slate-700/60 overflow-hidden" data-card>
+    <div class="bg-white/92 dark:bg-slate-900/80 rounded-2xl shadow-soft border border-slate-200/70 dark:border-slate-700/60 overflow-hidden" data-card>
       <details class="group" ${open?'open':''}>
         <summary class="px-4 py-3 cursor-pointer select-none flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200/70 dark:border-slate-700/60">
           <div class="title font-extrabold">مادة ${n}</div>
@@ -66,7 +106,6 @@
             <span class="text-slate-500 dark:text-slate-300 group-open:rotate-180 transition">▾</span>
           </div>
         </summary>
-
         <div class="p-4 space-y-3">
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -82,7 +121,6 @@
               </select>
             </div>
           </div>
-
           <div class="grid grid-cols-2 gap-3">
             <div class="rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2">
               <div class="text-[11px] text-slate-500 dark:text-slate-300">نقاط المادة</div>
@@ -93,7 +131,6 @@
               <div class="gval font-extrabold tabular-nums">0</div>
             </div>
           </div>
-
           <button type="button" class="remove w-full rounded-xl border border-slate-200 dark:border-slate-700 py-3 font-bold text-red-600 active:opacity-80">حذف المادة</button>
         </div>
       </details>
@@ -141,6 +178,11 @@
     semBar.style.width=`${clamp((semGpa/4)*100,0,100)}%`;
     cumBar.style.width=`${clamp((cumGpa/4)*100,0,100)}%`;
 
+    if(cumHours>0){
+      if(cumGpa>=3.85) { showToast('🔥 ممتاز جدًا'); burst(); }
+      else if(cumGpa>=3.5) showToast('✨ أداء رائع');
+    }
+
     save();
   }
 
@@ -169,21 +211,18 @@
     recalc();
   }
 
-  // sheet grade options
   GRADES.forEach(g=>{const o=document.createElement('option'); o.value=g; o.textContent=g; newGrade.appendChild(o);});
   newGrade.value='A';
 
-  // events
   prevHoursEl.addEventListener('input',recalc);
   prevGpaEl.addEventListener('input',recalc);
 
   fab.addEventListener('click',openSheet);
   closeSheet.addEventListener('click',closeSheetFn);
   sheetBackdrop.addEventListener('click',closeSheetFn);
-
   addCourse.addEventListener('click',()=>{addCard(newGrade.value, num(newHours.value)||3, true); closeSheetFn();});
 
-  resetBtn.addEventListener('click',()=>{localStorage.removeItem(LS_KEY); hydrate(null);});
+  resetBtn.addEventListener('click',()=>{localStorage.removeItem('gpa_app_v3_state'); hydrate(null);});
 
   toggleTheme.addEventListener('click',()=>{
     const isDark=document.documentElement.classList.contains('dark');
@@ -191,6 +230,5 @@
     save();
   });
 
-  // init
   hydrate(load());
 })();
