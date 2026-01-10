@@ -1,248 +1,56 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>جراديڤي — Gradify Aura</title>
-  <meta name="description" content="جراديڤي — Gradify Aura: القرآن (استماع/قراءة/تفسير) + مواقع الذكاء + تعلم الإنجليزية + حاسبة المعدل (SEU) + تواصل" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4a373'/%3E%3C/svg%3E">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: {
-        colors: {
-          brand: {50:'#fff9f0',100:'#ffefd8',200:'#fde3bf',300:'#f7d5a8',400:'#eec28a',500:'#d4a373',600:'#bb8e62',700:'#9a734d',800:'#7a5b3d',900:'#5f482f'},
-          ink: {50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717'}
-        },
-        boxShadow:{soft:'0 1px 2px rgba(17,17,17,.06), 0 14px 34px rgba(17,17,17,.10)'},
-        borderRadius:{xl2:'1.25rem'}
-      } }
-    }
-  </script>
-  <style>
-    html,body{color:#111}
-    summary::-webkit-details-marker{display:none}
-    details[open] summary .chev{transform:rotate(180deg)}
-    .glass{background:rgba(255,255,255,.75); backdrop-filter: blur(10px);}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gradify Aura</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-b from-ink-50 via-white to-ink-50">
-  <!-- خلفية زخرفية -->
-  <div aria-hidden="true" class="pointer-events-none fixed inset-0">
-    <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-200 blur-3xl opacity-40"></div>
-    <div class="absolute top-40 -left-24 h-72 w-72 rounded-full bg-ink-200 blur-3xl opacity-40"></div>
-    <div class="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-brand-100 blur-3xl opacity-50"></div>
+<body class="bg-white text-slate-900">
+<header class="border-b">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between">
+    <div class="font-extrabold">Gradify Aura</div>
+    <nav class="flex gap-6 text-sm">
+      <a href="#">القرآن</a>
+      <a href="#">الذكاء</a>
+      <a href="#">الإنجليزية</a>
+      <a href="gpa-app.html" class="font-bold">حاسبة المعدل المطورة</a>
+    </nav>
   </div>
+</header>
 
-  <header class="sticky top-0 z-50 border-b border-ink-200 glass">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <button id="brand" class="text-lg sm:text-xl font-extrabold tracking-tight text-ink-900">
-        جرادي<span class="text-brand-600">ڤ</span>ي <span class="text-ink-500 font-semibold">— Gradify Aura</span>
-      </button>
+<main class="max-w-7xl mx-auto px-4 py-16">
+  <h1 class="text-4xl font-extrabold mb-10 text-center">
+    كل ما تحتاجه… في صفحة واحدة
+  </h1>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm text-ink-600">
-        <a class="hover:text-ink-900 navlink" data-target="q-acc" href="#q-acc">القرآن</a>
-        <a class="hover:text-ink-900 navlink" data-target="ai-acc" href="#ai-acc">الذكاء</a>
-        <a class="hover:text-ink-900 navlink" data-target="en-acc" href="#en-acc">الإنجليزية</a>
-        <a class="hover:text-ink-900" href="./gpa.html">حاسبة المعدل</a>
-        <a class="hover:text-ink-900 navlink" data-target="contact" href="#contact">تواصل</a>
-      </nav>
+  <div class="grid md:grid-cols-3 gap-6">
 
-      <a href="./gpa.html" class="hidden sm:inline-flex md:hidden items-center gap-2 text-sm px-3 py-2 rounded-xl bg-ink-900 text-white hover:opacity-95 shadow-soft">
-        <span>حاسبة المعدل</span>
-      </a>
-    </div>
-  </header>
+    <!-- حاسبة المعدل القديمة -->
+    <a href="gpa.html" class="rounded-2xl border p-6 hover:shadow-lg transition">
+      <div class="font-extrabold mb-2">حاسبة المعدل</div>
+      <div class="text-sm text-slate-600">النسخة الأساسية</div>
+    </a>
 
-  <main class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
+    <!-- حاسبة المعدل المطورة -->
+    <a href="gpa-app.html"
+       class="rounded-2xl border p-6 hover:shadow-xl transition bg-gradient-to-br from-blue-600 to-sky-400 text-white">
+      <div class="font-extrabold mb-2 text-lg">حاسبة المعدل المطورة</div>
+      <div class="text-sm opacity-90">نسخة تطبيق • SEU 4.0</div>
+    </a>
 
-    <!-- HERO -->
-    <section class="text-center space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-ink-200 glass text-xs text-ink-700">
-        <span class="inline-block w-2 h-2 rounded-full bg-brand-500"></span>
-        <span>محتوى مرتب + أدوات مفيدة</span>
-      </div>
+    <!-- قسم آخر -->
+    <a href="#" class="rounded-2xl border p-6 hover:shadow-lg transition">
+      <div class="font-extrabold mb-2">تعلم الإنجليزية</div>
+      <div class="text-sm text-slate-600">روابط وتمارين</div>
+    </a>
 
-      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-ink-900">
-        كل ما تحتاجه… <span class="text-brand-700">في صفحة واحدة</span>
-      </h1>
+  </div>
+</main>
 
-      <p class="text-ink-600 max-w-2xl mx-auto leading-7">
-        أقسام مرتبة للقرآن، أدوات ذكاء، تعلم الإنجليزية، و<span class="font-semibold">حاسبة معدل (SEU)</span> برابط مستقل للمشاركة.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="./gpa.html" class="px-5 py-3 rounded-2xl bg-ink-900 text-white hover:opacity-95 shadow-soft">
-          افتح حاسبة المعدل
-        </a>
-        <a href="#q-acc" class="px-5 py-3 rounded-2xl border border-ink-200 glass hover:shadow-soft navlink" data-target="q-acc">
-          تصفح الأقسام
-        </a>
-      </div>
-    </section>
-
-    <!-- Quick cards -->
-    <section class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <a href="#q-acc" class="glass rounded-2xl p-4 border border-ink-200 hover:shadow-soft transition navlink" data-target="q-acc">
-        <div class="flex items-center justify-between">
-          <div class="font-bold text-ink-900">القرآن الكريم</div>
-          <div class="w-10 h-10 rounded-2xl bg-brand-100 flex items-center justify-center text-brand-700">۞</div>
-        </div>
-        <div class="mt-2 text-sm text-ink-600">استماع، قراءة، تفسير، وروابط مرتبة.</div>
-      </a>
-
-      <a href="#ai-acc" class="glass rounded-2xl p-4 border border-ink-200 hover:shadow-soft transition navlink" data-target="ai-acc">
-        <div class="flex items-center justify-between">
-          <div class="font-bold text-ink-900">مواقع الذكاء</div>
-          <div class="w-10 h-10 rounded-2xl bg-ink-100 flex items-center justify-center text-ink-700">AI</div>
-        </div>
-        <div class="mt-2 text-sm text-ink-600">أدوات مختارة + تحديثات سهلة.</div>
-      </a>
-
-      <a href="#en-acc" class="glass rounded-2xl p-4 border border-ink-200 hover:shadow-soft transition navlink" data-target="en-acc">
-        <div class="flex items-center justify-between">
-          <div class="font-bold text-ink-900">تعلم الإنجليزية</div>
-          <div class="w-10 h-10 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-700">EN</div>
-        </div>
-        <div class="mt-2 text-sm text-ink-600">روابط تعلم وتمارين مفيدة.</div>
-      </a>
-
-      <a href="./gpa.html" class="glass rounded-2xl p-4 border border-ink-200 hover:shadow-soft transition">
-        <div class="flex items-center justify-between">
-          <div class="font-bold text-ink-900">حاسبة المعدل</div>
-          <div class="w-10 h-10 rounded-2xl bg-ink-900 flex items-center justify-center text-white">GPA</div>
-        </div>
-        <div class="mt-2 text-sm text-ink-600">نظام 4/5 + فصلي/تراكمي.</div>
-      </a>
-    </section>
-
-    <!-- Content -->
-    <section class="grid lg:grid-cols-3 gap-5 items-start">
-      <div class="lg:col-span-2 space-y-4">
-        <details id="q-acc" class="card rounded-2xl p-4">
-      <summary class="flex items-center justify-between cursor-pointer select-none">
-        <div class="flex items-center gap-2 font-semibold">
-          <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M20 2H8a2 2 0 0 0-2 2v16"/><path d="M9 10h9M9 14h9M9 6h3"/></svg>
-          القرآن الكريم
-        </div>
-        <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-
-      <div class="mt-4 space-y-4">
-        <details class="rounded-xl border border-ink-200 p-4">
-          <summary class="flex items-center justify-between cursor-pointer">
-            <div class="flex items-center gap-2 font-medium">
-              <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5l-7 7 7 7"/><path d="M18 19V5"/></svg>
-              الاستماع — مشغل ذكي + بحث
-            </div>
-            <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-
-          <div class="mt-4 grid lg:grid-cols-3 gap-4">
-            <div class="rounded-xl border border-ink-200 p-4 space-y-3">
-              <input id="reciterQuery" class="w-full rounded-lg border border-ink-200 px-3 py-2" placeholder="ابحث باسم القارئ/الرواية..." />
-              <div class="grid grid-cols-2 gap-2 text-sm">
-                <select id="listenSurah" class="rounded-lg border border-ink-200 px-3 py-2"></select>
-                <select id="recitationType" class="rounded-lg border border-ink-200 px-3 py-2">
-                  <option value="">كل الأنواع</option>
-                  <option>مجود</option>
-                  <option>مرتل</option>
-                </select>
-              </div>
-              <div class="text-xs text-ink-500">المصدر: mp3quran — روابط HTTPS مباشرة.</div>
-            </div>
-
-            <div class="lg:col-span-2 space-y-3">
-              <div class="rounded-xl border border-ink-200 p-4">
-                <div class="flex flex-wrap items-center gap-2 text-sm">
-                  <span class="px-2 py-1 rounded-full border border-ink-200" id="selReciter">—</span>
-                  <span class="px-2 py-1 rounded-full border border-ink-200" id="selMoshaf">—</span>
-                  <span class="px-2 py-1 rounded-full border border-ink-200" id="selSurah">—</span>
-                </div>
-                <audio id="proPlayer" class="w-full mt-3" controls></audio>
-                <div class="mt-2 text-xs text-ink-500">اختصارات: Space تشغيل/إيقاف، ←/→ لتقديم/ترجيع 10 ثوانٍ.</div>
-              </div>
-
-              <div id="recitersWrap" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3"></div>
-              <div id="recitersEmpty" class="hidden text-ink-500 text-sm">لا نتائج مطابقة.</div>
-            </div>
-          </div>
-        </details>
-        <details id="ai-acc" class="card rounded-2xl p-4">
-      <summary class="flex items-center justify-between cursor-pointer select-none">
-        <div class="flex items-center gap-2 font-semibold">
-          <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4"/></svg>
-          مواقع الذكاء الاصطناعي (20+)
-        </div>
-        <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <div id="aiGrid" class="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-    </details>
-        <details id="en-acc" class="card rounded-2xl p-4">
-      <summary class="flex items-center justify-between cursor-pointer select-none">
-        <div class="flex items-center gap-2 font-semibold">
-          <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16M4 5h16M9 9h6M9 13h6"/></svg>
-          تعلم الإنجليزية
-        </div>
-        <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <div class="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="rounded-2xl border border-ink-200 p-5"><div class="font-semibold mb-2">الاستماع</div><ul id="engListening" class="space-y-2 text-sm"></ul></div>
-        <div class="rounded-2xl border border-ink-200 p-5"><div class="font-semibold mb-2">الشامل</div><ul id="engComprehensive" class="space-y-2 text-sm"></ul></div>
-        <div class="rounded-2xl border border-ink-200 p-5"><div class="font-semibold mb-2">الكتابة والمفردات</div><ul id="engWriting" class="space-y-2 text-sm"></ul></div>
-        <div class="rounded-2xl border border-ink-200 p-5"><div class="font-semibold mb-2">الأطفال</div><ul id="engKids" class="space-y-2 text-sm"></ul></div>
-        <div class="rounded-2xl border border-ink-200 p-5"><div class="font-semibold mb-2">تعلم لغات أخرى</div><ul id="otherLangs" class="space-y-2 text-sm"></ul></div>
-      </div>
-    </details>
-
-        <!-- GPA teaser -->
-        <div class="glass rounded-2xl p-5 border border-ink-200">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <div class="text-lg font-bold text-ink-900">حاسبة المعدل (SEU)</div>
-              <div class="text-sm text-ink-600 mt-1">صفحة منفصلة برابط مباشر — مناسبة للمشاركة.</div>
-            </div>
-            <a href="./gpa.html" class="px-4 py-2 rounded-xl bg-brand-500 text-white hover:bg-brand-600 shadow-soft">
-              فتح الحاسبة
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <aside class="space-y-4">
-        <div class="glass rounded-2xl p-5 border border-ink-200">
-          <div class="font-bold text-ink-900">ملاحظة سريعة</div>
-          <p class="text-sm text-ink-600 mt-2 leading-7">
-            إذا ما ظهرت التحديثات عندك أحيانًا، استخدم تحديث قوي:
-            <span class="font-semibold">Ctrl + F5</span>.
-          </p>
-        </div>
-
-        <section id="contact" class="pt-2">
-      <div class="flex items-center gap-3">
-        <button id="toggleContact" class="px-4 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600">تواصل معنا</button>
-        <span id="contactStatus" class="text-xs text-ink-500"></span>
-      </div>
-      <form id="contactForm" class="grid md:grid-cols-3 gap-2 mt-3 hidden">
-        <input type="hidden" name="access_key" value="219a1c52-9eb6-449d-b48a-a1b06dc3f95e" />
-        <input type="hidden" name="subject" value="رسالة جديدة من Gradify Aura" />
-        <input name="name" required placeholder="الاسم" class="rounded-lg border border-ink-200 px-3 py-2" />
-        <input name="email" type="email" required placeholder="البريد" class="rounded-lg border border-ink-200 px-3 py-2" />
-        <div class="flex gap-2">
-          <input name="message" required placeholder="رسالتك..." class="flex-1 rounded-lg border border-ink-200 px-3 py-2" />
-          <button class="px-4 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600" type="submit">إرسال</button>
-        </div>
-      </form>
-    </section>
-      </aside>
-    </section>
-
-    <footer class="pt-10 pb-6 text-center text-xs text-ink-500">
-      Gradify Aura © 2026
-    </footer>
-  </main>
-
-  <script src="./script.js"></script>
+<footer class="text-center text-sm text-slate-500 py-10">
+  Gradify Aura © 2026
+</footer>
 </body>
 </html>
