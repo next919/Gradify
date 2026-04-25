@@ -1,56 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradify Aura</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Gradify Aura — منصة الطالب</title>
+<link rel="stylesheet" href="styles.css?v=FULL2">
 </head>
-
-<body class="bg-white text-slate-900">
-<header class="border-b">
-  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between">
-    <div class="font-extrabold">Gradify Aura</div>
-    <nav class="flex gap-6 text-sm">
-      <a href="#">القرآن</a>
-      <a href="#">الذكاء</a>
-      <a href="#">الإنجليزية</a>
-      <a href="gpa-app.html" class="font-bold">حاسبة المعدل المطورة</a>
+<body>
+<header class="topbar">
+  <div class="container navwrap">
+    <a class="brand" href="#home">Gradify <span>Aura</span></a>
+    <button class="menuBtn" id="menuBtn">☰</button>
+    <nav class="nav" id="nav">
+      <a href="#quran">القرآن</a>
+      <a href="#ai">الذكاء</a>
+      <a href="#english">الإنجليزية</a>
+      <a href="#calculators">الحاسبات</a>
+      <a href="#useful">مواقع مفيدة</a>
     </nav>
+    <div class="searchBox">
+      <input id="globalSearch" placeholder="ابحث: البقرة، الحصري، ChatGPT، حاسبة..." autocomplete="off">
+      <div id="searchResults" class="searchResults"></div>
+    </div>
   </div>
 </header>
 
-<main class="max-w-7xl mx-auto px-4 py-16">
-  <h1 class="text-4xl font-extrabold mb-10 text-center">
-    كل ما تحتاجه… في صفحة واحدة
-  </h1>
+<main id="home">
+  <section class="hero container">
+    <div class="heroText">
+      <div class="pill">نسخة كاملة مستقرة</div>
+      <h1>كل أدواتك في واجهة واحدة أنيقة</h1>
+      <p>القرآن للاستماع، مواقع الذكاء الاصطناعي، تعلم الإنجليزية، حاسبة المعدل الأساسية والمطورة، ومواقع مفيدة.</p>
+      <div class="heroActions">
+        <a class="btn primary" href="#quran">ابدأ بالقرآن</a>
+        <a class="btn ghost" href="#calculators">افتح الحاسبات</a>
+      </div>
+    </div>
+    <div class="heroCard"><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><strong>Gradify Aura</strong><span>Dark Premium Rebuild</span></div>
+  </section>
 
-  <div class="grid md:grid-cols-3 gap-6">
+  <section id="quran" class="section container">
+    <div class="sectionHead"><div><span class="icon">🕋</span><h2>القرآن الكريم</h2><p>استماع بروابط HTTPS مباشرة وقوائم ثابتة لا تختفي.</p></div></div>
+    <div class="panel">
+      <div class="toolbar">
+        <label><span>القارئ</span><select id="reader" class="field"></select></label>
+        <label><span>الرواية/المصحف</span><select id="mushaf" class="field"></select></label>
+        <label><span>السورة</span><select id="surah" class="field"></select></label>
+        <button id="playBtn" class="btn primary">تشغيل</button>
+      </div>
+      <audio id="player" controls preload="none"></audio>
+      <p class="hint">إذا لم يعمل مصدر معين، اختر رواية/مصحف آخر من القائمة.</p>
+    </div>
+  </section>
 
-    <!-- حاسبة المعدل القديمة -->
-    <a href="gpa.html" class="rounded-2xl border p-6 hover:shadow-lg transition">
-      <div class="font-extrabold mb-2">حاسبة المعدل</div>
-      <div class="text-sm text-slate-600">النسخة الأساسية</div>
-    </a>
+  <section id="ai" class="section container">
+    <div class="sectionHead"><div><span class="icon">✨</span><h2>مواقع الذكاء الاصطناعي</h2><p>أدوات مختارة للكتابة والبحث والصور والفيديو والصوت.</p></div></div>
+    <div id="aiGrid" class="grid"></div>
+  </section>
 
-    <!-- حاسبة المعدل المطورة -->
-    <a href="gpa-app.html"
-       class="rounded-2xl border p-6 hover:shadow-xl transition bg-gradient-to-br from-blue-600 to-sky-400 text-white">
-      <div class="font-extrabold mb-2 text-lg">حاسبة المعدل المطورة</div>
-      <div class="text-sm opacity-90">نسخة تطبيق • SEU 4.0</div>
-    </a>
+  <section id="english" class="section container">
+    <div class="sectionHead"><div><span class="icon">🇬🇧</span><h2>تعلم الإنجليزية</h2><p>مصادر مجانية للاستماع والقواعد والكلمات.</p></div></div>
+    <div id="englishGrid" class="grid"></div>
+  </section>
 
-    <!-- قسم آخر -->
-    <a href="#" class="rounded-2xl border p-6 hover:shadow-lg transition">
-      <div class="font-extrabold mb-2">تعلم الإنجليزية</div>
-      <div class="text-sm text-slate-600">روابط وتمارين</div>
-    </a>
+  <section id="calculators" class="section container">
+    <div class="sectionHead"><div><span class="icon">🧮</span><h2>الحاسبات</h2><p>روابط مباشرة للنسخ المتاحة في ملفات الموقع.</p></div></div>
+    <div class="grid">
+      <a class="card big" href="gpa.html"><h3>حاسبة المعدل</h3><p>النسخة الأساسية بنظام 4/5 وإدخال النسب أو التقديرات.</p><span>فتح</span></a>
+      <a class="card big featured" href="gpa-app.html"><h3>حاسبة المعدل المطورة</h3><p>نسخة تطبيق محسّنة مع حفظ محلي وتجربة جوال أفضل.</p><span>فتح</span></a>
+      <a class="card big" href="gpa-v2.html"><h3>حاسبة المعدل السريعة</h3><p>نسخة خفيفة وسريعة للحساب المباشر.</p><span>فتح</span></a>
+    </div>
+  </section>
 
-  </div>
+  <section id="useful" class="section container">
+    <div class="sectionHead"><div><span class="icon">🧭</span><h2>مواقع مفيدة</h2><p>أدوات سريعة للصور وPDF والإنتاجية.</p></div></div>
+    <div id="usefulGrid" class="grid"></div>
+  </section>
 </main>
 
-<footer class="text-center text-sm text-slate-500 py-10">
-  Gradify Aura © 2026
-</footer>
+<div class="miniPlayer">
+  <button id="miniPlay" class="btn small">تشغيل/إيقاف</button>
+  <div id="nowPlaying">لم يتم التشغيل بعد</div>
+  <a href="#quran" class="btn small ghost">فتح القرآن</a>
+</div>
+
+<footer class="footer">Gradify Aura © 2026 — Full Rebuild</footer>
+<script src="script.js?v=FULL2" defer></script>
 </body>
 </html>
