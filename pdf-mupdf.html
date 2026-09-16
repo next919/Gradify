@@ -10,7 +10,7 @@
 <body>
 <header class="topbar">
   <div class="shell bar">
-    <a class="brand" href="pdf-mupdf.html?v=6">Gradify <b>PDF</b></a>
+    <a class="brand" href="pdf-mupdf.html?v=8">Gradify <b>PDF</b></a>
     <div class="badges"><span>MuPDF.js Lab</span><span>🔒 محلي</span></div>
   </div>
 </header>
@@ -22,7 +22,7 @@
       <h1>حرّر النص في مكانه</h1>
       <p>اضغط على النص الموجود في الصفحة، عدّله مباشرة، ثم اضغط في أي مكان خارج النص لإغلاق التحرير وحفظ التعديل محليًا.</p>
     </div>
-    <div class="quality"><strong>Arabic Vector</strong><span>تشكيل عربي بـ HarfBuzz + حفظ بدون Rasterization</span></div>
+    <div class="quality"><strong>Desktop Quality</strong><span>معاينة أعلى دقة + حفظ PDF مع رابط تنزيل احتياطي</span></div>
   </section>
 
   <section class="uploadCard" id="uploadCard">
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div class="notice"><b>طريقة التحرير:</b> اضغط على النص نفسه. عدّل ثم اضغط خارج النص. لا يوجد زر «تطبيق».</div>
+    <div class="notice"><b>طريقة التحرير:</b> اضغط على النص نفسه. عدّل ثم اضغط خارج النص. بعد التعديل تُعاد معاينة الصفحة من PDF نفسه بدون مربع أبيض.</div>
 
     <div class="editInfo" id="editInfo">
       <span id="selectionInfo">اضغط على أي نص في الصفحة.</span>
@@ -65,11 +65,11 @@
   </section>
 
   <section class="technicalNote">
-    <h2>وضع العربية التجريبي</h2>
-    <p>الإنجليزية تبقى كنص PDF عادي. التعديلات العربية تُشكّل باستخدام HarfBuzz وتُحفظ حاليًا كمسارات Vector للحفاظ على شكل الحروف وجودتها. هذا يحسن العربية بصريًا لكنه يعني أن النص العربي المعدّل في هذه النسخة التجريبية ليس نصًا قابلًا للبحث بعد.</p>
+    <h2>نسخة v8</h2>
+    <p>هذه النسخة ترفع دقة العرض على الكمبيوتر، وتزيل المعاينة البيضاء بعد تثبيت التعديل، وتعرض رسالة خطأ واضحة إذا فشل الحفظ مع رابط تنزيل احتياطي عند نجاح إنشاء الملف.</p>
   </section>
 </main>
 <footer>Gradify PDF — Arabic Editing Research Build</footer>
-<script type="module" src="pdf-mupdf.js?v=6"></script>
+<script type="module" src="pdf-mupdf-v8.js?v=8"></script>
 </body>
 </html>
