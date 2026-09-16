@@ -8,3 +8,10 @@
 .textLayer,.textHit{touch-action:none}
 .inlineEditor{transform-origin:0 0;touch-action:none}
 .pageViewport.is-dragging{cursor:grabbing}
+
+
+/* Keep native caret/selection behavior inside a clipped, page-anchored field. */
+.inlineEditor{padding:0;border:0;outline:1px solid var(--red);border-radius:0;min-width:0;min-height:0;overflow:hidden;touch-action:manipulation;-webkit-text-size-adjust:none;text-size-adjust:none}
+.inlineEditor[dir],.editPreview[dir]{unicode-bidi:isolate}
+.editPreview{display:block;overflow:hidden;min-width:0}
+#selectionInfo{min-width:0;overflow-wrap:anywhere;unicode-bidi:plaintext}

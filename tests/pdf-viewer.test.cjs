@@ -4,6 +4,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const elements=new Map(),frames=[],timers=new Map();let nextTimer=1,renders=0,destroys=0,revoked=[];
 class Element {
   constructor(id){this.id=id;this.style={};this.hidden=id==='inlineEditor';this.listeners={};this.children=[];this.clientWidth=id==='pageViewport'?360:0;this.clientHeight=id==='pageViewport'?500:0;this.classList={remove(){},toggle(){}};this.textContent='';this.captures=new Set();}
+  getContext(){return null;}
   addEventListener(type,fn){(this.listeners[type]??=[]).push(fn);}
   emit(type,props={}){const e={target:this,cancelable:true,preventDefault(){this.prevented=true},stopPropagation(){},...props};for(const fn of this.listeners[type]||[])fn(e);return e;}
   contains(el){return el===this||(this.id==='pageViewport'&&['textLayer','inlineEditor','pageImage'].includes(el?.id));}
@@ -19,7 +20,7 @@ const doc={loadPage:()=>page,countPages:()=>2,destroy(){destroys++}};
 const context={document,console,Blob,Uint8Array,Image:class{decode(){return Promise.resolve()}},URL:{createObjectURL:()=>`blob:${renders}`,revokeObjectURL:u=>revoked.push(u)},navigator:{userAgent:'iPhone'},matchMedia:()=>({matches:true}),getSelection:()=>({removeAllRanges(){},addRange(){}}),requestAnimationFrame:f=>(frames.push(f),frames.length),setTimeout:f=>{const id=nextTimer++;timers.set(id,f);return id},clearTimeout:id=>timers.delete(id),ResizeObserver:class{constructor(cb){this.cb=cb}observe(){}},innerHeight:900};
 context.window={devicePixelRatio:3,addEventListener(){},visualViewport:{offsetTop:0,height:900,addEventListener(){}}};
 const source=fs.readFileSync(require('node:path').join(__dirname,'../pdf-mupdf.js'),'utf8').replace('\ninitEngine();','\n// CDN startup disabled in test harness.');
-vm.createContext(context);vm.runInContext(source+`\nglobalThis.api={view,pdfToStage,clientToPdf,rectToCss,pickItemAt,zoomAt,applyTransform,layoutPage,renderPage,renderPreview,targetRenderScale,openEditor,commitActive,saveEditedPdf,resetGesture,getEdits:()=>edits,getGesture:()=>gesture,getPage:()=>currentPage,setup:(doc,engine)=>{documentRef=doc;mupdf=engine;pageCount=2;workspace.hidden=false;},setBounds:b=>{currentBounds=b},setItems:i=>{currentItems=i}};`,context);
+vm.createContext(context);vm.runInContext(source+`\nglobalThis.api={view,mergeNearbySegments,textDirection,numericField,recoverNumericOrder,getVisualRuns,pdfToStage,clientToPdf,rectToCss,pickItemAt,zoomAt,applyTransform,layoutPage,renderPage,renderPreview,targetRenderScale,openEditor,commitActive,saveEditedPdf,resetGesture,getEdits:()=>edits,getGesture:()=>gesture,getPage:()=>currentPage,setup:(doc,engine)=>{documentRef=doc;mupdf=engine;pageCount=2;workspace.hidden=false;},setBidi:b=>{bidi=b},setBounds:b=>{currentBounds=b},setItems:i=>{currentItems=i}};`,context);
 const api=context.api,$=id=>document.getElementById(id),vp=$('pageViewport');
 function flush(){while(frames.length)frames.shift()()}
 function near(a,b,label){assert.ok(Math.abs(a-b)<1e-7,`${label}: ${a} != ${b}`)}
@@ -57,5 +58,20 @@ vp.emit('pointerdown',{pointerId:3,pointerType:'mouse',button:0,clientX:p.x,clie
 api.zoomAt(4,p.x,p.y);flush();await api.renderPreview();assert.ok(renders>1);assert.ok(revoked.length>0);assert.ok(destroys>=renders*2);
 const e=vp.emit('gesturestart');assert.equal(e.prevented,true);
 assert.ok(!fs.readFileSync(require('node:path').join(__dirname,'../pdf-mupdf.html'),'utf8').includes('user-scalable=no'));
-console.log('PASS: fit, 100–500% focal zoom, crop origins, touch pinch/pan/tap/cancel, mouse capture/drag/click, exact hit testing, RTL editor, outside commit, navigation persistence, resize, bounds, render budget and cleanup.');
+// Regression: numeric Arabic is LTR and the PDF extraction may enumerate glyphs backwards.
+assert.equal(api.textDirection('٢٠٢٢/٠٦/٢٩'),'ltr');assert.equal(api.textDirection('شركة تجريبية'),'rtl');
+const date='٢٠٢٢/٠٦/٢٩',chars=[...date].map((c,i)=>({c,x:100+i*6})).reverse();
+const segments=[{text:chars.map(g=>g.c).join(''),bbox:[100,10,180,30]}];
+api.recoverNumericOrder(segments,{walk(w){w.beginLine();for(const g of chars)w.onChar(g.c,[g.x,25],null,10,[g.x,10,g.x+6,10,g.x,30,g.x+6,30]);w.endLine();}});
+assert.equal(segments[0].text,date);assert.equal(api.getVisualRuns(date)[0].direction,'ltr');
+const pieces=[{text:'٢٩',bbox:[145,10,160,30],fontName:'Arabic'}, {text:'/',bbox:[140,10,145,30],fontName:'Latin'}, {text:'٠٦',bbox:[125,10,140,30],fontName:'Arabic'}, {text:'/',bbox:[120,10,125,30],fontName:'Latin'}, {text:'٢٠٢٢',bbox:[90,10,120,30],fontName:'Arabic'}].map(x=>({...x,size:20,origin:[x.bbox[0],25]}));
+assert.equal(api.mergeNearbySegments(pieces)[0].text,date,'mixed-font date stays one LTR field');
+api.setBidi({getEmbeddingLevels:()=>({levels:[1,1,1,1,2,2,2]})});
+const mixed=api.getVisualRuns('طلب 123');assert.equal(mixed.map(x=>x.text).join(''),'123طلب ');assert.equal(mixed[0].direction,'ltr');assert.equal(mixed[1].direction,'rtl');
+// A small touch wobble is a tap; the immediate native caret click is never suppressed.
+vp.clientWidth=360;api.layoutPage(true);p=client(300,330);
+touch('touchstart',[[p.x,p.y]]);touch('touchmove',[[p.x+8,p.y+2]]);touch('touchend',[]);assert.equal($('inlineEditor').hidden,false);
+const caretClick=vp.emit('click',{target:$('inlineEditor')});assert.ok(!caretClick.prevented);
+console.log('PASS: numeric extraction/direction, touch wobble and native caret click; fit, 100–500% focal zoom, crop origins, touch pinch/pan/tap/cancel, mouse capture/drag/click, exact hit testing, RTL editor, outside commit, navigation persistence, resize, bounds, render budget and cleanup.');
 })().catch(e=>{console.error(e);process.exitCode=1});
+
