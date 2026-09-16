@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gradify PDF Studio</title>
+<link rel="stylesheet" href="pdf-studio.css?v=1">
+</head>
+<body>
+<div id="startScreen" class="start-screen">
+  <div class="start-card">
+    <div class="logo">Gradify <b>PDF</b></div>
+    <h1>محرر PDF عربي للكمبيوتر</h1>
+    <p>تحرير مباشر للنص، عرض حاد عند التكبير، وحفظ PDF بدون تحويل الصفحة إلى صورة.</p>
+    <input id="fileInput" type="file" accept="application/pdf,.pdf" hidden>
+    <button id="openBtn" class="primary big">فتح ملف PDF</button>
+    <div id="engineState" class="state">جاري تجهيز محرك PDF…</div>
+    <small>🔒 المعالجة محليًا داخل المتصفح</small>
+  </div>
+</div>
+
+<div id="app" class="app" hidden>
+  <header class="topbar">
+    <div class="brand">Gradify <b>PDF</b></div>
+    <div class="file-meta"><strong id="fileName">—</strong><span id="pageLabel">—</span></div>
+    <div class="toolbar">
+      <button id="undoBtn" title="تراجع" disabled>↶</button>
+      <button id="redoBtn" title="إعادة" disabled>↷</button>
+      <span class="sep"></span>
+      <button id="zoomOutBtn">−</button>
+      <button id="zoomLabel" class="zoom-label">100%</button>
+      <button id="zoomInBtn">+</button>
+      <button id="fitBtn">ملاءمة العرض</button>
+      <span class="sep"></span>
+      <button id="saveBtn" class="primary">حفظ PDF</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="side-title">الصفحات</div>
+      <div id="thumbs" class="thumbs"></div>
+    </aside>
+
+    <main id="viewer" class="viewer">
+      <div id="pageShell" class="page-shell">
+        <canvas id="pageCanvas"></canvas>
+        <div id="hitLayer" class="hit-layer"></div>
+        <div id="editor" class="editor" contenteditable="true" spellcheck="false" hidden></div>
+      </div>
+    </main>
+
+    <aside class="inspector">
+      <h2>تحرير النص</h2>
+      <div class="info-row"><span>الحالة</span><b id="statusText">جاهز</b></div>
+      <div class="info-row"><span>الخط</span><b id="fontText">—</b></div>
+      <div class="info-row"><span>الحجم</span><b id="sizeText">—</b></div>
+      <div class="info-row"><span>اللغة</span><b id="langText">—</b></div>
+      <div class="tip">انقر مرتين على النص لتحريره. اضغط خارج النص لاعتماد التعديل تلقائيًا.</div>
+      <div class="quality-box"><b>جودة الحفظ</b><span>الصفحة الأصلية لا تتحول إلى JPG. يتم تعديل النص المحدد فقط.</span></div>
+      <div id="saveState" class="save-state"></div>
+    </aside>
+  </div>
+</div>
+<script type="module" src="pdf-studio.js?v=1"></script>
+</body>
+</html>
