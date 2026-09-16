@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="نسخة تجريبية من محرر PDF عربي داخل المتصفح باستخدام MuPDF.js، مع تركيز على الجودة وتعديل النص الموجود.">
+  <meta name="theme-color" content="#b91c1c">
+  <title>محرر PDF العربي — Gradify</title>
+  <link rel="stylesheet" href="pdf-editor.css?v=1">
+</head>
+<body>
+<header class="topbar">
+  <div class="container navwrap">
+    <a class="brand" href="index.html" aria-label="Gradify">Gradify <span>PDF</span></a>
+    <div class="navActions">
+      <span class="privacyPill">🔒 المعالجة على جهازك</span>
+      <a class="backLink" href="pdf-tools.html">أدوات PDF</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <div class="heroCopy">
+      <span class="eyebrow">MuPDF Lab · تجربة أولية</span>
+      <h1>حرّر النص العربي داخل ملف PDF</h1>
+      <p>افتح الملف، اضغط على النص الموجود في الصفحة، عدّله في مكانه، ثم احفظ نسخة جديدة. الصفحة الأصلية لا تُحوّل إلى صورة أثناء الحفظ.</p>
+      <div class="trustRow">
+        <span>وضوح High‑DPI</span>
+        <span>استخراج النص وموقعه</span>
+        <span>حفظ محلي</span>
+      </div>
+    </div>
+    <div class="qualityCard">
+      <div class="qualityIcon">Q</div>
+      <div><strong>الجودة أولًا</strong><p>نعدّل المنطقة النصية فقط ونترك الصور والـVector وبقية الصفحة كما هي.</p></div>
+    </div>
+  </section>
+
+  <section class="workspace container">
+    <div id="engineNotice" class="notice loading">جاري تحميل محرك MuPDF.js…</div>
+
+    <div id="uploadPanel" class="uploadPanel">
+      <input id="pdfInput" type="file" accept="application/pdf,.pdf" hidden>
+      <button id="pickPdf" class="dropZone" type="button" disabled>
+        <span class="pdfMark">PDF</span>
+        <strong>اختر ملف PDF عربي</strong>
+        <span>أو اسحبه إلى هذه المنطقة</span>
+        <small>لا يتم رفع الملف إلى خادم Gradify</small>
+      </button>
+    </div>
+
+    <div id="editorApp" class="editorApp" hidden>
+      <div class="editorToolbar">
+        <div class="fileIdentity">
+          <span class="fileDot"></span>
+          <div><strong id="fileName">—</strong><small id="fileMeta">—</small></div>
+        </div>
+        <div class="pageControls">
+          <button id="prevPage" class="iconBtn" type="button" aria-label="الصفحة السابقة">→</button>
+          <span id="pageCounter">1 / 1</span>
+          <button id="nextPage" class="iconBtn" type="button" aria-label="الصفحة التالية">←</button>
+        </div>
+        <div class="toolbarActions">
+          <button id="resetEdits" class="btn secondary" type="button">تراجع عن التعديلات</button>
+          <button id="savePdf" class="btn primary" type="button">حفظ PDF</button>
+        </div>
+      </div>
+
+      <div class="editorGrid">
+        <aside class="infoPanel">
+          <div class="panelSection">
+            <span class="stepNo">1</span>
+            <div><strong>اضغط على النص</strong><p>المربعات الخفيفة تحدد السطور التي يستطيع MuPDF قراءتها.</p></div>
+          </div>
+          <div class="panelSection">
+            <span class="stepNo">2</span>
+            <div><strong>عدّل في مكانه</strong><p>سيظهر حقل تحرير فوق السطر نفسه. اكتب عربي أو إنجليزي.</p></div>
+          </div>
+          <div id="selectionInfo" class="selectionInfo empty">
+            <span>لم يتم تحديد نص بعد.</span>
+          </div>
+          <div class="qualityFacts">
+            <div><b>المعاينة</b><span>Retina / High‑DPI</span></div>
+            <div><b>الحفظ</b><span>بدون Rasterize للصفحة</span></div>
+            <div><b>المحرك</b><span>MuPDF.js 1.28.1</span></div>
+          </div>
+        </aside>
+
+        <section class="viewerPanel">
+          <div class="viewerHead">
+            <div><strong>معاينة الصفحة</strong><span id="textStats">—</span></div>
+            <div class="legend"><i></i> اضغط على النص المراد تعديله</div>
+          </div>
+          <div id="viewerScroll" class="viewerScroll">
+            <div id="pageStage" class="pageStage" aria-label="صفحة PDF">
+              <canvas id="pdfCanvas"></canvas>
+              <div id="textLayer" class="textLayer"></div>
+            </div>
+          </div>
+          <div id="editBar" class="editBar" hidden>
+            <div class="editBarText"><strong>تعديل نشط</strong><span>اكتب مباشرة داخل المربع فوق الصفحة.</span></div>
+            <button id="cancelLineEdit" class="btn secondary" type="button">إلغاء تعديل السطر</button>
+            <button id="finishLineEdit" class="btn primary" type="button">اعتماد</button>
+          </div>
+        </section>
+      </div>
+
+      <div id="statusBar" class="statusBar" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="limits container">
+    <h2>ما الذي نختبره في هذه النسخة؟</h2>
+    <p>هذه نسخة تقنية لاختبار العربية والجودة قبل بناء واجهة كاملة شبيهة بـ Acrobat. في المرحلة الحالية يتم تحديد <b>السطر النصي</b> الذي يستطيع MuPDF استخراجه، ثم إزالة النص الأصلي من منطق PDF وإضافة النص البديل. الملفات الممسوحة ضوئيًا أو النصوص التي لا تحتوي خريطة Unicode قد لا تكون قابلة للتحرير بعد.</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <span>Gradify PDF Lab</span>
+  <span>MuPDF.js تحت رخصة AGPLv3 · <a href="https://github.com/next919/Gradify" target="_blank" rel="noopener">الكود المصدري</a></span>
+</footer>
+
+<script type="module" src="pdf-editor.js?v=1"></script>
+</body>
+</html>
