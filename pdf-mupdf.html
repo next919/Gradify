@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="محرر PDF عربي تجريبي باستخدام MuPDF.js داخل المتصفح.">
 <title>Gradify PDF — Arabic Editor Lab</title>
-<link rel="stylesheet" href="pdf-mupdf.css?v=4">
+<link rel="stylesheet" href="pdf-mupdf.css?v=5">
 </head>
 <body>
 <header class="topbar">
   <div class="shell bar">
-    <a class="brand" href="pdf-mupdf.html?v=4">Gradify <b>PDF</b></a>
+    <a class="brand" href="pdf-mupdf.html?v=5">Gradify <b>PDF</b></a>
     <div class="badges"><span>MuPDF.js Lab</span><span>🔒 محلي</span></div>
   </div>
 </header>
@@ -53,10 +53,12 @@
     </div>
 
     <div class="pageArea" id="pageArea">
+      <div id="pageViewport" class="pageViewport" aria-label="عارض PDF — كبّر بإصبعين واسحب لتحريك الصفحة">
       <div id="pageStage" class="pageStage">
         <img id="pageImage" alt="معاينة صفحة PDF">
         <div id="textLayer" class="textLayer" aria-label="طبقة تحديد النص"></div>
         <div id="inlineEditor" class="inlineEditor" dir="auto" contenteditable="true" role="textbox" aria-multiline="false" spellcheck="false" hidden></div>
+      </div>
       </div>
       <div id="pageStatus" class="pageStatus">—</div>
     </div>
@@ -68,6 +70,6 @@
   </section>
 </main>
 <footer>Gradify PDF — Arabic Editing Research Build</footer>
-<script type="module" src="pdf-mupdf.js?v=4"></script>
+<script type="module" src="pdf-mupdf.js?v=5"></script>
 </body>
 </html>
