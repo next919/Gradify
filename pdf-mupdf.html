@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="نسخة تجريبية لتحرير النص داخل PDF باستخدام MuPDF.js داخل المتصفح.">
+<title>Gradify PDF — MuPDF Arabic Editor Lab</title>
+<link rel="stylesheet" href="pdf-mupdf.css?v=1">
+</head>
+<body>
+<header class="topbar">
+  <div class="shell bar">
+    <a class="brand" href="pdf-tools.html">Gradify <b>PDF</b></a>
+    <div class="badges"><span>MuPDF.js Lab</span><span>🔒 محلي</span></div>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="intro">
+    <div>
+      <p class="kicker">نسخة تجريبية — الجودة والعربية أولًا</p>
+      <h1>اضغط النص الموجود داخل PDF وعدّله</h1>
+      <p>هذه النسخة تختبر قراءة النص الحقيقي من PDF باستخدام MuPDF.js، تحديده مباشرة فوق الصفحة، تعديله، ثم حفظ نسخة جديدة مع إبقاء بقية محتوى الملف كما هو قدر الإمكان.</p>
+    </div>
+    <div class="quality">
+      <strong>High‑DPI Preview</strong>
+      <span>معاينة Retina + حفظ Incremental</span>
+    </div>
+  </section>
+
+  <section class="uploadCard" id="uploadCard">
+    <input id="fileInput" type="file" accept="application/pdf,.pdf" hidden>
+    <button id="pickBtn" class="pickBtn" type="button">
+      <span class="pdfMark">PDF</span>
+      <b>اختر ملف PDF عربي</b>
+      <small>الملف يبقى على جهازك — لا يتم رفعه إلى خادم Gradify</small>
+    </button>
+    <p id="engineStatus" class="engineStatus">جاري تجهيز MuPDF.js…</p>
+  </section>
+
+  <section id="workspace" class="workspace" hidden>
+    <div class="toolbar">
+      <div class="docInfo">
+        <b id="fileName">—</b>
+        <span id="pageInfo">—</span>
+      </div>
+      <div class="toolbarActions">
+        <button id="prevBtn" class="btn light" type="button">السابق</button>
+        <button id="nextBtn" class="btn light" type="button">التالي</button>
+        <button id="saveBtn" class="btn primary" type="button">حفظ PDF</button>
+      </div>
+    </div>
+
+    <div class="notice">
+      <b>طريقة الاستخدام:</b> اضغط على أي سطر نصي يتعرف عليه المحرك، عدّل النص في مكانه ثم اضغط <b>تطبيق</b>. الحدود الحمراء لا تدخل في الملف النهائي.
+    </div>
+
+    <div class="editorGrid">
+      <aside class="sidePanel">
+        <h2>النص المحدد</h2>
+        <p id="selectionHelp" class="muted">اضغط نصًا داخل الصفحة.</p>
+        <div id="selectionForm" hidden>
+          <label>النص الأصلي
+            <textarea id="originalText" rows="3" readonly></textarea>
+          </label>
+          <label>النص الجديد
+            <textarea id="replacementText" rows="4" dir="auto" autocomplete="off"></textarea>
+          </label>
+          <label>حجم الخط
+            <input id="fontSize" type="number" min="6" max="72" step="1" value="14">
+          </label>
+          <div class="formActions">
+            <button id="applyBtn" class="btn primary" type="button">تطبيق التعديل</button>
+            <button id="deleteEditBtn" class="btn light" type="button">إلغاء التعديل</button>
+          </div>
+        </div>
+        <div class="stats">
+          <span>التعديلات: <b id="editCount">0</b></span>
+          <span id="arabicState">العربية: بانتظار الاختبار</span>
+        </div>
+      </aside>
+
+      <div class="pageArea">
+        <div id="pageStage" class="pageStage">
+          <img id="pageImage" alt="معاينة صفحة PDF">
+          <div id="textLayer" class="textLayer"></div>
+          <textarea id="inlineEditor" class="inlineEditor" dir="auto" hidden></textarea>
+        </div>
+        <div id="pageStatus" class="pageStatus">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="technicalNote">
+    <h2>ما الذي نختبره هنا؟</h2>
+    <p>نحن لا نحوّل الملف كاملًا إلى صورة عند الحفظ. MuPDF.js يقرأ بنية PDF ويحدد مواضع النص، والتجربة الحالية تستبدل المنطقة النصية المحددة مع حفظ الملف بطريقة Incremental قدر الإمكان. الملفات المعقدة جدًا أو الخطوط ذات الترميزات الخاصة قد لا تكون قابلة للتحرير بشكل صحيح بعد؛ وهذا هو الاختبار الذي نريد قياسه الآن.</p>
+  </section>
+</main>
+<footer>Gradify PDF — Arabic Editing Research Build</footer>
+<script type="module" src="pdf-mupdf.js?v=1"></script>
+</body>
+</html>
