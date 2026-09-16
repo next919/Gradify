@@ -2,84 +2,222 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="أدوات PDF عربية تعمل داخل المتصفح مع الحفاظ على جودة الملف قدر الإمكان وبدون رفع ملفاتك إلى خوادمنا.">
-  <title>أدوات PDF — Gradify Aura</title>
-  <link rel="stylesheet" href="pdf-tools.css?v=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#b42318">
+  <meta name="description" content="محرر PDF عربي يعمل داخل المتصفح مع الحفاظ على جودة صفحات PDF الأصلية قدر الإمكان وبدون رفع ملفاتك إلى خوادمنا.">
+  <title>Gradify PDF — محرر PDF عربي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="pdf-tools.css?v=2">
 </head>
 <body>
   <header class="topbar">
     <div class="container navwrap">
-      <a class="brand" href="index.html">Gradify <span>Aura</span></a>
-      <a class="backLink" href="index.html">العودة للرئيسية</a>
+      <a class="brand" href="index.html" aria-label="Gradify الرئيسية">
+        <span class="brandMark">G</span>
+        <span>Gradify <b>PDF</b></span>
+      </a>
+      <div class="navActions">
+        <span class="privacyChip">🔒 المعالجة على جهازك</span>
+        <a class="homeLink" href="index.html">الرئيسية</a>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="hero container">
-      <div>
-        <div class="pill">نسخة تجريبية MVP</div>
-        <h1>أدوات PDF عربية بخصوصية أعلى</h1>
-        <p>ابدأ بدمج ملفات PDF مباشرة داخل متصفحك. لا يتم رفع ملفاتك إلى خوادمنا، ولا نحول الصفحات إلى صور أثناء الدمج.</p>
+      <div class="heroCopy">
+        <span class="eyebrow">Arabic-first PDF editor</span>
+        <h1>حرّر ملفات PDF <em>بالعربي</em><br>بدون التضحية بالجودة.</h1>
+        <p>أضف أو استبدل النص العربي بصريًا فوق الصفحة الأصلية. لا نحول صفحاتك إلى صور، ولا نرفع ملفك إلى خادم.</p>
         <div class="trustRow">
-          <span>🔒 معالجة محلية</span>
-          <span>✓ بدون تسجيل</span>
-          <span>✓ بدون Rasterization</span>
+          <span>✓ النص المضاف يبقى Vector</span>
+          <span>✓ الخط العربي يُضمَّن داخل PDF</span>
+          <span>✓ لا يوجد تسجيل</span>
         </div>
       </div>
-      <div class="qualityCard">
-        <strong>Original Quality</strong>
-        <p>يتم نسخ صفحات PDF الأصلية إلى الملف الجديد بدل إعادة تصويرها كـ JPG.</p>
-      </div>
+      <aside class="qualityCard">
+        <div class="qualityIcon">A+</div>
+        <div>
+          <small>وضع الجودة</small>
+          <strong>Original Quality</strong>
+          <p>نحافظ على الصفحة الأصلية ونضيف التعديلات فوقها بدل إعادة تصوير المستند بالكامل.</p>
+        </div>
+      </aside>
     </section>
 
-    <section class="container toolSection">
-      <div class="sectionHead">
-        <span class="eyebrow">الأداة الأولى</span>
-        <h2>دمج PDF</h2>
-        <p>اختر ملفين أو أكثر، رتبها، ثم ادمجها في ملف واحد.</p>
+    <section class="container toolsArea">
+      <div class="toolTabs" role="tablist" aria-label="أدوات PDF">
+        <button class="toolTab active" type="button" data-tool="editor" role="tab" aria-selected="true">
+          <span class="tabIcon">ع</span>
+          <span><b>محرر PDF العربي</b><small>الأولوية الحالية</small></span>
+        </button>
+        <button class="toolTab" type="button" data-tool="merge" role="tab" aria-selected="false">
+          <span class="tabIcon">＋</span>
+          <span><b>دمج PDF</b><small>بدون إعادة ضغط</small></span>
+        </button>
       </div>
 
-      <div class="toolCard">
-        <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple hidden>
-
-        <button id="dropZone" class="dropZone" type="button" aria-label="اختيار ملفات PDF">
-          <span class="dropIcon">PDF</span>
-          <strong>اسحب ملفات PDF هنا</strong>
-          <span>أو اضغط لاختيار الملفات من جهازك</span>
-          <small>تتم المعالجة داخل المتصفح فقط</small>
-        </button>
-
-        <div id="fileArea" class="fileArea" hidden>
-          <div class="fileHeader">
-            <div>
-              <h3>الملفات المختارة</h3>
-              <p id="fileSummary"></p>
-            </div>
-            <button id="addMoreBtn" class="btn ghost" type="button">إضافة ملفات</button>
-          </div>
-
-          <div id="fileList" class="fileList"></div>
-
-          <div class="actions">
-            <button id="mergeBtn" class="btn primary" type="button">دمج ملفات PDF</button>
-            <button id="clearBtn" class="btn ghost danger" type="button">مسح القائمة</button>
+      <section id="editorTool" class="toolPanel active" aria-labelledby="editorTitle">
+        <div class="sectionHead">
+          <span class="stepBadge">01</span>
+          <div>
+            <h2 id="editorTitle">محرر النص العربي</h2>
+            <p>ارفع ملف PDF، أضف النص العربي، اسحبه إلى مكانه ثم احفظ الملف.</p>
           </div>
         </div>
 
-        <div id="status" class="status" role="status" aria-live="polite"></div>
-      </div>
+        <input id="editorFileInput" type="file" accept="application/pdf,.pdf" hidden>
+        <button id="editorDropZone" class="dropZone" type="button">
+          <span class="pdfBadge">PDF</span>
+          <strong>اختر ملف PDF للتحرير</strong>
+          <span>أو اسحبه إلى هذه المنطقة</span>
+          <small>الملف يبقى داخل متصفحك</small>
+        </button>
 
-      <div class="privacyNote">
-        <h3>كيف نحافظ على خصوصيتك وجودة الملف؟</h3>
-        <p>ملفات PDF تبقى في جهازك أثناء هذه العملية. الدمج يتم محليًا في المتصفح، ولا نقوم برفع محتوى ملفاتك أو بتحويل الصفحات إلى صور. بعض خصائص PDF المتقدمة جدًا مثل التوقيعات الرقمية أو النماذج المعقدة قد تحتاج معالجة خاصة في إصدارات لاحقة.</p>
-      </div>
+        <div id="editorWorkspace" class="editorWorkspace" hidden>
+          <div class="editorTopbar">
+            <div class="loadedFile">
+              <span class="fileDot"></span>
+              <div>
+                <strong id="editorFileName">document.pdf</strong>
+                <small id="editorFileMeta">—</small>
+              </div>
+            </div>
+            <div class="pageNav" aria-label="التنقل بين الصفحات">
+              <button id="nextPageBtn" class="squareBtn" type="button" title="الصفحة التالية">‹</button>
+              <span><b id="currentPageLabel">1</b> / <span id="pageCountLabel">1</span></span>
+              <button id="prevPageBtn" class="squareBtn" type="button" title="الصفحة السابقة">›</button>
+            </div>
+            <button id="changeEditorFileBtn" class="textBtn" type="button">تغيير الملف</button>
+          </div>
+
+          <div class="editorGrid">
+            <aside class="controlPanel">
+              <div class="controlIntro">
+                <span class="miniLabel">النص</span>
+                <h3>اكتب بالعربي</h3>
+                <p>بعد إضافة النص، اسحبه بإصبعك أو الماوس فوق الصفحة.</p>
+              </div>
+
+              <label class="fieldLabel" for="arabicText">النص العربي</label>
+              <textarea id="arabicText" class="textArea" rows="4" dir="rtl" placeholder="مثال: مرحبًا بكم في Gradify PDF"></textarea>
+
+              <div class="twoCols">
+                <label class="fieldGroup">
+                  <span>حجم الخط</span>
+                  <div class="numberField"><input id="fontSize" type="number" min="8" max="96" value="22"><b>pt</b></div>
+                </label>
+                <label class="fieldGroup">
+                  <span>لون النص</span>
+                  <div class="colorField"><input id="fontColor" type="color" value="#111827"><b id="colorValue">#111827</b></div>
+                </label>
+              </div>
+
+              <label class="switchRow">
+                <span>
+                  <b>تغطية النص القديم</b>
+                  <small>خلفية بيضاء خلف النص الجديد</small>
+                </span>
+                <input id="coverOldText" type="checkbox">
+                <i aria-hidden="true"></i>
+              </label>
+
+              <div class="editorButtons">
+                <button id="addTextBtn" class="btn primary" type="button">＋ إضافة النص للصفحة</button>
+                <button id="updateTextBtn" class="btn soft" type="button" disabled>تحديث النص المحدد</button>
+                <button id="deleteTextBtn" class="btn ghost danger" type="button" disabled>حذف النص المحدد</button>
+              </div>
+
+              <div class="selectionHint" id="selectionHint">لم يتم تحديد أي نص مضاف.</div>
+
+              <div class="saveBox">
+                <div>
+                  <strong>جاهز للحفظ؟</strong>
+                  <small id="editCountLabel">0 تعديلات</small>
+                </div>
+                <button id="saveEditedPdfBtn" class="btn save" type="button" disabled>حفظ PDF بجودة أصلية</button>
+              </div>
+
+              <button id="clearEditsBtn" class="linkDanger" type="button" disabled>مسح جميع التعديلات</button>
+            </aside>
+
+            <div class="previewColumn">
+              <div class="previewHeader">
+                <div>
+                  <b>معاينة الصفحة</b>
+                  <span>النصوص الحمراء الحدود هي تعديلاتك فقط</span>
+                </div>
+                <span class="vectorPill">Vector text</span>
+              </div>
+              <div id="previewShell" class="previewShell">
+                <div id="previewStage" class="previewStage">
+                  <canvas id="pdfCanvas"></canvas>
+                  <div id="textOverlayLayer" class="textOverlayLayer"></div>
+                </div>
+              </div>
+              <p class="dragTip">💡 اسحب النص المضاف فوق الصفحة لوضعه في المكان المطلوب.</p>
+            </div>
+          </div>
+
+          <div id="editorStatus" class="status" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="qualityNotes">
+          <div><span>1</span><p><b>لا Rasterization</b> — الصفحة الأصلية لا تتحول إلى JPG عند إضافة النص.</p></div>
+          <div><span>2</span><p><b>خط عربي مضمّن</b> — نستخدم Noto Sans Arabic داخل ملف PDF الناتج.</p></div>
+          <div><span>3</span><p><b>خصوصية محلية</b> — ملفك لا يُرفع إلى خوادم Gradify.</p></div>
+        </div>
+
+        <div class="warningBox">
+          <b>مهم:</b> خيار «تغطية النص القديم» هو استبدال بصري فقط، وليس Redaction أمنيًا. لا تستخدمه لإخفاء بيانات سرية نهائيًا.
+        </div>
+      </section>
+
+      <section id="mergeTool" class="toolPanel" aria-labelledby="mergeTitle" hidden>
+        <div class="sectionHead">
+          <span class="stepBadge">02</span>
+          <div>
+            <h2 id="mergeTitle">دمج PDF</h2>
+            <p>دمج الملفات بدون تحويل الصفحات إلى صور أو تقليل دقتها.</p>
+          </div>
+        </div>
+
+        <input id="mergeFileInput" type="file" accept="application/pdf,.pdf" multiple hidden>
+        <button id="mergeDropZone" class="dropZone" type="button">
+          <span class="pdfBadge">PDF</span>
+          <strong>اختر ملفين PDF أو أكثر</strong>
+          <span>رتبها ثم ادمجها محليًا</span>
+          <small>بدون رفع الملفات</small>
+        </button>
+
+        <div id="mergeFileArea" class="mergeFileArea" hidden>
+          <div class="fileHeader">
+            <div><h3>الملفات المختارة</h3><p id="mergeFileSummary"></p></div>
+            <button id="mergeAddMoreBtn" class="btn soft compact" type="button">إضافة ملفات</button>
+          </div>
+          <div id="mergeFileList" class="fileList"></div>
+          <div class="actions">
+            <button id="mergeBtn" class="btn primary" type="button">دمج ملفات PDF</button>
+            <button id="mergeClearBtn" class="btn ghost danger" type="button">مسح القائمة</button>
+          </div>
+        </div>
+        <div id="mergeStatus" class="status" role="status" aria-live="polite"></div>
+      </section>
     </section>
   </main>
 
-  <footer class="footer">Gradify Aura © 2026 — PDF Tools MVP</footer>
+  <footer class="footer">
+    <div class="container footerInner">
+      <span>Gradify PDF © 2026</span>
+      <span>Arabic-first • Privacy-first • Quality-first</span>
+    </div>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-  <script src="pdf-tools.js?v=1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="pdf-tools.js?v=2" defer></script>
 </body>
 </html>
