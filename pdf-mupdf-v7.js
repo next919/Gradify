@@ -35,7 +35,7 @@ const previewReplacement = `function basePreviewScale(){
   return Math.min(4,Math.max(1.5,view.baseScale*dpr*1.45));
 }
 function visiblePdfRect(){
-  const s=Math.max(.0001,view.baseScale*view.zoomScale),w=currentBounds[2]-currentBounds[0],h=currentBounds[3]-currentBounds[1];
+  const s=Math.max(.0001,view.baseScale*view.zoomScale);
   const vw=pageViewport.clientWidth/s,vh=pageViewport.clientHeight/s;
   let x0=currentBounds[0]+(-view.panX)/s,y0=currentBounds[1]+(-view.panY)/s;
   let x1=x0+vw,y1=y0+vh;
@@ -121,7 +121,7 @@ async function renderPreview(force=false){
 }
 `;
 
-source = replaceRange(source, 'function targetRenderScale(){', 'function scheduleQuality()', previewReplacement + 'function scheduleQuality()');
+source = replaceRange(source, 'function targetRenderScale(){', 'function scheduleQuality()', previewReplacement);
 
 // The committed edit is now rendered by MuPDF itself in the page preview. Do
 // not paint a white HTML rectangle over the PDF after the edit.
@@ -129,7 +129,7 @@ source = replaceRange(
   source,
   'function renderOverlay(){',
   'function drawActiveBox',
-  "function renderOverlay(){textLayer.innerHTML='';if(activeItem&&!inlineEditor.hidden)drawActiveBox(activeItem);}\nfunction drawActiveBox"
+  "function renderOverlay(){textLayer.innerHTML='';if(activeItem&&!inlineEditor.hidden)drawActiveBox(activeItem);}\n"
 );
 
 source = source.replace(
