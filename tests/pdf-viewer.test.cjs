@@ -20,7 +20,7 @@ const doc={loadPage:()=>page,countPages:()=>2,destroy(){destroys++}};
 const context={document,console,Blob,Uint8Array,Image:class{decode(){return Promise.resolve()}},URL:{createObjectURL:()=>`blob:${renders}`,revokeObjectURL:u=>revoked.push(u)},navigator:{userAgent:'iPhone'},matchMedia:()=>({matches:true}),getSelection:()=>({removeAllRanges(){},addRange(){}}),requestAnimationFrame:f=>(frames.push(f),frames.length),setTimeout:f=>{const id=nextTimer++;timers.set(id,f);return id},clearTimeout:id=>timers.delete(id),ResizeObserver:class{constructor(cb){this.cb=cb}observe(){}},innerHeight:900};
 context.window={devicePixelRatio:3,addEventListener(){},visualViewport:{offsetTop:0,height:900,addEventListener(){}}};
 const source=fs.readFileSync(require('node:path').join(__dirname,'../pdf-mupdf.js'),'utf8').replace('\ninitEngine();','\n// CDN startup disabled in test harness.');
-vm.createContext(context);vm.runInContext(source+`\nglobalThis.api={view,mergeNearbySegments,textDirection,numericField,recoverNumericOrder,getVisualRuns,pdfToStage,clientToPdf,rectToCss,pickItemAt,zoomAt,applyTransform,layoutPage,renderPage,renderPreview,targetRenderScale,openEditor,commitActive,saveEditedPdf,resetGesture,getEdits:()=>edits,getGesture:()=>gesture,getPage:()=>currentPage,setup:(doc,engine)=>{documentRef=doc;mupdf=engine;pageCount=2;workspace.hidden=false;},setBidi:b=>{bidi=b},setBounds:b=>{currentBounds=b},setItems:i=>{currentItems=i}};`,context);
+vm.createContext(context);vm.runInContext(source+`\nglobalThis.api={view,mergeNearbySegments,textDirection,numericField,recoverNumericOrder,getVisualRuns,pdfToStage,clientToPdf,rectToCss,pickItemAt,zoomAt,applyTransform,layoutPage,renderPage,renderPreview,targetRenderScale,openEditor,commitActive,saveEditedPdf,resetGesture,getEdits:()=>edits,getGesture:()=>gesture,getPage:()=>currentPage,setup:(doc,engine)=>{documentRef=doc;mupdf={...engine,Document:{openDocument:()=>doc}};applyPdfEdits=async()=>doc;pageCount=2;workspace.hidden=false;},setBidi:b=>{bidi=b},setBounds:b=>{currentBounds=b},setItems:i=>{currentItems=i}};`,context);
 const api=context.api,$=id=>document.getElementById(id),vp=$('pageViewport');
 function flush(){while(frames.length)frames.shift()()}
 function near(a,b,label){assert.ok(Math.abs(a-b)<1e-7,`${label}: ${a} != ${b}`)}
@@ -44,7 +44,7 @@ touch('touchstart',[[100,550]]);touch('touchmove',[[130,500]]);touch('touchend',
 touch('touchstart',[[25,105]]);touch('touchend',[]);assert.equal($('inlineEditor').hidden,true);assert.equal(api.getEdits()[0].newText,'تاريخ 2026');
 // Navigation commits against the old page and resets pan/zoom.
 $('nextBtn').emit('click');await Promise.resolve();await Promise.resolve();flush();assert.equal(api.getPage(),1);assert.equal(api.view.zoomScale,1);assert.equal(api.view.panY,0);
-$('prevBtn').emit('click');await Promise.resolve();await Promise.resolve();flush();assert.equal(api.getEdits().length,1);assert.equal($('textLayer').children[0].textContent,'تاريخ 2026');
+$('prevBtn').emit('click');await Promise.resolve();await Promise.resolve();flush();assert.equal(api.getEdits().length,1);assert.equal($('textLayer').children.length,0,'committed preview comes from PDF, not HTML text');
 // CropBox origins, resizing, clamping and bitmap memory limits.
 for(const width of [360,740,300]){vp.clientWidth=width;api.layoutPage();for(const zoom of [1,1.5,2.5,4]){p=client(300,330);api.zoomAt(zoom,p.x,p.y);flush();p=client(300,330);assert.equal(api.pickItemAt(p.x,p.y).text,'Target');const scale=api.targetRenderScale();assert.ok(600*1000*scale*scale<=8000000.1);assert.ok(1000*scale<=4096.1);}}
 api.view.panX=1e5;api.view.panY=-1e5;api.applyTransform();assert.equal(api.view.panX,0);near(api.view.panY,vp.clientHeight-api.view.height*api.view.zoomScale,'pan clamp');
@@ -64,6 +64,10 @@ const date='٢٠٢٢/٠٦/٢٩',chars=[...date].map((c,i)=>({c,x:100+i*6})).reve
 const segments=[{text:chars.map(g=>g.c).join(''),bbox:[100,10,180,30]}];
 api.recoverNumericOrder(segments,{walk(w){w.beginLine();for(const g of chars)w.onChar(g.c,[g.x,25],null,10,[g.x,10,g.x+6,10,g.x,30,g.x+6,30]);w.endLine();}});
 assert.equal(segments[0].text,date);assert.equal(api.getVisualRuns(date)[0].direction,'ltr');
+// Accurate ink bounds may exclude every glyph baseline, and JSON bidi order may differ from walk.
+const accurate=[{text:chars.map(g=>g.c).join(''),bbox:[100,10,180,20]}];
+api.recoverNumericOrder(accurate,{walk(w){w.beginLine([100,10,180,20]);for(const g of [...chars].reverse())w.onChar(g.c,[g.x,25],null,10,[g.x,10,g.x+6,10,g.x,20,g.x+6,20]);w.endLine();}});
+assert.equal(accurate[0].text,date,'baseline outside ink bbox does not prevent numeric recovery');
 const pieces=[{text:'٢٩',bbox:[145,10,160,30],fontName:'Arabic'}, {text:'/',bbox:[140,10,145,30],fontName:'Latin'}, {text:'٠٦',bbox:[125,10,140,30],fontName:'Arabic'}, {text:'/',bbox:[120,10,125,30],fontName:'Latin'}, {text:'٢٠٢٢',bbox:[90,10,120,30],fontName:'Arabic'}].map(x=>({...x,size:20,origin:[x.bbox[0],25]}));
 assert.equal(api.mergeNearbySegments(pieces)[0].text,date,'mixed-font date stays one LTR field');
 api.setBidi({getEmbeddingLevels:()=>({levels:[1,1,1,1,2,2,2]})});

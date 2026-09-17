@@ -56,20 +56,27 @@ async function openFile(file){if(!mupdf){status('المحرك لم يجهز بع
 function extractSegments(json){const list=[];for(const block of json?.blocks||[]){if(block?.type&&block.type!=='text')continue;for(const line of block?.lines||[]){const text=String(line?.text||'').trim();const bbox=normalizeBBox(line?.bbox);if(!text||!bbox||bbox[2]<=bbox[0]||bbox[3]<=bbox[1])continue;const f=line.font||{};list.push({text,bbox,origin:[Number(line.x)||bbox[0],Number(line.y)||bbox[3]],fontName:cleanFontName(f.name||''),family:f.family||'sans-serif',weight:f.weight||'normal',style:f.style||'normal',size:Number(f.size)||Math.max(8,(bbox[3]-bbox[1])*.8),wmode:line.wmode||0});}}return list;}
 function recoverNumericOrder(segments,st){
   if(typeof st.walk!=='function')return segments;
-  const lines=[];let chars=[];
-  st.walk({beginLine(){chars=[];},onChar(c,origin,font,size,quad){
+  const lines=[];let chars=[],bounds=null;
+  st.walk({beginLine(bbox){chars=[];bounds=normalizeBBox(bbox);},onChar(c,origin,font,size,quad){
     chars.push({c:String(c),x:origin[0],y:origin[1],quad:[...quad]});
-  },endLine(){lines.push(chars);}});
+  },endLine(){
+    if(!chars.length)return;
+    const xs=chars.flatMap(c=>[c.quad[0],c.quad[2],c.quad[4],c.quad[6]]),ys=chars.flatMap(c=>[c.quad[1],c.quad[3],c.quad[5],c.quad[7]]);
+    lines.push({chars,bbox:bounds||[Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)]});
+  }});
+  const signature=text=>[...text.normalize('NFKC').replace(/\s/g,'')].sort().join('');
+  const overlap=(a,b)=>Math.max(0,Math.min(a[2],b[2])-Math.max(a[0],b[0]))*Math.max(0,Math.min(a[3],b[3])-Math.max(a[1],b[1]));
   for(const item of segments){
-    if(!hasArabic(item.text)&&!numericField(item.text))continue;
-    // preserve-spans makes each JSON line match one walked line; verify by geometry too.
-    const candidates=lines.filter(row=>row.length&&row.every(c=>c.x>=item.bbox[0]-.5&&c.x<=item.bbox[2]+.5&&c.y>=item.bbox[1]-.5&&c.y<=item.bbox[3]+.5));
-    const row=candidates.find(row=>row.map(c=>c.c).join('').trim()===item.text);
+    if(!hasArabic(item.text)&&!numericFragment(item.text))continue;
+    // Glyph origins are baselines and can lie OUTSIDE accurate ink bounds. Compare line boxes,
+    // not origins. JSON and walk may also expose different bidi order for the same characters.
+    const numeric=numericFragment(item.text),key=signature(item.text);
+    const candidates=lines.filter(line=>overlap(line.bbox,item.bbox)>0&&signature(line.chars.map(c=>c.c).join(''))===key);
+    candidates.sort((a,b)=>overlap(b.bbox,item.bbox)-overlap(a.bbox,item.bbox));
+    const row=candidates[0]?.chars;
     if(!row)continue;
-    const text=row.map(c=>c.c).join('').trim();
-    if(numericField(text))item.text=[...row].sort((a,b)=>a.x-b.x).map(c=>c.c).join('').trim();
-    else {
-      // Preserve logical Arabic words and spaces; repair only contiguous numeric subsequences.
+    if(numeric)item.text=[...row].sort((a,b)=>a.x-b.x).map(c=>c.c).join('').trim();
+    else if(row.map(c=>c.c).join('').trim()===item.text){
       const result=[];let run=[];
       const flush=()=>{result.push(...run.sort((a,b)=>a.x-b.x).map(c=>c.c));run=[];};
       for(const ch of row){if(numericPart(ch.c))run.push(ch);else{flush();result.push(ch.c);}}flush();
@@ -139,14 +146,20 @@ function zoomAt(zoom,clientX,clientY,previousX=clientX,previousY=clientY){
 function targetRenderScale(){
   const w=currentBounds[2]-currentBounds[0],h=currentBounds[3]-currentBounds[1];
   // Bound the decoded bitmap (and MuPDF working memory), particularly on iPhone.
-  return Math.min(Math.max(1,view.baseScale*view.zoomScale*(window.devicePixelRatio||1)),Math.sqrt(8000000/(w*h)),4096/Math.max(w,h));
+  return Math.min(Math.max(1,view.baseScale*view.zoomScale*(window.devicePixelRatio||1)),Math.sqrt((mobile()?8000000:24000000)/(w*h)),(mobile()?4096:8192)/Math.max(w,h));
 }
 async function renderPreview(force=false){
   if(!documentRef)return;
   const scale=targetRenderScale();if(!force&&scale<=renderedScale*1.15){pageStatus.textContent=`تكبير ${Math.round(view.zoomScale*100)}% — معاينة ${Math.round(renderedScale*72)} DPI — ${currentItems.length} منطقة نصية`;return;}
-  const generation=renderGeneration,request=++previewRequest;let page=null,pix=null,url=null;
+  const generation=renderGeneration,request=++previewRequest;let page=null,pix=null,url=null,previewDoc=null;
   try{
-    page=documentRef.loadPage(currentPage);
+    const pageIndex=currentPage, snapshot=edits.filter(e=>e.page===pageIndex);
+    if(snapshot.length){
+      previewDoc=mupdf.Document.openDocument(originalBytes,'application/pdf');
+      await applyPdfEdits(previewDoc,snapshot);
+      if(generation!==renderGeneration||request!==previewRequest)return;
+    }
+    page=(previewDoc||documentRef).loadPage(pageIndex);
     pix=page.toPixmap(mupdf.Matrix.scale(scale,scale),mupdf.ColorSpace.DeviceRGB,false,true,'View','CropBox');
     url=URL.createObjectURL(new Blob([pix.asPNG()],{type:'image/png'}));
     pix.destroy();pix=null;page.destroy();page=null;
@@ -156,7 +169,7 @@ async function renderPreview(force=false){
     if(old)URL.revokeObjectURL(old);
     pageStatus.textContent=`تكبير ${Math.round(view.zoomScale*100)}% — معاينة ${Math.round(scale*72)} DPI — ${currentItems.length} منطقة نصية`;
   }catch(e){if(url)URL.revokeObjectURL(url);if(generation===renderGeneration)pageStatus.textContent=`تعذر تحسين المعاينة: ${e?.message||e}`;}
-  finally{try{pix?.destroy?.()}catch{}try{page?.destroy?.()}catch{}}
+  finally{try{pix?.destroy?.()}catch{}try{page?.destroy?.()}catch{}try{previewDoc?.destroy?.()}catch{}}
 }
 function scheduleQuality(){clearTimeout(qualityTimer);qualityTimer=setTimeout(()=>{if(!gesture)void renderPreview();},180);}
 async function renderPage(){
@@ -184,7 +197,7 @@ async function renderPage(){
 }
 
 function rectToCss(b){const p=pdfToStage(b[0],b[1]),s=stageScale();return{left:p.x,top:p.y,width:(b[2]-b[0])*s,height:(b[3]-b[1])*s};}
-function renderOverlay(){textLayer.innerHTML='';const s=stageScale();for(const item of currentItems){const ed=getEdit(item);if(!ed)continue;const r=rectToCss(item.bbox);const p=document.createElement('div');p.className='editPreview';p.textContent=ed.newText;p.dir=textDirection(ed.newText);p.style.left=`${r.left}px`;p.style.top=`${r.top}px`;p.style.width=`${Math.max(1,r.width)}px`;p.style.height=`${Math.max(r.height,fittedFontSize(ed,ed.newText)*s*1.18)}px`;p.style.fontSize=`${Math.max(1,fittedFontSize(ed,ed.newText)*s)}px`;p.style.fontFamily=cssFont(ed);p.style.fontWeight=ed.weight||'normal';p.style.fontStyle=ed.style||'normal';p.style.textAlign=textDirection(ed.newText)==='rtl'?'right':'left';textLayer.appendChild(p);}if(activeItem&&!inlineEditor.hidden)drawActiveBox(activeItem);}
+function renderOverlay(){textLayer.innerHTML='';if(activeItem&&!inlineEditor.hidden)drawActiveBox(activeItem);}
 function drawActiveBox(item){textLayer.querySelector('.activeOutline')?.remove();const r=rectToCss(item.bbox);const b=document.createElement('div');b.className='textHit active activeOutline';b.style.left=`${r.left}px`;b.style.top=`${r.top}px`;b.style.width=`${Math.max(2,r.width)}px`;b.style.height=`${Math.max(2,r.height)}px`;b.style.pointerEvents='none';textLayer.appendChild(b);}
 function pickItemAt(clientX,clientY){
   const {x,y}=clientToPdf(clientX,clientY),s=view.baseScale*view.zoomScale,pad=(mobile()?16:6)/s;
@@ -286,7 +299,7 @@ inlineEditor.addEventListener('compositionend',()=>{composing=false;positionEdit
 inlineEditor.addEventListener('input',()=>{if(!activeItem)return;const txt=editorText();inlineEditor.dir=textDirection(txt);inlineEditor.style.textAlign=textDirection(txt)==='rtl'?'right':'left';if(!composing)positionEditor();});
 inlineEditor.addEventListener('keydown',e=>{if(e.isComposing||composing)return;if(e.key==='Enter'){e.preventDefault();inlineEditor.blur();}if(e.key==='Escape'){e.preventDefault();hideEditor();selectionInfo.textContent='تم إلغاء التعديل الحالي.';}});
 inlineEditor.addEventListener('blur',()=>{commitActive(true);});
-function commitActive(rerender=true){if(committing||!activeItem||inlineEditor.hidden)return;committing=true;try{const item=activeItem,newText=editorText(),key=keyFor(currentPage,item.bbox,item.text);edits=edits.filter(e=>e.key!==key);if(newText!==item.text)edits.push({key,page:currentPage,bbox:[...item.bbox],oldText:item.text,newText,origin:[...item.origin],fontSize:fittedFontSize(item,newText),fontName:item.fontName||'',family:item.family||'sans-serif',weight:item.weight||'normal',style:item.style||'normal',rtl:textDirection(newText)==='rtl'});updateCount();inlineEditor.hidden=true;activeItem=null;queueTransform();selectionInfo.textContent=newText===item.text?'لم يتغير النص.':'تم حفظ التعديل محليًا ✓';if(rerender)renderOverlay();}finally{committing=false;}}
+function commitActive(rerender=true){if(committing||!activeItem||inlineEditor.hidden)return;committing=true;try{const item=activeItem,newText=editorText(),key=keyFor(currentPage,item.bbox,item.text);edits=edits.filter(e=>e.key!==key);if(newText!==item.text)edits.push({key,page:currentPage,bbox:[...item.bbox],oldText:item.text,newText,origin:[...item.origin],fontSize:fittedFontSize(item,newText),fontName:item.fontName||'',family:item.family||'sans-serif',weight:item.weight||'normal',style:item.style||'normal',rtl:textDirection(newText)==='rtl'});updateCount();inlineEditor.hidden=true;activeItem=null;queueTransform();selectionInfo.textContent=newText===item.text?'لم يتغير النص.':'تم حفظ التعديل محليًا ✓';if(rerender){renderOverlay();void renderPreview(true);}}finally{committing=false;}}
 prevBtn.addEventListener('click',async()=>{commitActive(false);if(currentPage>0){currentPage--;await renderPage();}});nextBtn.addEventListener('click',async()=>{commitActive(false);if(currentPage<pageCount-1){currentPage++;await renderPage();}});
 
 function expandRect(r,p=.7){return[r[0]-p,r[1]-p,r[2]+p,r[3]+p];}
@@ -318,7 +331,41 @@ async function makeArabicAppearance(e){await ensureArabicEngine();const blob=new
 
 async function addArabicVector(page,pdf,e){const ap=await makeArabicAppearance(e),a=page.createAnnotation('Stamp');a.setRect(e.bbox);try{a.setContents(e.newText)}catch{}const resources=pdf.newDictionary();a.setAppearance('N',null,mupdf.Matrix.identity,ap.bbox,resources,ap.content);return a;}
 
-async function saveEditedPdf(){commitActive(false);if(!originalBytes||!mupdf)return;if(!edits.length){pageStatus.textContent='لا توجد تعديلات للحفظ.';return;}saveBtn.disabled=true;let doc=null;try{if(edits.some(e=>hasArabic(e.newText)))await ensureArabicEngine();pageStatus.textContent='جاري حفظ النصوص مع الحفاظ على الصفحة الأصلية كـ PDF…';doc=mupdf.Document.openDocument(originalBytes,'application/pdf');const pdf=typeof doc.asPDF==='function'?doc.asPDF():doc,byPage=new Map();for(const e of edits){if(!byPage.has(e.page))byPage.set(e.page,[]);byPage.get(e.page).push(e);}for(const [pi,list] of byPage){const page=pdf.loadPage(pi);for(const e of list){const red=page.createAnnotation('Redaction');red.setRect(expandRect(e.bbox,.35));red.update?.();}page.applyRedactions(false,mupdf.PDFPage.REDACT_IMAGE_NONE,mupdf.PDFPage.REDACT_LINE_ART_NONE,mupdf.PDFPage.REDACT_TEXT_REMOVE);for(const e of list){if(!e.newText)continue;if(hasArabic(e.newText)){await addArabicVector(page,pdf,e);}else{const a=page.createAnnotation('FreeText');a.setRect(expandRect(e.bbox,.35));a.setContents(e.newText);a.setDefaultAppearance(daFont(e),e.fontSize,[0,0,0]);a.update();}}page.update?.();page.destroy?.();}const buf=pdf.saveToBuffer('compress');const bytes=buf.asUint8Array(),blobOut=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blobOut),a=document.createElement('a');a.href=url;a.download=sourceName.replace(/\.pdf$/i,'')+'-edited.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);pageStatus.textContent='تم إنشاء الملف. العربية حُفظت كـ Vector مشكّل، بدون تحويل الصفحة إلى صورة.';}catch(e){console.error(e);pageStatus.textContent=`تعذر الحفظ: ${e?.message||e}`;}finally{saveBtn.disabled=false;try{doc?.destroy?.()}catch{}}}
+// One PDF editing path for both the displayed result and the downloaded file.
+async function applyPdfEdits(doc,list){
+  if(list.some(e=>hasArabic(e.newText)))await ensureArabicEngine();
+  const pdf=typeof doc.asPDF==='function'?doc.asPDF():doc,groups=new Map();
+  for(const e of list){if(!groups.has(e.page))groups.set(e.page,[]);groups.get(e.page).push(e);}
+  for(const [index,items] of groups){
+    const page=pdf.loadPage(index);
+    try{
+      for(const e of items){const red=page.createAnnotation('Redaction');try{red.setRect(expandRect(e.bbox,.15));red.update();}finally{red.destroy();}}
+      page.applyRedactions(false,mupdf.PDFPage.REDACT_IMAGE_NONE,mupdf.PDFPage.REDACT_LINE_ART_NONE,mupdf.PDFPage.REDACT_TEXT_REMOVE);
+      for(const e of items){
+        if(!e.newText)continue;
+        if(hasArabic(e.newText)){const a=await addArabicVector(page,pdf,e);a.destroy();}
+        else{const a=page.createAnnotation('FreeText');try{a.setRect(expandRect(e.bbox,.15));a.setContents(e.newText);a.setDefaultAppearance(daFont(e),e.fontSize,[0,0,0]);a.update();}finally{a.destroy();}}
+      }
+      page.update();
+    }finally{page.destroy();}
+  }
+  return pdf;
+}
+async function saveEditedPdf(){
+  commitActive(false);if(!originalBytes||!mupdf)return;
+  saveBtn.disabled=true;let doc=null,buffer=null;
+  try{
+    pageStatus.textContent='جاري تجهيز PDF مع الحفاظ على الصفحة الأصلية…';
+    doc=mupdf.Document.openDocument(originalBytes,'application/pdf');
+    const pdf=await applyPdfEdits(doc,edits.map(e=>({...e})));
+    buffer=pdf.saveToBuffer('compress');
+    const blob=new Blob([new Uint8Array(buffer.asUint8Array())],{type:'application/pdf'}),url=URL.createObjectURL(blob);
+    const link=document.createElement('a');link.href=url;link.download=sourceName.replace(/\.pdf$/i,'')+'-edited.pdf';
+    link.textContent='تنزيل PDF المعدّل';pageStatus.textContent='الملف جاهز — ';pageStatus.appendChild(link);link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),120000);
+  }catch(e){console.error(e);pageStatus.textContent=`تعذر الحفظ: ${e?.message||e}`;}
+  finally{saveBtn.disabled=false;try{buffer?.destroy?.()}catch{}try{doc?.destroy?.()}catch{}}
+}
 saveBtn.addEventListener('click',saveEditedPdf);
 let layoutFrame=0;
 const resizeObserver=new ResizeObserver(()=>{
