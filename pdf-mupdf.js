@@ -339,7 +339,7 @@ async function applyPdfEdits(doc,list){
   for(const [index,items] of groups){
     const page=pdf.loadPage(index);
     try{
-      for(const e of items){const red=page.createAnnotation('Redaction');try{red.setRect(expandRect(e.bbox,.15));red.update();}finally{red.destroy();}}
+      for(const e of items){const red=page.createAnnotation('Redact');try{red.setRect(expandRect(e.bbox,.15));red.update();}finally{red.destroy();}}
       page.applyRedactions(false,mupdf.PDFPage.REDACT_IMAGE_NONE,mupdf.PDFPage.REDACT_LINE_ART_NONE,mupdf.PDFPage.REDACT_TEXT_REMOVE);
       for(const e of items){
         if(!e.newText)continue;
