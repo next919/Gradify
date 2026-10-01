@@ -1,7 +1,7 @@
 // Applies text edits to a PDF without rasterising anything.
 import { analyzePage, pageFonts, winAnsiEncode } from './analyze.js';
 import { blankFor, splice, fmt } from './content.js';
-import { ShapeFont, layoutLine, needsShaping, hasArabic, guessBundled, isBoldName, cleanBaseName, subsetTrueType, bundledList, visualRuns, styleClass } from './fonts.js';
+import { ShapeFont, layoutLine, needsShaping, hasArabic, guessBundled, isBoldName, cleanBaseName, subsetTrueType, bundledList, visualRuns, styleClass, VISUAL_ORDER_MARK, NO_TEXT, toVisualCluster } from './fonts.js';
 
 const { PDFDocument, PDFName, degrees } = window.PDFLib;
 
@@ -537,9 +537,9 @@ function writeType0(doc, ent) {
 }
 
 function toUnicodeCMap(glyphs) {
-  const entries = [...glyphs.entries()].filter(([, u]) => u).sort((a, b) => a[0] - b[0]);
+  const entries = [...glyphs.entries()].map(([g, u]) => [g, u ? toVisualCluster(u) : NO_TEXT]).sort((a, b) => a[0] - b[0]);
   const hex = (s) => [...s].map((ch) => { const cp = ch.codePointAt(0); if (cp > 0xFFFF) { const v = cp - 0x10000; return ((0xD800 + (v >> 10)).toString(16) + (0xDC00 + (v & 1023)).toString(16)).toUpperCase(); } return cp.toString(16).padStart(4, '0').toUpperCase(); }).join('');
-  let s = '/CIDInit /ProcSet findresource begin\n12 dict begin\nbegincmap\n/CIDSystemInfo << /Registry (Adobe) /Ordering (UCS) /Supplement 0 >> def\n/CMapName /Adobe-Identity-UCS def\n/CMapType 2 def\n1 begincodespacerange\n<0000> <FFFF>\nendcodespacerange\n';
+  let s = `%${VISUAL_ORDER_MARK}\n` + '/CIDInit /ProcSet findresource begin\n12 dict begin\nbegincmap\n/CIDSystemInfo << /Registry (Adobe) /Ordering (UCS) /Supplement 0 >> def\n/CMapName /Adobe-Identity-UCS def\n/CMapType 2 def\n1 begincodespacerange\n<0000> <FFFF>\nendcodespacerange\n';
   for (let i = 0; i < entries.length; i += 100) {
     const chunk = entries.slice(i, i + 100);
     s += `${chunk.length} beginbfchar\n`;

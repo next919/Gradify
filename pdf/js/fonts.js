@@ -289,11 +289,17 @@ export function layoutLine(text, baseDir, fonts, styleOf = null) {
     const uniOf = new Map();
     for (const cl of clusters) {
       const gs = shaped.filter((g) => g.cl === cl);
-      const chars = [...clusterText(cl)];
+      let chars = [...clusterText(cl)];
       if (gs.length === 1) { uniOf.set(gs[0], chars.join('')); continue; }
+      const zero = gs.filter((g) => g.ax === 0);
+      // Some fonts draw «أ إ آ» as alef plus a separate hamza/madda glyph: split the letter the same way
+      // (Unicode decomposition), so the mark glyph gets the mark and the lam-alef glyph always means «لا».
+      if (zero.length > chars.filter((c) => /\p{M}/u.test(c)).length) {
+        const nfd = [...chars.join('').normalize('NFD')];
+        if (nfd.length > chars.length) chars = nfd;
+      }
       const marks = chars.filter((c) => /\p{M}/u.test(c));
       const letters = chars.filter((c) => !/\p{M}/u.test(c));
-      const zero = gs.filter((g) => g.ax === 0);
       const wide = gs.filter((g) => g.ax !== 0).sort((a, b) => b.ax - a.ax);
       zero.forEach((g, i) => uniOf.set(g, i < marks.length ? marks[i] : ''));
       const rest = letters.join('') + marks.slice(zero.length).join('');
@@ -309,6 +315,17 @@ export function layoutLine(text, baseDir, fonts, styleOf = null) {
   }
   return { glyphs, width: pen, fonts: [...used], missing };
 }
+
+// ---------- copy/search text in the PDF ----------
+// RTL text is drawn in visual order and PDF readers reverse it character by character when copying, so a glyph
+// that stands for several RTL characters (a ligature such as lam-alef) lists them in visual order in our ToUnicode.
+// The marker comment tells this editor to read them back the same way; older files and other producers use logical order.
+export const VISUAL_ORDER_MARK = 'ligatures in visual order - arabic-pdf-editor';
+// Glyphs a font adds on its own (no text) map to this invisible joiner: an empty mapping makes readers show junk.
+export const NO_TEXT = String.fromCharCode(0x34f);
+const isRtlCp = (cp) => (cp >= 0x590 && cp <= 0x8ff) || (cp >= 0xfb1d && cp <= 0xfdff) || (cp >= 0xfe70 && cp <= 0xfeff);
+export const toVisualCluster = (u) => { const a = [...u]; return a.length > 1 && isRtlCp(a[0].codePointAt(0)) ? a.reverse().join('') : u; };
+export const fromVisualCluster = (v) => { const a = [...v]; return a.length > 1 && isRtlCp(a[a.length - 1].codePointAt(0)) ? a.reverse().join('') : v; };
 
 // ---------- font name matching ----------
 export function cleanBaseName(name) {
@@ -426,7 +443,8 @@ export class FontLibrary {
 
 // Recover reading order from glyphs sorted left-to-right.
 export function visualToLogical(vis) {
-  if (!hasArabic(vis)) return vis;
+  // NFC: a font that draws «إ» as alef + hamza leaves the letter decomposed in the PDF text
+  if (!hasArabic(vis)) return vis.normalize('NFC');
   const lv = bidi.getEmbeddingLevels(vis, 'rtl');
-  return bidi.getReorderedString(vis, lv);
+  return bidi.getReorderedString(vis, lv).normalize('NFC');
 }
