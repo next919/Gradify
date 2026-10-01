@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gradify Aura — منصة الطالب</title>
-<link rel="stylesheet" href="styles.css?v=FULL3">
+<meta name="description" content="أدوات مجانية للطالب: محرر PDF عربي، برنامج مواقيت الصلاة نداء، القرآن الكريم، مواقع الذكاء الاصطناعي، تعلم الإنجليزية وحاسبة المعدل.">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 <header class="topbar">
@@ -12,14 +13,15 @@
     <a class="brand" href="#home">Gradify <span>Aura</span></a>
     <button class="menuBtn" id="menuBtn">☰</button>
     <nav class="nav" id="nav">
+      <a href="pdf/">محرر PDF</a>
+      <a href="nidaa/">برنامج نداء</a>
       <a href="#quran">القرآن</a>
       <a href="#ai">الذكاء</a>
       <a href="#english">الإنجليزية</a>
-      <a href="#calculators">الحاسبات</a>
-      <a href="#useful">مواقع مفيدة</a>
+      <a href="gpa.html">المعدل</a>
     </nav>
     <div class="searchBox">
-      <input id="globalSearch" placeholder="ابحث: البقرة، الحصري، ChatGPT، حاسبة..." autocomplete="off">
+      <input id="globalSearch" placeholder="ابحث: PDF، البقرة، الحصري، ChatGPT، حاسبة..." autocomplete="off">
       <div id="searchResults" class="searchResults"></div>
     </div>
   </div>
@@ -28,19 +30,28 @@
 <main id="home">
   <section class="hero container">
     <div class="heroText">
-      <div class="pill">نسخة كاملة مستقرة</div>
+      <div class="pill">مجاني بالكامل</div>
       <h1>كل أدواتك في واجهة واحدة أنيقة</h1>
-      <p>القرآن للاستماع، مواقع الذكاء الاصطناعي، تعلم الإنجليزية، حاسبة المعدل الأساسية والمطورة، ومواقع مفيدة.</p>
+      <p>محرر PDF بالعربي، برنامج مواقيت الصلاة، القرآن الكريم للاستماع، مواقع الذكاء الاصطناعي، تعلم الإنجليزية وحاسبة المعدل.</p>
       <div class="heroActions">
-        <a class="btn primary" href="#quran">ابدأ بالقرآن</a>
-        <a class="btn ghost" href="#calculators">افتح الحاسبات</a>
+        <a class="btn primary" href="pdf/">محرر PDF</a>
+        <a class="btn ghost" href="nidaa/">حمّل برنامج نداء</a>
+        <a class="btn ghost" href="#quran">استمع للقرآن</a>
       </div>
     </div>
-    <div class="heroCard"><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><strong>Gradify Aura</strong><span>Dark Premium Rebuild</span></div>
+    <div class="heroCard"><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><strong>Gradify Aura</strong><span>أدواتك في مكان واحد</span></div>
+  </section>
+
+  <section id="tools" class="section container">
+    <div class="sectionHead"><div><span class="icon">🧰</span><h2>أدوات Gradify</h2><p>أدوات من صنعنا، مجانية وتعمل بدون تسجيل.</p></div></div>
+    <div class="grid">
+      <a class="card big featured" href="pdf/"><h3>محرر PDF العربي</h3><p>عدّل نصوص ملفات PDF بالعربي والإنجليزي بنفس الخط والحجم، بدون فقدان الجودة. ملفاتك لا تغادر جهازك.</p><span>افتح المحرر</span></a>
+      <a class="card big featured" href="nidaa/"><h3>برنامج نداء لمواقيت الصلاة</h3><p>برنامج لويندوز: الأذان، والتاريخ الهجري، والمواسم، والجدول الشهري، وأدوات سطح المكتب.</p><span>صفحة التحميل</span></a>
+    </div>
   </section>
 
   <section id="quran" class="section container">
-    <div class="sectionHead"><div><span class="icon">🕋</span><h2>القرآن الكريم</h2><p>استماع بروابط HTTPS مباشرة وقوائم ثابتة لا تختفي.</p></div></div>
+    <div class="sectionHead"><div><span class="icon">🕋</span><h2>القرآن الكريم</h2><p>استمع لتلاوات كبار القرّاء بأكثر من رواية.</p></div></div>
     <div class="panel">
       <div class="toolbar">
         <label><span>القارئ</span><select id="reader" class="field"></select></label>
@@ -64,11 +75,9 @@
   </section>
 
   <section id="calculators" class="section container">
-    <div class="sectionHead"><div><span class="icon">🧮</span><h2>الحاسبات</h2><p>روابط مباشرة للنسخ المتاحة في ملفات الموقع.</p></div></div>
+    <div class="sectionHead"><div><span class="icon">🧮</span><h2>حاسبة المعدل</h2><p>احسب معدلك الفصلي والتراكمي.</p></div></div>
     <div class="grid">
-      <a class="card big" href="gpa.html" target="_blank" rel="noopener"><h3>حاسبة المعدل</h3><p>النسخة الأساسية بنظام 4/5 وإدخال النسب أو التقديرات.</p><span>فتح</span></a>
-      <a class="card big featured" href="gpa-app.html" target="_blank" rel="noopener"><h3>حاسبة المعدل المطورة</h3><p>نسخة تطبيق محسّنة مع حفظ محلي وتجربة جوال أفضل.</p><span>فتح</span></a>
-      <a class="card big" href="gpa-v2.html" target="_blank" rel="noopener"><h3>حاسبة المعدل السريعة</h3><p>نسخة خفيفة وسريعة للحساب المباشر.</p><span>فتح</span></a>
+      <a class="card big" href="gpa.html"><h3>حاسبة المعدل</h3><p>نظام 4 أو 5، بإدخال الدرجات أو التقديرات، مع المعدل التراكمي.</p><span>افتح الحاسبة</span></a>
     </div>
   </section>
 
@@ -84,7 +93,7 @@
   <a href="#quran" class="btn small ghost">فتح القرآن</a>
 </div>
 
-<footer class="footer">Gradify Aura © 2026 — Full Rebuild</footer>
-<script src="script.js?v=FULL3" defer></script>
+<footer class="footer">Gradify Aura © 2026</footer>
+<script src="script.js?v=4" defer></script>
 </body>
 </html>

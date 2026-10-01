@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Online PDF Editor — Gradify</title>
+<meta name="description" content="تعديل نصوص ملفات PDF بالعربية والإنجليزية بنفس الخط والحجم، بدون فقدان الجودة، ودون رفع ملفاتك لأي خادم.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d7262e'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='white' font-family='Arial'%3E%D8%B9%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="vendor/hb.js"></script>
+<script src="vendor/hbjs.js"></script>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="../" title="Gradify — الرئيسية"><span class="logo">ع</span><span>Gradify PDF</span></a>
+  <div class="tools" id="tools" hidden>
+    <div class="seg" role="tablist">
+      <button class="seg-btn active" data-mode="edit" title="اضغط على أي سطر لتعديله">تعديل النص</button>
+      <button class="seg-btn" data-mode="add" title="اضغط في أي مكان لإضافة نص">إضافة نص</button>
+    </div>
+    <span class="sep"></span>
+    <button class="icon" id="undo" title="تراجع (Ctrl+Z)" disabled>↶</button>
+    <button class="icon" id="redo" title="إعادة (Ctrl+Y)" disabled>↷</button>
+    <span class="sep"></span>
+    <button class="icon" id="zoomOut" title="تصغير">−</button>
+    <span id="zoomLabel" class="zoom">100%</span>
+    <button class="icon" id="zoomIn" title="تكبير">+</button>
+    <span class="sep"></span>
+    <button class="chip" id="localBtn" title="يسمح باستخدام نفس الخطوط المثبتة على جهازك"></button>
+  </div>
+  <div class="actions">
+    <button class="btn ghost" id="openBtn">فتح ملف</button>
+    <button class="btn primary" id="saveBtn" hidden>حفظ PDF</button>
+  </div>
+  <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden>
+  <input type="file" id="fontInput" accept=".ttf,.otf,.ttc,font/ttf,font/otf" hidden>
+</header>
+
+<main id="main">
+  <section id="empty" class="empty">
+    <div class="drop" id="drop">
+      <div class="drop-icon">PDF</div>
+      <h1>عدّل ملفات PDF بالعربية بنفس الخط والجودة</h1>
+      <p>اسحب الملف هنا أو <button class="link" id="openBtn2">اختره من جهازك</button></p>
+      <ul class="points">
+        <li><b>نفس الخط والحجم:</b> اضغط على أي سطر وعدّله مباشرة.</li>
+        <li><b>بدون فقدان جودة:</b> النص يبقى نصًا حقيقيًا ولا يتحول لصورة.</li>
+        <li><b>ملفاتك لا تغادر جهازك:</b> كل المعالجة داخل المتصفح.</li>
+      </ul>
+    </div>
+  </section>
+  <section id="pages" class="pages" hidden></section>
+</main>
+
+<div id="editor" class="editor" hidden>
+  <div class="ed-bar">
+    <select id="edFont" title="الخط"></select>
+    <input id="edSize" type="number" min="4" max="200" step="0.5" title="الحجم">
+    <input id="edColor" type="color" title="اللون">
+    <div class="seg small">
+      <button class="seg-btn" data-align="right" title="محاذاة يمين">⇥</button>
+      <button class="seg-btn" data-align="center" title="توسيط">≡</button>
+      <button class="seg-btn" data-align="left" title="محاذاة يسار">⇤</button>
+    </div>
+    <button class="btn primary sm" id="edApply" title="Enter">تطبيق</button>
+    <button class="btn ghost sm" id="edCancel" title="Esc">إلغاء</button>
+    <button class="btn danger sm" id="edDelete" title="حذف السطر">حذف</button>
+  </div>
+  <div class="ed-status" id="edStatus"></div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+<div id="busy" class="busy" hidden><div class="spinner"></div></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
