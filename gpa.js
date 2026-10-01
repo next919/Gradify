@@ -1,4 +1,4 @@
-// Gradify GPA calculator — grading system of Prince Musaid bin Abdulrahman University (formerly Saudi Electronic University)
+// Gradify GPA calculator — Saudi unified grading table; the university only picks the default scale (4 or 5)
 (() => {
   const $ = (s) => document.querySelector(s);
   // code, Arabic symbol, Arabic name, points /5, points /4, min %, counts in GPA
@@ -31,10 +31,24 @@
   };
   const NEUTRAL = "linear-gradient(135deg,#5d6e6a,#3e4b48)";
 
-  let state = { scale: 4, mode: "letter", prevHours: "", prevGpa: "", rows: [] };
-  try { state = { ...state, ...JSON.parse(localStorage.getItem("gradify-gpa") || "{}") }; } catch (e) { /* private mode */ }
-  if (!Array.isArray(state.rows) || !state.rows.length) state.rows = [newRow(), newRow(), newRow(), newRow()];
-  const save = () => { try { localStorage.setItem("gradify-gpa", JSON.stringify(state)); } catch (e) { /* ignore */ } };
+  // [name, default scale]; the scale can always be changed by the student
+  const UNIS = [
+    ["جامعة أخرى / عام", 0],
+    ["جامعة الأمير مساعد بن عبدالرحمن (الإلكترونية سابقًا)", 4],
+    ["جامعة الملك سعود", 5], ["جامعة الملك عبدالعزيز", 5], ["جامعة الإمام محمد بن سعود الإسلامية", 5],
+    ["جامعة أم القرى", 5], ["جامعة الملك خالد", 5], ["جامعة القصيم", 5], ["جامعة الإمام عبدالرحمن بن فيصل", 5],
+    ["جامعة الأميرة نورة بنت عبدالرحمن", 5], ["جامعة طيبة", 5], ["جامعة الطائف", 5], ["جامعة جدة", 5],
+    ["جامعة جازان", 5], ["جامعة حائل", 5], ["جامعة تبوك", 5], ["جامعة الجوف", 5], ["جامعة نجران", 5],
+    ["جامعة الباحة", 5], ["جامعة الحدود الشمالية", 5], ["جامعة المجمعة", 5], ["جامعة شقراء", 5],
+    ["جامعة الأمير سطام بن عبدالعزيز", 5], ["جامعة بيشة", 5], ["جامعة حفر الباطن", 5], ["الجامعة الإسلامية", 5],
+    ["جامعة الملك فيصل", 5],
+    ["جامعة الملك فهد للبترول والمعادن", 4], ["جامعة الفيصل", 4], ["جامعة الأمير سلطان", 4],
+  ];
+  let state = { uni: 0, scale: 4, mode: "letter", prevHours: "", prevGpa: "", rows: [] };
+  try { state = { ...state, ...JSON.parse(localStorage.getItem("gradify-gpa-v2") || "{}") }; } catch (e) { /* private mode */ }
+  const freshRows = () => Array.from({ length: 6 }, newRow);
+  if (!Array.isArray(state.rows) || !state.rows.length) state.rows = freshRows();
+  const save = () => { try { localStorage.setItem("gradify-gpa-v2", JSON.stringify(state)); } catch (e) { /* ignore */ } };
 
   function newRow() { return { name: "", grade: "", pct: "", hours: 3 }; }
   const pctToCode = (p) => { const v = +p; if (p === "" || isNaN(v)) return null; return (GRADES.find((g) => g[5] != null && v >= g[5]) || byCode.F)[0]; };
@@ -85,6 +99,7 @@
   }
 
   function renderStatic() {
+    $("#uni").value = state.uni;
     document.querySelectorAll("#scaleSeg button").forEach((b) => b.classList.toggle("active", +b.dataset.v === state.scale));
     document.querySelectorAll("#modeSeg button").forEach((b) => b.classList.toggle("active", b.dataset.v === state.mode));
     $("#prevGpa").max = state.scale;
@@ -98,6 +113,8 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     $("#menuBtn").onclick = () => $("#nav").classList.toggle("open");
+    $("#uni").innerHTML = UNIS.map(([n, sc], i) => `<option value="${i}">${n}${sc ? ` — من ${sc}` : ""}</option>`).join("");
+    $("#uni").onchange = () => { state.uni = +$("#uni").value; const sc = UNIS[state.uni][1]; if (sc) state.scale = sc; all(); };
     $("#scaleSeg").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; state.scale = +b.dataset.v; all(); };
     $("#modeSeg").onclick = (e) => {
       const b = e.target.closest("button"); if (!b || b.dataset.v === state.mode) return;
@@ -123,7 +140,7 @@
       all();
     });
     $("#addRow").onclick = () => { state.rows.push(newRow()); all(); const last = document.querySelector("#rows .row:last-child select, #rows .row:last-child input[data-k=pct]"); if (last) last.focus(); };
-    $("#reset").onclick = () => { if (!confirm("مسح كل المواد والبيانات؟")) return; state.rows = [newRow(), newRow(), newRow(), newRow()]; state.prevHours = ""; state.prevGpa = ""; all(); };
+    $("#reset").onclick = () => { if (!confirm("مسح كل المواد والبيانات؟")) return; state.rows = freshRows(); state.prevHours = ""; state.prevGpa = ""; all(); };
     $("#prevHours").oninput = () => { state.prevHours = $("#prevHours").value; compute(); save(); };
     $("#prevGpa").oninput = () => { state.prevGpa = $("#prevGpa").value; compute(); save(); };
     all();

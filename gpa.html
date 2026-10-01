@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>حاسبة المعدل — جامعة الأمير مساعد بن عبدالرحمن | Gradify</title>
-<meta name="description" content="احسب معدلك الفصلي والتراكمي حسب نظام الدرجات في جامعة الأمير مساعد بن عبدالرحمن (الجامعة السعودية الإلكترونية سابقًا)، بنظام 4 أو 5، بالحرف أو بالدرجة.">
+<title>حاسبة المعدل الجامعي — لكل الجامعات السعودية | Gradify</title>
+<meta name="description" content="احسب معدلك الفصلي والتراكمي لأي جامعة سعودية، بنظام 4 أو 5، بالحرف أو بالدرجة، مع النتيجة الملوّنة حسب التقدير.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -81,10 +81,11 @@
 <main class="container">
   <section class="gHead">
     <div>
-      <h1>حاسبة المعدل</h1>
-      <p>حسب نظام الدرجات في <b>جامعة الأمير مساعد بن عبدالرحمن</b> (الجامعة السعودية الإلكترونية سابقًا).</p>
+      <h1>حاسبة المعدل الجامعي</h1>
+      <p>اختر جامعتك، وأدخل درجاتك، وتظهر النتيجة مباشرة.</p>
     </div>
     <div class="opts">
+      <div>الجامعة <select class="field small" id="uni" style="width:auto;max-width:260px"></select></div>
       <div>نظام المعدل <span class="seg" id="scaleSeg"><button type="button" data-v="4">من 4</button><button type="button" data-v="5">من 5</button></span></div>
       <div>إدخال الدرجة <span class="seg" id="modeSeg"><button type="button" data-v="letter">بالحرف</button><button type="button" data-v="number">بالدرجة</button></span></div>
     </div>
@@ -127,7 +128,7 @@
         <tbody id="gradeTable"></tbody>
       </table>
     </div>
-    <p class="muted" style="margin:12px 0">
+    <p class="muted" style="margin:12px 0">هذا جدول النظام السعودي الموحّد الذي تعتمده أغلب الجامعات. <b>تأكد من جدول جامعتك</b>، فقد تختلف بعض الجامعات في التفاصيل.<br>
       <b>المعدل الفصلي</b> = مجموع (نقاط كل مادة × ساعاتها) ÷ مجموع الساعات.
       <b>المعدل التراكمي</b> = (المعدل السابق × الساعات السابقة + نقاط هذا الفصل) ÷ (الساعات السابقة + ساعات الفصل).
       الرموز ند، هد، م، ل، ع، عف لا تدخل في حساب المعدل.
@@ -136,6 +137,6 @@
 </main>
 
 <footer class="footer"><div class="container"><span>© 2026 Gradify — جميع الحقوق محفوظة</span><span style="font-size:.82rem">للاسترشاد؛ المعدل الرسمي هو المعتمد في نظام الجامعة.</span><span style="font-size:.85rem"><a href="privacy/" style="color:inherit">سياسة الخصوصية</a></span></div></footer>
-<script src="gpa.js?v=2" defer></script>
+<script src="gpa.js?v=3" defer></script>
 </body>
 </html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مواقع الذكاء الاصطناعي — Gradify</title>
+<meta name="description" content="أفضل مواقع الذكاء الاصطناعي للطالب: محادثة وكتابة، بحث ومذاكرة، صور وتصميم، فيديو وصوت، برمجة، وتدقيق.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=7">
+<script src="../analytics.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="container navwrap">
+    <a class="brand" href="../" aria-label="Gradify — الرئيسية">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg>
+      <span class="brand-text"><span class="brand-name">Grad<b>ify</b></span><span class="brand-tag">لنستخدم الذكاء الاصطناعي بذكاء</span></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="../">الرئيسية</a>
+      <a href="../quran/">القرآن الكريم</a>
+      <a href="../ai/" class="active">الذكاء الاصطناعي</a>
+      <a href="../english/">الإنجليزية</a>
+    </nav>
+    <div class="searchBox">
+      <input id="globalSearch" type="search" placeholder="ابحث…" autocomplete="off" aria-label="بحث">
+      <div id="searchResults" class="searchResults"></div>
+    </div>
+    <button class="menuBtn" id="menuBtn" aria-label="القائمة">☰</button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="pageHero">
+    <h1><span class="sectionIcon" style="background:var(--violet-soft)">✨</span>مواقع الذكاء الاصطناعي</h1>
+    <p>أفضل الأدوات، مصنّفة حسب الاستخدام. استخدمها لتتعلّم أسرع، لا لتنسخ.</p>
+  </section>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer class="footer"><div class="container"><span>© 2026 Gradify — جميع الحقوق محفوظة</span><nav><a href="../">الرئيسية</a><a href="../privacy/">سياسة الخصوصية</a></nav></div></footer>
+<script src="../data.js?v=1" defer></script>
+<script src="../common.js?v=1" data-root="../" defer></script>
+<script defer>document.addEventListener("DOMContentLoaded",()=>{GradifyUI.initMenu();GradifyUI.initSearch("#globalSearch","#searchResults");GradifyUI.tabbed(GRADIFY.AI,"#tabs","#grid","الكل");});</script>
+</body>
+</html>
