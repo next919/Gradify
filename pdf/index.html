@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Only this site's own code may run; PDFs and fonts are data, never code. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
 <title>Online PDF Editor — Gradify</title>
 <meta name="description" content="تعديل نصوص ملفات PDF بالعربية والإنجليزية بنفس الخط والحجم، بدون فقدان الجودة، ودون رفع ملفاتك لأي خادم.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d7262e'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='white' font-family='Arial'%3E%D8%B9%3C/text%3E%3C/svg%3E">
