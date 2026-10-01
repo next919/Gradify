@@ -13,6 +13,7 @@ const lib = new FontLibrary();
 //  orig/libDoc: the source PDF (grows when files are merged or blank pages added)
 //  edits: text and image edits, each tied to a source page index (e.page)
 //  plan: final page order [{o: source index, rot}]; stamps: page numbers / watermark
+const BASE_TITLE = document.title; // the Gradify copy has its own title
 const S = {
   orig: null, name: 'document', libDoc: null, pdf: null, baseCount: 0,
   analyses: new Map(), edits: [], plan: [], stamps: null, undo: [], redo: [],
@@ -104,7 +105,7 @@ async function openFile(file) {
     S.scale = Math.min(1.6, Math.max(0.5, (Math.min(window.innerWidth - sideW, 1100) - 48) / vp.width));
     $('empty').hidden = true; $('workspace').hidden = false; $('tools').hidden = false; $('saveBtn').hidden = false;
     $('sidebar').classList.toggle('closed', window.innerWidth <= 720);
-    document.title = file.name + ' – محرر PDF العربي';
+    document.title = file.name + ' – ' + BASE_TITLE;
     layoutSidebar();
     buildPages();
     renderThumbs();
