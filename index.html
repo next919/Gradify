@@ -3,97 +3,159 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradify Aura — منصة الطالب</title>
-<meta name="description" content="أدوات مجانية للطالب: محرر PDF عربي، برنامج مواقيت الصلاة نداء، القرآن الكريم، مواقع الذكاء الاصطناعي، تعلم الإنجليزية وحاسبة المعدل.">
-<link rel="stylesheet" href="styles.css?v=4">
+<title>Gradify — لنستخدم الذكاء الاصطناعي بذكاء</title>
+<meta name="description" content="أدوات مجانية للطالب: محرر PDF بالعربي، القرآن الكريم آية بآية مع التكرار والتفسير، أفضل مواقع الذكاء الاصطناعي، تعلم الإنجليزية، برنامج نداء لمواقيت الصلاة وحاسبة المعدل.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 <header class="topbar">
   <div class="container navwrap">
-    <a class="brand" href="#home">Gradify <span>Aura</span></a>
-    <button class="menuBtn" id="menuBtn">☰</button>
+    <a class="brand" href="./" aria-label="Gradify — الرئيسية">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg>
+      <span class="brand-text"><span class="brand-name">Grad<b>ify</b></span><span class="brand-tag">لنستخدم الذكاء الاصطناعي بذكاء</span></span>
+    </a>
     <nav class="nav" id="nav">
-      <a href="pdf/">محرر PDF</a>
-      <a href="nidaa/">برنامج نداء</a>
-      <a href="#quran">القرآن</a>
-      <a href="#ai">الذكاء</a>
+      <a href="#tools">الأدوات</a>
+      <a href="quran/">القرآن الكريم</a>
+      <a href="#ai">الذكاء الاصطناعي</a>
       <a href="#english">الإنجليزية</a>
-      <a href="gpa.html">المعدل</a>
+      <a href="#useful">مواقع مفيدة</a>
+      <a href="#contact">تواصل</a>
     </nav>
     <div class="searchBox">
-      <input id="globalSearch" placeholder="ابحث: PDF، البقرة، الحصري، ChatGPT، حاسبة..." autocomplete="off">
+      <input id="globalSearch" type="search" placeholder="ابحث: سورة، قارئ، موقع، أداة…" autocomplete="off" aria-label="بحث">
       <div id="searchResults" class="searchResults"></div>
     </div>
+    <button class="menuBtn" id="menuBtn" aria-label="القائمة">☰</button>
   </div>
 </header>
 
-<main id="home">
-  <section class="hero container">
-    <div class="heroText">
-      <div class="pill">مجاني بالكامل</div>
-      <h1>كل أدواتك في واجهة واحدة أنيقة</h1>
-      <p>محرر PDF بالعربي، برنامج مواقيت الصلاة، القرآن الكريم للاستماع، مواقع الذكاء الاصطناعي، تعلم الإنجليزية وحاسبة المعدل.</p>
+<main>
+  <section class="container hero">
+    <div>
+      <span class="pill">✦ مجاني وبدون تسجيل</span>
+      <h1>أدوات تساعدك <em>تتعلّم وتنجز</em></h1>
+      <p>عدّل ملفات PDF بالعربي، واقرأ القرآن واستمع له آية بآية، واكتشف أفضل مواقع الذكاء الاصطناعي، واحسب معدلك.</p>
       <div class="heroActions">
         <a class="btn primary" href="pdf/">محرر PDF</a>
-        <a class="btn ghost" href="nidaa/">حمّل برنامج نداء</a>
-        <a class="btn ghost" href="#quran">استمع للقرآن</a>
+        <a class="btn" href="quran/">القرآن الكريم</a>
+        <a class="btn ghost" href="gpa.html">حاسبة المعدل</a>
       </div>
     </div>
-    <div class="heroCard"><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><strong>Gradify Aura</strong><span>أدواتك في مكان واحد</span></div>
-  </section>
-
-  <section id="tools" class="section container">
-    <div class="sectionHead"><div><span class="icon">🧰</span><h2>أدوات Gradify</h2><p>أدوات من صنعنا، مجانية وتعمل بدون تسجيل.</p></div></div>
-    <div class="grid">
-      <a class="card big featured" href="pdf/"><h3>محرر PDF العربي</h3><p>عدّل نصوص ملفات PDF بالعربي والإنجليزي بنفس الخط والحجم، بدون فقدان الجودة. ملفاتك لا تغادر جهازك.</p><span>افتح المحرر</span></a>
-      <a class="card big featured" href="nidaa/"><h3>برنامج نداء لمواقيت الصلاة</h3><p>برنامج لويندوز: الأذان، والتاريخ الهجري، والمواسم، والجدول الشهري، وأدوات سطح المكتب.</p><span>صفحة التحميل</span></a>
+    <div class="heroArt" aria-hidden="true">
+      <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+      <a class="floatCard fc1" href="quran/" tabindex="-1"><i>📖</i><span>القرآن الكريم<small>آية بآية مع التكرار</small></span></a>
+      <a class="floatCard fc2" href="pdf/" tabindex="-1"><i>📄</i><span>محرر PDF<small>بنفس الخط والجودة</small></span></a>
+      <a class="floatCard fc3" href="#ai" tabindex="-1"><i>✨</i><span>الذكاء الاصطناعي<small>مواقع مختارة بعناية</small></span></a>
     </div>
   </section>
 
-  <section id="quran" class="section container">
-    <div class="sectionHead"><div><span class="icon">🕋</span><h2>القرآن الكريم</h2><p>استمع لتلاوات كبار القرّاء بأكثر من رواية.</p></div></div>
-    <div class="panel">
-      <div class="toolbar">
-        <label><span>القارئ</span><select id="reader" class="field"></select></label>
-        <label><span>الرواية/المصحف</span><select id="mushaf" class="field"></select></label>
-        <label><span>السورة</span><select id="surah" class="field"></select></label>
-        <button id="playBtn" class="btn primary">تشغيل</button>
+  <section id="tools" class="container section">
+    <div class="sectionHead"><div><h2>أدوات Gradify</h2><p>من صنعنا، وتعمل مباشرة من المتصفح أو جهازك.</p></div></div>
+    <div class="tools">
+      <a class="card tool" href="pdf/">
+        <span class="tag" style="background:var(--rose-soft);color:var(--rose)">جديد</span>
+        <span class="ticon" style="background:var(--rose-soft)">📄</span>
+        <h3>محرر PDF العربي</h3>
+        <p>عدّل نصوص ملفات PDF بالعربي والإنجليزي بنفس الخط والحجم، بدون فقدان الجودة. ملفاتك لا تغادر جهازك.</p>
+        <span class="go">افتح المحرر ←</span>
+      </a>
+      <a class="card tool" href="nidaa/">
+        <span class="ticon" style="background:var(--primary-soft)">🕌</span>
+        <h3>نداء — مواقيت الصلاة</h3>
+        <p>برنامج لويندوز: الأذان في وقته، والتاريخ الهجري، والمواسم، والجدول الشهري، وأدوات سطح المكتب.</p>
+        <span class="go">صفحة التحميل ←</span>
+      </a>
+      <a class="card tool" href="gpa.html">
+        <span class="ticon" style="background:var(--gold-soft)">🎓</span>
+        <h3>حاسبة المعدل</h3>
+        <p>احسب معدلك الفصلي والتراكمي بنظام 4 أو 5، بإدخال الدرجات أو التقديرات.</p>
+        <span class="go">احسب معدلك ←</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="quran" class="container section">
+    <div class="quranBand">
+      <div>
+        <h2>القرآن الكريم</h2>
+        <p>اقرأ واستمع آية بآية بأصوات كبار القرّاء، مع تكرار الآية للحفظ والتفسير الميسّر.</p>
+        <div class="qFeatures"><span>16 قارئًا آية بآية</span><span>أكثر من 240 قارئًا للسورة كاملة</span><span>تكرار الآية والمقطع</span><span>التفسير الميسّر</span><span>وضع الحفظ</span></div>
+        <div class="heroActions">
+          <a class="btn" href="quran/">افتح المصحف</a>
+          <a class="btn ghost" href="quran/#listen">استمع لسورة كاملة</a>
+        </div>
       </div>
-      <audio id="player" controls preload="none"></audio>
-      <p class="hint">إذا لم يعمل مصدر معين، اختر رواية/مصحف آخر من القائمة.</p>
+      <div class="ayahCard" id="dailyAyah">
+        <div class="label"><span>آية اليوم</span><span id="dailyRef"></span></div>
+        <div class="text" id="dailyText">…</div>
+        <div class="ref" id="dailySurah"></div>
+        <div class="row">
+          <button class="btn small" id="dailyPlay" type="button" disabled>▶ استمع</button>
+          <a class="btn small" id="dailyOpen" href="quran/">اقرأ السورة</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="ai" class="section container">
-    <div class="sectionHead"><div><span class="icon">✨</span><h2>مواقع الذكاء الاصطناعي</h2><p>أدوات مختارة للكتابة والبحث والصور والفيديو والصوت.</p></div></div>
-    <div id="aiGrid" class="grid"></div>
-  </section>
-
-  <section id="english" class="section container">
-    <div class="sectionHead"><div><span class="icon">🇬🇧</span><h2>تعلم الإنجليزية</h2><p>مصادر مجانية للاستماع والقواعد والكلمات.</p></div></div>
-    <div id="englishGrid" class="grid"></div>
-  </section>
-
-  <section id="calculators" class="section container">
-    <div class="sectionHead"><div><span class="icon">🧮</span><h2>حاسبة المعدل</h2><p>احسب معدلك الفصلي والتراكمي.</p></div></div>
-    <div class="grid">
-      <a class="card big" href="gpa.html"><h3>حاسبة المعدل</h3><p>نظام 4 أو 5، بإدخال الدرجات أو التقديرات، مع المعدل التراكمي.</p><span>افتح الحاسبة</span></a>
+  <section id="ai" class="container section">
+    <div class="sectionHead">
+      <div><h2><span class="sectionIcon" style="background:var(--violet-soft)">✨</span>مواقع الذكاء الاصطناعي</h2><p>أفضل الأدوات، مصنّفة حسب الاستخدام.</p></div>
     </div>
+    <div class="tabs" id="aiTabs"></div>
+    <div class="grid" id="aiGrid"></div>
   </section>
 
-  <section id="useful" class="section container">
-    <div class="sectionHead"><div><span class="icon">🧭</span><h2>مواقع مفيدة</h2><p>أدوات سريعة للصور وPDF والإنتاجية.</p></div></div>
-    <div id="usefulGrid" class="grid"></div>
+  <section id="english" class="container section">
+    <div class="sectionHead">
+      <div><h2><span class="sectionIcon" style="background:var(--blue-soft)">🇬🇧</span>تعلّم الإنجليزية</h2><p>مصادر مجانية، مقسّمة حسب المهارة.</p></div>
+    </div>
+    <div class="tabs" id="enTabs"></div>
+    <div class="grid" id="enGrid"></div>
+  </section>
+
+  <section id="useful" class="container section">
+    <div class="sectionHead">
+      <div><h2><span class="sectionIcon" style="background:var(--amber-soft)">🧭</span>مواقع مفيدة</h2><p>أدوات سريعة للصور والملفات والإنتاجية.</p></div>
+    </div>
+    <div class="grid" id="usefulGrid"></div>
+  </section>
+
+  <section id="contact" class="container section">
+    <div class="sectionHead"><div><h2><span class="sectionIcon" style="background:var(--gold-soft)">✉️</span>تواصل معنا</h2><p>اقتراح، أو مشكلة، أو فكرة أداة جديدة؟</p></div></div>
+    <div class="contact">
+      <div class="contactInfo">
+        <h3>نسعد برسالتك</h3>
+        <p>اكتب لنا مباشرة من النموذج، أو راسلنا على البريد:</p>
+        <a class="btn" href="mailto:support@gradifysa.com" dir="ltr">support@gradifysa.com</a>
+      </div>
+      <form class="form" id="contactForm">
+        <input type="hidden" name="access_key" value="219a1c52-9eb6-449d-b48a-a1b06dc3f95e">
+        <input type="hidden" name="subject" value="رسالة جديدة من موقع Gradify">
+        <input type="checkbox" name="botcheck" hidden tabindex="-1" autocomplete="off">
+        <div class="two">
+          <input class="field" name="name" placeholder="الاسم" required maxlength="80">
+          <input class="field" name="email" type="email" placeholder="البريد الإلكتروني" required dir="auto" maxlength="120">
+        </div>
+        <textarea class="field" name="message" placeholder="رسالتك" required maxlength="3000"></textarea>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button class="btn primary" type="submit">إرسال</button>
+          <p class="formNote" id="formNote">تصلنا رسالتك مباشرة، بدون فتح برنامج البريد.</p>
+        </div>
+      </form>
+    </div>
   </section>
 </main>
 
-<div class="miniPlayer">
-  <button id="miniPlay" class="btn small">تشغيل/إيقاف</button>
-  <div id="nowPlaying">لم يتم التشغيل بعد</div>
-  <a href="#quran" class="btn small ghost">فتح القرآن</a>
-</div>
-
-<footer class="footer">Gradify Aura © 2026 — جميع الحقوق محفوظة</footer>
-<script src="script.js?v=4" defer></script>
+<footer class="footer">
+  <div class="container">
+    <span>© 2026 Gradify — جميع الحقوق محفوظة</span>
+    <nav><a href="pdf/">محرر PDF</a><a href="quran/">القرآن الكريم</a><a href="nidaa/">نداء</a><a href="gpa.html">حاسبة المعدل</a></nav>
+  </div>
+</footer>
+<script src="script.js?v=5" defer></script>
 </body>
 </html>

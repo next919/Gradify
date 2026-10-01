@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>حاسبة المعدل — Gradify Aura</title>
+  <title>حاسبة المعدل — Gradify</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <meta name="description" content="حاسبة المعدل الفصلي والتراكمي (SEU) مع دعم نظام 4 أو 5 وإضافة الساعات والمواد." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: { extend: {
         colors: {
-          brand: {50:'#fff9f0',100:'#ffefd8',200:'#fde3bf',300:'#f7d5a8',400:'#eec28a',500:'#d4a373',600:'#bb8e62',700:'#9a734d',800:'#7a5b3d',900:'#5f482f'},
+          brand: {50:'#effaf7',100:'#d7f2eb',200:'#b0e5d8',300:'#7fd2bf',400:'#43b9a1',500:'#17a08a',600:'#0e8a79',700:'#0b6f62',800:'#0b584f',900:'#0a4942'},
           ink: {50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717'}
         },
         boxShadow:{soft:'0 1px 2px rgba(17,17,17,.06), 0 12px 24px rgba(17,17,17,.08)'},
@@ -19,7 +22,7 @@
     }
   </script>
   <style>
-    html,body{background:#fff;color:#222}
+    html,body{background:#f6f9f8;color:#1d2b29;font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif}
     .card{border:1px solid rgba(0,0,0,.06)}
     input,select{outline:none}
     .mono{font-variant-numeric: tabular-nums;}
@@ -32,7 +35,7 @@
   <header class="border-b border-ink-200 bg-white/90 backdrop-blur sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="./" class="text-lg sm:text-2xl font-extrabold tracking-tight text-ink-900">
-        جرادي<span class="text-brand-600">ڤ</span>ي — <span class="text-ink-700">Gradify Aura</span>
+        <span style="display:inline-flex;align-items:center;gap:10px"><svg style="width:38px;height:38px" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg><span>Grad<span class="text-brand-600">ify</span></span></span>
       </a>
       <nav class="flex gap-3 text-sm text-ink-600">
         <a class="hover:text-ink-900" href="./">الرئيسية</a>
@@ -147,7 +150,7 @@
       </div>
     </section>
 
-    <footer class="py-8 text-center text-xs text-ink-500">© <span id="year"></span> Gradify Aura</footer>
+    <footer class="py-8 text-center text-xs text-ink-500">© <span id="year"></span> Gradify — جميع الحقوق محفوظة</footer>
   </main>
 
   <script src="./gpa.js"></script>

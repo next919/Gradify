@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>القرآن الكريم — اقرأ واستمع آية بآية | Gradify</title>
+<meta name="description" content="اقرأ القرآن الكريم واستمع له آية بآية بأصوات كبار القرّاء، مع تكرار الآية والمقطع للحفظ، والتفسير الميسّر، والاستماع للسورة كاملة، والبحث في الآيات.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=5">
+<link rel="stylesheet" href="quran.css?v=1">
+</head>
+<body>
+<header class="topbar">
+  <div class="container navwrap">
+    <a class="brand" href="../" aria-label="Gradify — الرئيسية">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg>
+      <span class="brand-text"><span class="brand-name">Grad<b>ify</b></span><span class="brand-tag">لنستخدم الذكاء الاصطناعي بذكاء</span></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="../">الرئيسية</a>
+      <a href="./" class="active">القرآن الكريم</a>
+      <a href="../pdf/">محرر PDF</a>
+      <a href="../nidaa/">نداء</a>
+    </nav>
+    <button class="menuBtn" id="menuBtn" aria-label="القائمة">☰</button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="qHero">
+    <div>
+      <h1>القرآن الكريم</h1>
+      <p>اقرأ واستمع آية بآية، وكرّر للحفظ.</p>
+    </div>
+    <div class="modeTabs" role="tablist">
+      <button type="button" data-mode="read" class="active">المصحف آية بآية</button>
+      <button type="button" data-mode="listen">السورة كاملة</button>
+      <button type="button" data-mode="search">بحث</button>
+    </div>
+  </section>
+
+  <!-- read mode -->
+  <section id="modeRead">
+    <div class="panel">
+      <div class="controls">
+        <label>السورة<select id="surah" class="field"></select></label>
+        <label>القارئ<select id="reciter" class="field"></select></label>
+        <label>من الآية<select id="from" class="field"></select></label>
+        <label>إلى الآية<select id="to" class="field"></select></label>
+        <label>تكرار كل آية<select id="repAyah" class="field">
+          <option value="1">مرة</option><option value="2">مرتين</option><option value="3">3 مرات</option><option value="5">5 مرات</option><option value="7">7 مرات</option><option value="10">10 مرات</option><option value="0">بلا توقف</option>
+        </select></label>
+        <label>تكرار المقطع<select id="repRange" class="field">
+          <option value="1">مرة</option><option value="2">مرتين</option><option value="3">3 مرات</option><option value="5">5 مرات</option><option value="0">بلا توقف</option>
+        </select></label>
+      </div>
+      <div class="toggles">
+        <label class="chip"><input type="checkbox" id="optTafsir">التفسير الميسّر</label>
+        <label class="chip"><input type="checkbox" id="optHifz">وضع الحفظ</label>
+        <label class="chip"><input type="checkbox" id="optBasmala" checked>البسملة قبل السورة</label>
+        <label class="chip"><input type="checkbox" id="optFollow" checked>متابعة الآية</label>
+        <span class="spacer"></span>
+        <label class="chip btnlike">السرعة
+          <select id="speed" style="border:0;background:transparent;font-weight:700;color:var(--ink)">
+            <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
+          </select>
+        </label>
+        <button class="chip btnlike" type="button" id="fontDown" title="تصغير الخط">ـأ</button>
+        <button class="chip btnlike" type="button" id="fontUp" title="تكبير الخط">أ+</button>
+      </div>
+    </div>
+
+    <article class="mushaf" id="mushaf">
+      <div class="surahHead"><h2 id="surahTitle">…</h2><small id="surahMeta"></small></div>
+      <p class="hifzHint" id="hifzHint" hidden>وضع الحفظ: الآيات مخفية، اضغط على آية لإظهارها.</p>
+      <div class="basmala" id="basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+      <div class="ayat" id="ayat"><div class="loading">جارٍ تحميل السورة…</div></div>
+    </article>
+  </section>
+
+  <!-- listen mode -->
+  <section id="modeListen" hidden>
+    <div class="listen">
+      <div class="panel">
+        <input id="reciterSearch" class="field" type="search" placeholder="ابحث عن قارئ…">
+        <select id="riwaya" class="field" style="margin-top:8px"><option value="">كل الروايات</option></select>
+        <div class="reciterList" id="reciterList"><div class="loading">جارٍ تحميل القرّاء…</div></div>
+      </div>
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+          <div><b id="lReciter">اختر قارئًا</b><br><small style="color:var(--muted)" id="lMoshaf"></small></div>
+          <label class="chip"><input type="checkbox" id="lAuto" checked>تشغيل السورة التالية تلقائيًا</label>
+        </div>
+        <select id="lMoshafSel" class="field" style="margin-top:10px" hidden></select>
+        <audio id="lAudio" controls preload="none"></audio>
+        <div class="surahGrid" id="lSurahs"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- search mode -->
+  <section id="modeSearch" hidden>
+    <div class="panel">
+      <form id="searchForm" style="display:flex;gap:8px">
+        <input id="q" class="field" type="search" placeholder="اكتب كلمة من آية، مثل: الصابرين" required>
+        <button class="btn primary" type="submit">بحث</button>
+      </form>
+      <p style="margin:8px 0 0;color:var(--muted);font-size:.88rem">اكتب الكلمة بدون تشكيل.</p>
+    </div>
+    <div class="results" id="results"></div>
+  </section>
+</main>
+
+<div class="player" id="player">
+  <div class="container">
+    <div class="pbtns">
+      <button class="round" id="pPrev" type="button" title="الآية السابقة">⏵⏵</button>
+      <button class="round main" id="pPlay" type="button" title="تشغيل">▶</button>
+      <button class="round" id="pNext" type="button" title="الآية التالية">⏴⏴</button>
+    </div>
+    <div class="pinfo">
+      <b id="pTitle">اختر سورة واضغط تشغيل</b>
+      <small id="pSub">أو اضغط على أي آية للبدء منها</small>
+      <div class="prog"><i id="pProg"></i></div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"><div class="container"><span>© 2026 Gradify — جميع الحقوق محفوظة</span><span style="font-size:.82rem">النص والتلاوات: AlQuran Cloud و MP3Quran</span></div></footer>
+<script src="quran.js?v=1" defer></script>
+</body>
+</html>

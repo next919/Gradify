@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>برنامج نداء لمواقيت الصلاة — Gradify</title>
 <meta name="description" content="نداء: برنامج مجاني لمواقيت الصلاة على ويندوز، مع الأذان والتاريخ الهجري والمواسم والجدول الشهري وأدوات سطح المكتب.">
-<link rel="stylesheet" href="../styles.css?v=4">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=5">
 <style>
   .dl { padding: 56px 0 24px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 28px; align-items: center; }
   .dl h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.25; margin: .6rem 0; }
@@ -13,10 +16,10 @@
   .meta { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 22px; }
   .meta span { border: 1px solid var(--ring); border-radius: 99px; padding: .25rem .75rem; color: var(--muted); font-size: .92rem; }
   .bigBtn { font-size: 1.1rem; padding: .95rem 1.6rem; }
-  .safety { margin-top: 16px; padding: 12px 14px; border: 1px solid rgba(250, 204, 21, .35); background: rgba(250, 204, 21, .08); border-radius: 14px; color: var(--muted); font-size: .95rem; max-width: 560px; }
-  .safety b { color: #fde68a; }
+  .safety { margin-top: 16px; padding: 12px 14px; border: 1px solid #f1d9a6; background: var(--gold-soft); border-radius: 14px; color: #6b5528; font-size: .95rem; max-width: 560px; }
+  .safety b { color: #8a5a00; }
   .hashRow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .hashRow code, .cmd { display: block; background: #0b1428; border: 1px solid var(--ring); border-radius: 10px; padding: 8px 10px; font-size: .82rem; color: #a5f3fc; word-break: break-all; font-family: Consolas, monospace; text-align: left; }
+  .hashRow code, .cmd { display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: .82rem; color: var(--primary); word-break: break-all; font-family: Consolas, monospace; text-align: left; }
   .hashRow code { flex: 1; min-width: 0; }
   .bigBtn[aria-disabled="true"] { opacity: .55; pointer-events: none; }
   .appCard { background: var(--card); border: 1px solid var(--ring); border-radius: 26px; padding: 30px; text-align: center; box-shadow: var(--shadow); }
@@ -37,9 +40,10 @@
 <body>
 <header class="topbar">
   <div class="container navwrap">
-    <a class="brand" href="../">Gradify <span>Aura</span></a>
+    <a class="brand" href="../" aria-label="Gradify — الرئيسية"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg><span class="brand-text"><span class="brand-name">Grad<b>ify</b></span><span class="brand-tag">لنستخدم الذكاء الاصطناعي بذكاء</span></span></a>
     <nav class="nav" style="margin-inline-start:auto">
       <a href="../">الرئيسية</a>
+      <a href="../quran/">القرآن الكريم</a>
       <a href="../pdf/">محرر PDF</a>
     </nav>
   </div>
@@ -101,7 +105,7 @@
   </section>
 </main>
 
-<footer class="footer">© 2026 نداء — جميع الحقوق محفوظة. يُسمح بتحميل البرنامج واستخدامه مجانًا، ويُمنع تعديله أو بيعه أو إعادة نشره دون إذن.</footer>
+<footer class="footer"><div class="container">© 2026 نداء — جميع الحقوق محفوظة. يُسمح بتحميل البرنامج واستخدامه مجانًا، ويُمنع تعديله أو بيعه أو إعادة نشره دون إذن.</div></footer>
 
 <script>
   // ===== ضع رابط التحميل ورقم الإصدار هنا =====
