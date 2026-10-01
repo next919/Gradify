@@ -1,5 +1,5 @@
 /* Quran page */
-body { padding-bottom: 110px; }
+
 .qHero { padding: 34px 0 10px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }
 .qHero h1 { margin: 0; font-size: clamp(1.7rem, 4vw, 2.4rem); }
 .qHero p { margin: 4px 0 0; color: var(--muted); }
@@ -53,10 +53,10 @@ body { padding-bottom: 110px; }
 
 /* player bar */
 .player {
-  position: fixed; inset-inline: 0; bottom: 0; z-index: 40; background: rgba(255, 255, 255, .96); backdrop-filter: blur(10px);
-  border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgba(20, 50, 45, .08);
+  position: sticky; top: 72px; z-index: 40; margin: 0 0 14px; background: rgba(255, 255, 255, .97); backdrop-filter: blur(10px);
+  border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 8px 24px rgba(20, 50, 45, .08);
 }
-.player .container { display: flex; align-items: center; gap: 14px; min-height: 76px; }
+.player .container { width: 100%; padding: 0 14px; display: flex; align-items: center; gap: 14px; min-height: 72px; }
 .pbtns { display: flex; align-items: center; gap: 6px; }
 .round { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; display: grid; place-items: center; font-size: 1rem; }
 .round.main { width: 54px; height: 54px; background: linear-gradient(135deg, var(--primary-2), var(--primary)); color: #fff; border: 0; font-size: 1.25rem; box-shadow: 0 6px 16px rgba(14, 138, 121, .3); position: relative; transition: background .3s ease, box-shadow .3s ease; }
@@ -70,6 +70,15 @@ body { padding-bottom: 110px; }
 .pinfo small { color: var(--muted); }
 .prog { height: 5px; background: var(--line); border-radius: 99px; margin-top: 6px; overflow: hidden; }
 .prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--primary-2), var(--gold)); transition: width .3s ease; }
+
+/* tajweed colours (AlQuran Cloud quran-tajweed markup) */
+.tj-h, .tj-s, .tj-l { color: #a3a3a3; }
+.tj-n { color: #537fff; } .tj-p { color: #4050ff; } .tj-m { color: #000ebc; } .tj-o { color: #2144c1; }
+.tj-q { color: #dd0008; } .tj-c { color: #d500b7; } .tj-f { color: #9400a8; } .tj-w { color: #58b800; }
+.tj-i { color: #26bffd; } .tj-a { color: #169777; } .tj-u { color: #169200; } .tj-d, .tj-b { color: #a1a1a1; } .tj-g { color: #ff7e1e; }
+.tjLegend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 0 0 10px; font-size: .85rem; color: var(--muted); }
+.tjLegend span { display: inline-flex; align-items: center; gap: 5px; }
+.tjLegend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
 /* volume */
 .vol { display: flex; align-items: center; gap: 6px; flex: none; }
@@ -106,7 +115,7 @@ mark { background: #fbe9b7; border-radius: 4px; padding: 0 2px; }
   .reciterList { max-height: 280px; }
 }
 @media (max-width: 560px) {
-  .player .container { gap: 8px; }
+  .player .container { gap: 8px; padding: 0 8px; }
   .round { width: 38px; height: 38px; }
   .round.main { width: 48px; height: 48px; }
   .mushaf { padding: 18px 14px 24px; }

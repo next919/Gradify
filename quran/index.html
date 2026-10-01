@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles.css?v=5">
-<link rel="stylesheet" href="quran.css?v=4">
+<link rel="stylesheet" href="quran.css?v=5">
 </head>
 <body>
 <header class="topbar">
@@ -41,6 +41,25 @@
     </div>
   </section>
 
+<div class="player" id="player">
+  <div class="container">
+    <div class="pbtns">
+      <button class="round" id="pPrev" type="button" title="الآية السابقة">⏵⏵</button>
+      <button class="round main" id="pPlay" type="button" title="تشغيل">▶</button>
+      <button class="round" id="pNext" type="button" title="الآية التالية">⏴⏴</button>
+    </div>
+    <div class="pinfo">
+      <b id="pTitle">اختر سورة واضغط تشغيل</b>
+      <small id="pSub">أو اضغط على أي آية للبدء منها</small>
+      <div class="prog"><i id="pProg"></i></div>
+    </div>
+    <label class="vol" title="مستوى الصوت">
+      <button type="button" id="pMute" class="volIcon" aria-label="كتم الصوت">🔊</button>
+      <input type="range" id="pVol" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت">
+    </label>
+  </div>
+</div>
+
   <!-- read mode -->
   <section id="modeRead">
     <div class="panel">
@@ -58,6 +77,7 @@
       </div>
       <div class="toggles">
         <label class="chip"><input type="checkbox" id="optTafsir">التفسير الميسّر</label>
+        <label class="chip"><input type="checkbox" id="optTajweed">ألوان التجويد</label>
         <label class="chip"><input type="checkbox" id="optHifz">وضع الحفظ</label>
         <label class="chip"><input type="checkbox" id="optBasmala" checked>البسملة قبل السورة</label>
         <label class="chip"><input type="checkbox" id="optFollow" checked>متابعة الآية</label>
@@ -74,6 +94,12 @@
 
     <article class="mushaf" id="mushaf">
       <div class="surahHead"><h2 id="surahTitle">…</h2><small id="surahMeta"></small></div>
+      <div class="tjLegend" id="tjLegend" hidden>
+        <span><i style="background:#2f5fe0"></i>مدّ</span><span><i style="background:#dd0008"></i>قلقلة</span>
+        <span><i style="background:#9400a8"></i>إخفاء</span><span><i style="background:#169777"></i>إدغام</span>
+        <span><i style="background:#26bffd"></i>إقلاب</span><span><i style="background:#ff7e1e"></i>غُنّة</span>
+        <span><i style="background:#aaaaaa"></i>لا يُنطق</span>
+      </div>
       <p class="hifzHint" id="hifzHint" hidden>وضع الحفظ: الآيات مخفية، اضغط على آية لإظهارها.</p>
       <div class="basmala" id="basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
       <div class="ayat" id="ayat"><div class="loading">جارٍ تحميل السورة…</div></div>
@@ -113,26 +139,9 @@
   </section>
 </main>
 
-<div class="player" id="player">
-  <div class="container">
-    <div class="pbtns">
-      <button class="round" id="pPrev" type="button" title="الآية السابقة">⏵⏵</button>
-      <button class="round main" id="pPlay" type="button" title="تشغيل">▶</button>
-      <button class="round" id="pNext" type="button" title="الآية التالية">⏴⏴</button>
-    </div>
-    <div class="pinfo">
-      <b id="pTitle">اختر سورة واضغط تشغيل</b>
-      <small id="pSub">أو اضغط على أي آية للبدء منها</small>
-      <div class="prog"><i id="pProg"></i></div>
-    </div>
-    <label class="vol" title="مستوى الصوت">
-      <button type="button" id="pMute" class="volIcon" aria-label="كتم الصوت">🔊</button>
-      <input type="range" id="pVol" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت">
-    </label>
-  </div>
-</div>
+
 
 <footer class="footer"><div class="container"><span>© 2026 Gradify — جميع الحقوق محفوظة</span><span style="font-size:.82rem">النص والتلاوات: AlQuran Cloud و MP3Quran</span></div></footer>
-<script src="quran.js?v=4" defer></script>
+<script src="quran.js?v=5" defer></script>
 </body>
 </html>

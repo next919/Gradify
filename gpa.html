@@ -1,158 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>حاسبة المعدل — Gradify</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <meta name="description" content="حاسبة المعدل الفصلي والتراكمي (SEU) مع دعم نظام 4 أو 5 وإضافة الساعات والمواد." />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: {
-        colors: {
-          brand: {50:'#effaf7',100:'#d7f2eb',200:'#b0e5d8',300:'#7fd2bf',400:'#43b9a1',500:'#17a08a',600:'#0e8a79',700:'#0b6f62',800:'#0b584f',900:'#0a4942'},
-          ink: {50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717'}
-        },
-        boxShadow:{soft:'0 1px 2px rgba(17,17,17,.06), 0 12px 24px rgba(17,17,17,.08)'},
-        borderRadius:{xl2:'1.25rem'}
-      } }
-    }
-  </script>
-  <style>
-    html,body{background:#f6f9f8;color:#1d2b29;font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif}
-    .card{border:1px solid rgba(0,0,0,.06)}
-    input,select{outline:none}
-    .mono{font-variant-numeric: tabular-nums;}
-    summary::-webkit-details-marker{display:none}
-    details[open] summary .chev{transform:rotate(180deg)}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حاسبة المعدل — جامعة الأمير مساعد بن عبدالرحمن | Gradify</title>
+<meta name="description" content="احسب معدلك الفصلي والتراكمي حسب نظام الدرجات في جامعة الأمير مساعد بن عبدالرحمن (الجامعة السعودية الإلكترونية سابقًا)، بنظام 4 أو 5، بالحرف أو بالدرجة.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=6">
+<style>
+  .gHead { padding: 30px 0 14px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }
+  .gHead h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.2rem); }
+  .gHead p { margin: 4px 0 0; color: var(--muted); }
+  .seg { display: inline-flex; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 3px; gap: 2px; }
+  .seg button { border: 0; background: transparent; padding: .42rem .9rem; border-radius: 9px; font-weight: 700; color: var(--muted); cursor: pointer; }
+  .seg button.active { background: var(--primary); color: #fff; }
+  .opts { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .opts > div { display: flex; align-items: center; gap: 8px; font-size: .9rem; color: var(--muted); font-weight: 600; }
+
+  /* sticky result */
+  .result {
+    position: sticky; top: 72px; z-index: 30; margin: 6px 0 16px; border-radius: 20px; padding: 14px 18px; color: #fff;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: center;
+    background: var(--band, linear-gradient(135deg, #13a58f, #0e8a79)); box-shadow: 0 10px 26px rgba(20, 50, 45, .18);
+    transition: background .35s ease;
+  }
+  .result .k { font-size: .82rem; opacity: .9; }
+  .result .v { font-size: 1.6rem; font-weight: 800; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .result .big .v { font-size: 2.2rem; }
+  .result .rate { justify-self: start; background: rgba(255, 255, 255, .2); border-radius: 99px; padding: .3rem .9rem; font-weight: 700; font-size: .95rem; }
+
+  .layout { display: grid; grid-template-columns: 1fr 300px; gap: 16px; align-items: start; }
+  .box { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
+  .box h2 { margin: 0 0 10px; font-size: 1.1rem; }
+  .row {
+    display: grid; grid-template-columns: 34px 1.4fr 1fr 110px 36px; gap: 8px; align-items: center;
+    padding: 8px; border-radius: 14px; border: 1px solid var(--line); margin-bottom: 8px; background: var(--bg);
+  }
+  .row .no { width: 30px; height: 30px; border-radius: 9px; background: #fff; display: grid; place-items: center; font-weight: 700; color: var(--muted); font-size: .85rem; border: 1px solid var(--line); }
+  .row .pts { font-size: .78rem; color: var(--muted); text-align: center; margin-top: 2px; }
+  .del { width: 34px; height: 34px; border: 0; background: transparent; color: var(--rose); border-radius: 10px; cursor: pointer; font-size: 1.1rem; }
+  .del:hover { background: var(--rose-soft); }
+  .rowsHead { display: grid; grid-template-columns: 34px 1.4fr 1fr 110px 36px; gap: 8px; padding: 0 8px 6px; font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .field.small { padding: .5rem .6rem; }
+  .muted { color: var(--muted); font-size: .85rem; margin: 6px 0 0; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: center; }
+  th { color: var(--muted); font-weight: 600; font-size: .82rem; }
+  details { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 4px 16px; margin-top: 16px; }
+  summary { cursor: pointer; font-weight: 700; padding: 10px 0; }
+  .bands { display: grid; gap: 6px; margin-top: 8px; }
+  .bands span { display: flex; justify-content: space-between; padding: .35rem .7rem; border-radius: 10px; font-size: .88rem; font-weight: 600; color: #fff; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .result { grid-template-columns: repeat(3, 1fr); top: 72px; padding: 10px 14px; gap: 4px 10px; border-radius: 16px; }
+    .result .rate { grid-column: 1 / -1; justify-self: stretch; text-align: center; padding: .15rem .6rem; font-size: .85rem; }
+  }
+  @media (max-width: 560px) {
+    .row, .rowsHead { grid-template-columns: 30px 1fr 92px 34px; }
+    .row .name, .rowsHead .name { display: none; }
+    .result .k { font-size: .72rem; } .result .v { font-size: 1.15rem; } .result .big .v { font-size: 1.45rem; }
+  }
+</style>
 </head>
+<body>
+<header class="topbar">
+  <div class="container navwrap">
+    <a class="brand" href="./" aria-label="Gradify — الرئيسية">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg>
+      <span class="brand-text"><span class="brand-name">Grad<b>ify</b></span><span class="brand-tag">لنستخدم الذكاء الاصطناعي بذكاء</span></span>
+    </a>
+    <nav class="nav" id="nav"><a href="./">الرئيسية</a><a href="quran/">القرآن الكريم</a><a href="pdf/">محرر PDF</a></nav>
+    <button class="menuBtn" id="menuBtn" aria-label="القائمة">☰</button>
+  </div>
+</header>
 
-<body class="min-h-screen bg-ink-50/60">
-  <header class="border-b border-ink-200 bg-white/90 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="./" class="text-lg sm:text-2xl font-extrabold tracking-tight text-ink-900">
-        <span style="display:inline-flex;align-items:center;gap:10px"><svg style="width:38px;height:38px" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17b39b"/><stop offset="1" stop-color="#0b7869"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#gm)"/><rect x="11" y="27" width="6" height="10" rx="3" fill="#fff" opacity=".7"/><rect x="21" y="21" width="6" height="16" rx="3" fill="#fff" opacity=".88"/><rect x="31" y="15" width="6" height="22" rx="3" fill="#fff"/><path d="M38 5l1.5 3.8L43.3 10.3 39.5 11.8 38 15.6l-1.5-3.8-3.8-1.5 3.8-1.5z" fill="#f7c55c"/></svg><span>Grad<span class="text-brand-600">ify</span></span></span>
-      </a>
-      <nav class="flex gap-3 text-sm text-ink-600">
-        <a class="hover:text-ink-900" href="./">الرئيسية</a>
-        <a class="hover:text-ink-900" href="#calc">الحاسبة</a>
-      </nav>
+<main class="container">
+  <section class="gHead">
+    <div>
+      <h1>حاسبة المعدل</h1>
+      <p>حسب نظام الدرجات في <b>جامعة الأمير مساعد بن عبدالرحمن</b> (الجامعة السعودية الإلكترونية سابقًا).</p>
     </div>
-  </header>
+    <div class="opts">
+      <div>نظام المعدل <span class="seg" id="scaleSeg"><button type="button" data-v="4">من 4</button><button type="button" data-v="5">من 5</button></span></div>
+      <div>إدخال الدرجة <span class="seg" id="modeSeg"><button type="button" data-v="letter">بالحرف</button><button type="button" data-v="number">بالدرجة</button></span></div>
+    </div>
+  </section>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-5">
-    <section class="space-y-2 text-center sm:text-right">
-      <h1 class="text-2xl sm:text-3xl font-extrabold text-ink-900">حاسبة المعدل (SEU)</h1>
-      <p class="text-ink-600 leading-7">
-        مناسبة للجوال ✅ — نظام 4 أو 5 + معدل فصلي وتراكمي.
-      </p>
-    </section>
+  <section class="result" id="result" aria-live="polite">
+    <div class="big"><div class="k">المعدل التراكمي</div><div class="v" id="rCum">—</div></div>
+    <div><div class="k">المعدل الفصلي</div><div class="v" id="rSem">—</div></div>
+    <div><div class="k">ساعات الفصل</div><div class="v" id="rHours">0</div></div>
+    <div class="rate" id="rRate">أضف موادك</div>
+  </section>
 
-    <section id="calc" class="card rounded-2xl p-4 sm:p-5 bg-white">
-      <div class="grid lg:grid-cols-3 gap-4 items-start">
-
-        <!-- إعدادات -->
-        <div class="space-y-4">
-          <div class="rounded-xl border border-ink-200 p-3">
-            <div class="font-semibold text-ink-900 mb-2">نظام الـ GPA</div>
-            <div class="flex gap-4 text-sm">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="scale" value="5" checked />
-                <span>من 5</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="scale" value="4" />
-                <span>من 4</span>
-              </label>
-            </div>
-            <div class="mt-2 text-xs text-ink-500">يتغير جدول النقاط تلقائياً حسب النظام.</div>
-          </div>
-
-          <div class="rounded-xl border border-ink-200 p-3 space-y-2">
-            <div class="font-semibold text-ink-900">بيانات سابقة (اختياري)</div>
-            <label class="text-sm text-ink-700">عدد الساعات السابقة</label>
-            <input id="prevHours" type="number" min="0" step="1" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono" value="0" />
-            <label class="text-sm text-ink-700">المعدل التراكمي السابق</label>
-            <input id="prevGpa" type="number" min="0" step="0.01" class="w-full rounded-lg border border-ink-200 px-3 py-2 mono" value="0" />
-            <div class="text-xs text-ink-500">إذا ما عندك بيانات سابقة، اتركها 0.</div>
-          </div>
-
-          <div class="rounded-xl border border-ink-200 p-3 space-y-2">
-            <div class="font-semibold text-ink-900">طريقة إدخال الدرجة</div>
-            <select id="gradeMode" class="w-full rounded-lg border border-ink-200 px-3 py-2">
-              <option value="percent" selected>نسبة مئوية (0 - 100)</option>
-              <option value="letter">تقدير (A+ ... F)</option>
-            </select>
-            <div id="modeHint" class="text-xs text-ink-500"></div>
-          </div>
-
-          <details class="rounded-xl border border-ink-200 p-3 bg-ink-50/40">
-            <summary class="flex items-center justify-between cursor-pointer select-none">
-              <span class="font-semibold text-ink-900">جدول التحويل</span>
-              <svg class="chev w-5 h-5 text-ink-500 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </summary>
-            <div class="mt-3 text-xs text-ink-600 leading-6">
-              95–100: A+ • 90–&lt;95: A • 85–&lt;90: B+ • 80–&lt;85: B • 75–&lt;80: C+ • 70–&lt;75: C • 65–&lt;70: D+ • 60–&lt;65: D • &lt;60: F
-            </div>
-          </details>
-        </div>
-
-        <!-- النتائج + المواد -->
-        <div class="lg:col-span-2 space-y-4">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-ink-200 p-4 sm:p-5 bg-ink-50">
-              <div class="font-semibold text-ink-900 mb-2">نتائج الفصل</div>
-              <div class="space-y-1 text-sm">
-                <div class="flex justify-between"><span>عدد الساعات</span><span id="semHours" class="mono">0</span></div>
-                <div class="flex justify-between"><span>النقاط</span><span id="semPoints" class="mono">0</span></div>
-                <div class="flex justify-between"><span>المعدل</span><span id="semGpa" class="mono">0.00</span></div>
-              </div>
-            </div>
-
-            <div class="rounded-2xl border border-ink-200 p-4 sm:p-5 bg-ink-50">
-              <div class="font-semibold text-ink-900 mb-2">النتيجة التراكمية</div>
-              <div class="space-y-1 text-sm">
-                <div class="flex justify-between"><span>الساعات الكلية</span><span id="cumHours" class="mono">0</span></div>
-                <div class="flex justify-between"><span>المعدل التراكمي</span><span id="cumGpa" class="mono">0.00</span></div>
-              </div>
-              <div id="cumNote" class="mt-2 text-xs text-ink-500"></div>
-            </div>
-          </div>
-
-          <div class="rounded-2xl border border-ink-200 overflow-hidden bg-white">
-            <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div>
-                <div class="font-semibold text-ink-900">المواد</div>
-              </div>
-              <div class="flex gap-2">
-                <button id="addRow" class="px-3 py-2 rounded-xl bg-brand-500 text-white hover:bg-brand-600">+ أضف مادة</button>
-                <button id="resetAll" class="px-3 py-2 rounded-xl border border-ink-200 hover:shadow-soft">إعادة ضبط</button>
-              </div>
-            </div>
-
-            <div id="rows" class="p-4 space-y-3"></div>
-
-            <div class="p-4 pt-0 text-xs text-ink-500">
-              * النقاط = (نقاط التقدير × عدد الساعات).
-            </div>
-          </div>
-
-          <div class="text-xs text-ink-500 text-center sm:text-right">
-            مشاركة الرابط: انسخ رابط <span class="font-semibold">gpa.html</span>.
-          </div>
-        </div>
+  <div class="layout">
+    <section class="box">
+      <h2>مواد الفصل</h2>
+      <div class="rowsHead"><span></span><span class="name">اسم المادة (اختياري)</span><span>الدرجة</span><span>الساعات</span><span></span></div>
+      <div id="rows"></div>
+      <div class="actions">
+        <button class="btn primary small" type="button" id="addRow">+ أضف مادة</button>
+        <button class="btn small" type="button" id="reset">مسح الكل</button>
       </div>
     </section>
 
-    <footer class="py-8 text-center text-xs text-ink-500">© <span id="year"></span> Gradify — جميع الحقوق محفوظة</footer>
-  </main>
+    <aside class="box">
+      <h2>المعدل السابق (اختياري)</h2>
+      <label class="muted" for="prevHours">الساعات المجتازة سابقًا</label>
+      <input class="field" id="prevHours" type="number" min="0" max="400" step="1" inputmode="numeric" placeholder="0">
+      <label class="muted" for="prevGpa">المعدل التراكمي السابق</label>
+      <input class="field" id="prevGpa" type="number" min="0" max="5" step="0.01" inputmode="decimal" placeholder="0.00">
+      <p class="muted">اتركها فارغة إذا هذا فصلك الأول.</p>
+      <div class="bands" id="bands"></div>
+    </aside>
+  </div>
 
-  <script src="./gpa.js"></script>
+  <details>
+    <summary>جدول الدرجات وطريقة الحساب</summary>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>الدرجة المئوية</th><th>التقدير</th><th>الرمز</th><th>من 5</th><th>من 4</th></tr></thead>
+        <tbody id="gradeTable"></tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin:12px 0">
+      <b>المعدل الفصلي</b> = مجموع (نقاط كل مادة × ساعاتها) ÷ مجموع الساعات.
+      <b>المعدل التراكمي</b> = (المعدل السابق × الساعات السابقة + نقاط هذا الفصل) ÷ (الساعات السابقة + ساعات الفصل).
+      الرموز ند، هد، م، ل، ع، عف لا تدخل في حساب المعدل.
+    </p>
+  </details>
+</main>
+
+<footer class="footer"><div class="container"><span>© 2026 Gradify — جميع الحقوق محفوظة</span><span style="font-size:.82rem">للاسترشاد؛ المعدل الرسمي هو المعتمد في نظام الجامعة.</span></div></footer>
+<script src="gpa.js?v=2" defer></script>
 </body>
 </html>

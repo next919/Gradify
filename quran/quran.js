@@ -19,7 +19,7 @@ const arNum = (n) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
 const pad3 = (n) => String(n).padStart(3, "0");
 
 // ---------- settings ----------
-const DEFAULTS = { volume: 1, reciter: "ar.alafasy", repAyah: "1", repRange: "1", speed: "1", size: 1.9, tafsir: false, hifz: false, basmala: true, follow: true, surah: 1 };
+const DEFAULTS = { tajweed: false, volume: 1, reciter: "ar.alafasy", repAyah: "1", repRange: "1", speed: "1", size: 1.9, tafsir: false, hifz: false, basmala: true, follow: true, surah: 1 };
 let prefs = { ...DEFAULTS };
 try { prefs = { ...DEFAULTS, ...JSON.parse(localStorage.getItem("gradify-quran") || "{}") }; } catch (e) { /* private mode */ }
 const savePrefs = () => { try { localStorage.setItem("gradify-quran", JSON.stringify(prefs)); } catch (e) { /* ignore */ } };
@@ -41,6 +41,7 @@ function fillSelects() {
   $("#speed").value = prefs.speed;
   $("#optTafsir").checked = prefs.tafsir;
   $("#optHifz").checked = prefs.hifz;
+  $("#optTajweed").checked = prefs.tajweed;
   $("#optBasmala").checked = prefs.basmala;
   $("#optFollow").checked = prefs.follow;
   document.documentElement.style.setProperty("--qsize", prefs.size + "rem");
@@ -77,7 +78,7 @@ async function loadSurah(n, focusAyah = 0) {
       if (i === 0 && n !== 1 && n !== 9) t = t.replace(BASMALA_RE, "");
       return { n: a.numberInSurah, text: t, audio: aud.ayahs[i].audio, tafsir: taf.ayahs[i].text };
     });
-    renderAyat();
+    await renderAyat();
     if (focusAyah) { highlight(focusAyah - 1, true); }
     updateInfo();
   } catch (e) {
@@ -98,14 +99,40 @@ async function changeReciter() {
   updateInfo();
 }
 
-function renderAyat() {
+// Tajweed: AlQuran Cloud marks letters as [x[..] or [x:id[..]; x = rule code.
+const tajweedCache = new Map();
+async function ensureTajweed() {
+  const n = S.surah;
+  if (!tajweedCache.has(n)) {
+    tajweedCache.set(n, fetch(`${API}/surah/${n}/quran-tajweed`).then((r) => r.json()).then((j) => j.data.ayahs.map((a, i) => {
+      let t = a.text.replace(/^﻿/, "");
+      if (i === 0 && n !== 1 && n !== 9) {
+        const parts = t.split(" ");
+        if (parts.slice(0, 4).join(" ").replace(/\[[a-z](?::\d+)?\[|\]/g, "").startsWith("بِسْمِ")) t = parts.slice(4).join(" ");
+      }
+      return t;
+    })).catch((e) => { tajweedCache.delete(n); throw e; }));
+  }
+  return tajweedCache.get(n);
+}
+const tajweedHTML = (t) => esc(t).replace(/\[([a-z])(?::\d+)?\[([^\]]*)\]/g, '<span class="tj-$1">$2</span>');
+
+async function renderAyat() {
+  const useTj = $("#optTajweed").checked;
+  $("#tjLegend").hidden = !useTj;
+  let tj = null;
+  if (useTj) { try { tj = await ensureTajweed(); } catch (e) { tj = null; } }
+  renderAyatWith(tj);
+}
+
+function renderAyatWith(tj) {
   const list = $("#optTafsir").checked;
   const box = $("#ayat");
   box.classList.toggle("list", list);
   box.classList.toggle("hifz", $("#optHifz").checked);
   $("#hifzHint").hidden = !$("#optHifz").checked;
   box.innerHTML = S.ayahs.map((a, i) =>
-    `<span class="ayah" data-i="${i}"><span class="t">${esc(a.text)}</span> <span class="num">۝${arNum(a.n)}</span>${list ? `<span class="tafsir">${esc(a.tafsir)}</span>` : ""}</span> `
+    `<span class="ayah" data-i="${i}"><span class="t">${tj && tj[i] != null ? tajweedHTML(tj[i]) : esc(a.text)}</span> <span class="num">۝${arNum(a.n)}</span>${list ? `<span class="tafsir">${esc(a.tafsir)}</span>` : ""}</span> `
   ).join("");
   if (S.idx >= 0) highlight(S.idx, false);
 }
@@ -117,7 +144,7 @@ function highlight(i, scroll) {
   el.classList.add("current");
   if (scroll && $("#optFollow").checked) {
     const r = el.getBoundingClientRect();
-    if (r.top < 90 || r.bottom > innerHeight - 110) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (r.top < 170 || r.bottom > innerHeight - 30) el.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
@@ -310,6 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#speed").onchange = () => { prefs.speed = $("#speed").value; savePrefs(); audio.playbackRate = +prefs.speed; };
   $("#optTafsir").onchange = () => { prefs.tafsir = $("#optTafsir").checked; savePrefs(); renderAyat(); };
   $("#optHifz").onchange = () => { prefs.hifz = $("#optHifz").checked; savePrefs(); renderAyat(); };
+  $("#optTajweed").onchange = () => { prefs.tajweed = $("#optTajweed").checked; savePrefs(); renderAyat(); };
   $("#optBasmala").onchange = () => { prefs.basmala = $("#optBasmala").checked; savePrefs(); };
   $("#optFollow").onchange = () => { prefs.follow = $("#optFollow").checked; savePrefs(); };
   const setSize = (d) => { prefs.size = Math.max(1.3, Math.min(3.2, +(prefs.size + d).toFixed(2))); savePrefs(); document.documentElement.style.setProperty("--qsize", prefs.size + "rem"); };
