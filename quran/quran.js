@@ -19,7 +19,7 @@ const arNum = (n) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
 const pad3 = (n) => String(n).padStart(3, "0");
 
 // ---------- settings ----------
-const DEFAULTS = { reciter: "ar.alafasy", repAyah: "1", repRange: "1", speed: "1", size: 1.9, tafsir: false, hifz: false, basmala: true, follow: true, surah: 1 };
+const DEFAULTS = { volume: 1, reciter: "ar.alafasy", repAyah: "1", repRange: "1", speed: "1", size: 1.9, tafsir: false, hifz: false, basmala: true, follow: true, surah: 1 };
 let prefs = { ...DEFAULTS };
 try { prefs = { ...DEFAULTS, ...JSON.parse(localStorage.getItem("gradify-quran") || "{}") }; } catch (e) { /* private mode */ }
 const savePrefs = () => { try { localStorage.setItem("gradify-quran", JSON.stringify(prefs)); } catch (e) { /* ignore */ } };
@@ -105,7 +105,7 @@ function renderAyat() {
   box.classList.toggle("hifz", $("#optHifz").checked);
   $("#hifzHint").hidden = !$("#optHifz").checked;
   box.innerHTML = S.ayahs.map((a, i) =>
-    `<span class="ayah" data-i="${i}"><span class="t">${esc(a.text)}</span> <span class="num">${arNum(a.n)}</span>${list ? `<span class="tafsir">${esc(a.tafsir)}</span>` : ""}</span> `
+    `<span class="ayah" data-i="${i}"><span class="t">${esc(a.text)}</span> <span class="num">۝${arNum(a.n)}</span>${list ? `<span class="tafsir">${esc(a.tafsir)}</span>` : ""}</span> `
   ).join("");
   if (S.idx >= 0) highlight(S.idx, false);
 }
@@ -328,6 +328,16 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (audio.paused) audio.play().catch(() => {});
     else audio.pause();
   };
+  // volume (also applies to the full-surah player)
+  const applyVol = () => {
+    const v = +$("#pVol").value;
+    audio.volume = v; $("#lAudio").volume = v;
+    $("#pMute").textContent = v === 0 ? "🔇" : v < 0.5 ? "🔉" : "🔊";
+    $("#pVol").style.background = "";
+  };
+  $("#pVol").value = prefs.volume; applyVol();
+  $("#pVol").oninput = () => { applyVol(); if (+$("#pVol").value > 0) prefs.volume = +$("#pVol").value; savePrefs(); };
+  $("#pMute").onclick = (e) => { e.preventDefault(); $("#pVol").value = +$("#pVol").value > 0 ? 0 : (prefs.volume || 1); applyVol(); };
   $("#pNext").onclick = () => step(1);
   $("#pPrev").onclick = () => step(-1);
   if ("mediaSession" in navigator) {

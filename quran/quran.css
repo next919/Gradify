@@ -39,9 +39,8 @@ body { padding-bottom: 110px; }
 .ayah.current { background: #fbe9b7; }
 .ayah.inrange { }
 .ayah .num {
-  display: inline-grid; place-items: center; min-width: 1.5em; height: 1.5em; margin: 0 .15em; font-size: .62em;
-  color: #6e5520; background: radial-gradient(circle, #fff6df 55%, #e9d39a 56%, #e9d39a 62%, #fff6df 63%); border-radius: 50%;
-  font-family: var(--font); font-weight: 700; vertical-align: middle;
+  /* U+06DD END OF AYAH + Arabic-Indic digits: the Quran font draws the number inside the ornament, like printed mushafs */
+  font-family: var(--quran); color: #8a6a1f; white-space: nowrap; margin: 0 .08em;
 }
 /* list layout (with tafsir) */
 .ayat.list { text-align: right; text-align-last: auto; }
@@ -66,6 +65,13 @@ body { padding-bottom: 110px; }
 .pinfo small { color: var(--muted); }
 .prog { height: 5px; background: var(--line); border-radius: 99px; margin-top: 6px; overflow: hidden; }
 .prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--primary-2), var(--gold)); transition: width .3s ease; }
+
+/* volume */
+.vol { display: flex; align-items: center; gap: 6px; flex: none; }
+.volIcon { border: 0; background: transparent; font-size: 1.15rem; cursor: pointer; width: 32px; height: 32px; border-radius: 8px; }
+.volIcon:hover { background: var(--bg); }
+.vol input[type=range] { width: 120px; accent-color: var(--primary); cursor: pointer; }
+@media (max-width: 560px) { .vol input[type=range] { width: 70px; } }
 
 /* listen mode */
 .listen { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-top: 16px; align-items: start; }
