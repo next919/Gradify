@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="أدوات PDF عربية تعمل داخل المتصفح مع الحفاظ على جودة الملف قدر الإمكان وبدون رفع ملفاتك إلى خوادمنا.">
+  <title>أدوات PDF — Gradify Aura</title>
+  <link rel="stylesheet" href="pdf-tools.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container navwrap">
+      <a class="brand" href="index.html">Gradify <span>Aura</span></a>
+      <a class="backLink" href="index.html">العودة للرئيسية</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div>
+        <div class="pill">نسخة تجريبية MVP</div>
+        <h1>أدوات PDF عربية بخصوصية أعلى</h1>
+        <p>ابدأ بدمج ملفات PDF مباشرة داخل متصفحك. لا يتم رفع ملفاتك إلى خوادمنا، ولا نحول الصفحات إلى صور أثناء الدمج.</p>
+        <div class="trustRow">
+          <span>🔒 معالجة محلية</span>
+          <span>✓ بدون تسجيل</span>
+          <span>✓ بدون Rasterization</span>
+        </div>
+      </div>
+      <div class="qualityCard">
+        <strong>Original Quality</strong>
+        <p>يتم نسخ صفحات PDF الأصلية إلى الملف الجديد بدل إعادة تصويرها كـ JPG.</p>
+      </div>
+    </section>
+
+    <section class="container toolSection">
+      <div class="sectionHead">
+        <span class="eyebrow">الأداة الأولى</span>
+        <h2>دمج PDF</h2>
+        <p>اختر ملفين أو أكثر، رتبها، ثم ادمجها في ملف واحد.</p>
+      </div>
+
+      <div class="toolCard">
+        <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple hidden>
+
+        <button id="dropZone" class="dropZone" type="button" aria-label="اختيار ملفات PDF">
+          <span class="dropIcon">PDF</span>
+          <strong>اسحب ملفات PDF هنا</strong>
+          <span>أو اضغط لاختيار الملفات من جهازك</span>
+          <small>تتم المعالجة داخل المتصفح فقط</small>
+        </button>
+
+        <div id="fileArea" class="fileArea" hidden>
+          <div class="fileHeader">
+            <div>
+              <h3>الملفات المختارة</h3>
+              <p id="fileSummary"></p>
+            </div>
+            <button id="addMoreBtn" class="btn ghost" type="button">إضافة ملفات</button>
+          </div>
+
+          <div id="fileList" class="fileList"></div>
+
+          <div class="actions">
+            <button id="mergeBtn" class="btn primary" type="button">دمج ملفات PDF</button>
+            <button id="clearBtn" class="btn ghost danger" type="button">مسح القائمة</button>
+          </div>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="privacyNote">
+        <h3>كيف نحافظ على خصوصيتك وجودة الملف؟</h3>
+        <p>ملفات PDF تبقى في جهازك أثناء هذه العملية. الدمج يتم محليًا في المتصفح، ولا نقوم برفع محتوى ملفاتك أو بتحويل الصفحات إلى صور. بعض خصائص PDF المتقدمة جدًا مثل التوقيعات الرقمية أو النماذج المعقدة قد تحتاج معالجة خاصة في إصدارات لاحقة.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Gradify Aura © 2026 — PDF Tools MVP</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="pdf-tools.js?v=1" defer></script>
+</body>
+</html>
