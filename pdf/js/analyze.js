@@ -294,21 +294,24 @@ function groupLines(runs, pageIndex) {
   }
   items.sort((a, b) => b.y - a.y || a.x0 - b.x0);
   const lines = [];
+  // A gap wider than COLUMN_GAP (in em) means separate columns/tab stops: keep them as separate
+  // editable lines so editing one never shifts the other.
+  const COLUMN_GAP = 1.2;
   for (const it of items) {
-    if (it.markOnly) continue;
+    if (it.markOnly || it.blank) continue;
     let best = null;
     for (const L of lines) {
       if (Math.abs(L.y - it.y) > 0.3 * Math.min(L.size, it.size)) continue;
       const ratio = it.size / L.size;
-      if (!it.blank && (ratio < 0.6 || ratio > 1.7)) continue;
+      if (ratio < 0.6 || ratio > 1.7) continue;
       const gap = Math.max(L.x0 - it.x1, it.x0 - L.x1, 0);
-      if (gap > 2.2 * Math.max(L.size, it.size)) continue;
+      if (gap > COLUMN_GAP * Math.max(L.size, it.size)) continue;
       best = L; break;
     }
     if (!best) { best = { y: it.y, size: it.size, x0: it.x0, x1: it.x1, items: [] }; lines.push(best); }
     best.items.push(it);
     best.x0 = Math.min(best.x0, it.x0); best.x1 = Math.max(best.x1, it.x1);
-    if (!it.blank) best.size = Math.max(best.size, it.size);
+    best.size = Math.max(best.size, it.size);
   }
   // merge lines that ended up split because of processing order
   for (let changed = true; changed;) {
@@ -317,10 +320,16 @@ function groupLines(runs, pageIndex) {
       const A = lines[i], B = lines[j];
       if (Math.abs(A.y - B.y) > 0.3 * Math.min(A.size, B.size)) continue;
       const gap = Math.max(A.x0 - B.x1, B.x0 - A.x1, 0);
-      if (gap > 2.2 * Math.max(A.size, B.size)) continue;
+      if (gap > COLUMN_GAP * Math.max(A.size, B.size)) continue;
       A.items.push(...B.items); A.x0 = Math.min(A.x0, B.x0); A.x1 = Math.max(A.x1, B.x1); A.size = Math.max(A.size, B.size);
       lines.splice(j, 1); changed = true;
     }
+  }
+  // space-only runs join the line they sit inside, without widening it (a wide space must not bridge columns)
+  for (const it of items.filter((i) => i.blank)) {
+    const c = (it.x0 + it.x1) / 2;
+    const L = lines.find((l) => Math.abs(l.y - it.y) <= 0.3 * l.size && c >= l.x0 - 0.3 * l.size && c <= l.x1 + 0.3 * l.size);
+    if (L) L.items.push(it);
   }
   // diacritics drawn as separate runs (e.g. Chrome/Skia) belong to the line they sit on
   for (const it of items.filter((i) => i.markOnly)) {

@@ -196,7 +196,7 @@ function initContact() {
       if (!j.success) throw new Error(j.message || "error");
       form.reset(); note.className = "formNote ok"; note.textContent = "✓ وصلتنا رسالتك، شكرًا لك.";
     } catch (err) {
-      note.className = "formNote err"; note.textContent = "تعذّر الإرسال. جرّب مرة أخرى أو راسلنا على البريد.";
+      note.className = "formNote err"; note.textContent = "تعذّر الإرسال. تأكد من الاتصال وجرّب مرة أخرى.";
     } finally { btn.disabled = false; }
   });
 }

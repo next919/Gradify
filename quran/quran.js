@@ -179,7 +179,11 @@ audio.addEventListener("play", () => setPlayIcon(true));
 audio.addEventListener("pause", () => setPlayIcon(false));
 audio.addEventListener("error", () => { if (S.started) updateInfo("تعذّر تشغيل الصوت، جرّب قارئًا آخر"); });
 
-function setPlayIcon(on) { $("#pPlay").textContent = on ? "❚❚" : "▶"; $("#pPlay").title = on ? "إيقاف مؤقت" : "تشغيل"; }
+function setPlayIcon(on) {
+  const b = $("#pPlay");
+  b.textContent = on ? "❚❚" : "▶"; b.title = on ? "إيقاف مؤقت" : "تشغيل";
+  b.classList.toggle("playing", on);
+}
 
 function updateInfo(note) {
   const [from, to] = range();

@@ -193,6 +193,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* contact */
 .contact { display: grid; grid-template-columns: .8fr 1.2fr; gap: 20px; align-items: start; }
+.contact.single { grid-template-columns: minmax(0, 760px); }
 .contactInfo { background: var(--gold-soft); border-radius: var(--radius); padding: 24px; }
 .contactInfo h3 { margin: 0 0 6px; }
 .contactInfo p { margin: 0 0 12px; color: #6b5528; }

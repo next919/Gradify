@@ -59,7 +59,12 @@ body { padding-bottom: 110px; }
 .player .container { display: flex; align-items: center; gap: 14px; min-height: 76px; }
 .pbtns { display: flex; align-items: center; gap: 6px; }
 .round { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; display: grid; place-items: center; font-size: 1rem; }
-.round.main { width: 54px; height: 54px; background: linear-gradient(135deg, var(--primary-2), var(--primary)); color: #fff; border: 0; font-size: 1.25rem; box-shadow: 0 6px 16px rgba(14, 138, 121, .3); }
+.round.main { width: 54px; height: 54px; background: linear-gradient(135deg, var(--primary-2), var(--primary)); color: #fff; border: 0; font-size: 1.25rem; box-shadow: 0 6px 16px rgba(14, 138, 121, .3); position: relative; transition: background .3s ease, box-shadow .3s ease; }
+/* while reciting: warm gold with a soft pulse */
+.round.main.playing { background: linear-gradient(135deg, #f2b84b, #dd8a1f); box-shadow: 0 6px 18px rgba(221, 138, 31, .4); }
+.round.main.playing::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(242, 184, 75, .7); animation: pulseRing 1.6s ease-out infinite; }
+@keyframes pulseRing { from { transform: scale(.9); opacity: 1; } to { transform: scale(1.35); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .round.main.playing::after { animation: none; } }
 .pinfo { flex: 1; min-width: 0; }
 .pinfo b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pinfo small { color: var(--muted); }
