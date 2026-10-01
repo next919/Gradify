@@ -6,7 +6,7 @@
 <!-- Only this site's own code may run; PDFs and fonts are data, never code. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://www.googletagmanager.com; worker-src 'self'; connect-src 'self' https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; font-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
 <title>Online PDF Editor — Gradify</title>
-<meta name="description" content="تعديل نصوص ملفات PDF بالعربية والإنجليزية بنفس الخط والحجم، بدون فقدان الجودة، ودون رفع ملفاتك لأي خادم.">
+<meta name="description" content="محرر PDF عربي مجاني: عدّل النصوص بنفس الخط والحجم، رتّب الصفحات وادمج الملفات، وقّع وأضف الصور، ورقّم الصفحات، بدون فقدان الجودة ودون رفع ملفاتك لأي خادم.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d7262e'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='white' font-family='Arial'%3E%D8%B9%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/style.css">
 <script src="../analytics.js" defer></script>
@@ -18,10 +18,15 @@
 <header class="bar">
   <a class="brand" href="../" title="Gradify — الرئيسية"><span class="logo">ع</span><span>Gradify PDF</span></a>
   <div class="tools" id="tools" hidden>
+    <button class="icon" id="pagesBtn" title="الصفحات">▤</button>
     <div class="seg" role="tablist">
       <button class="seg-btn active" data-mode="edit" title="اضغط على أي سطر لتعديله">تعديل النص</button>
       <button class="seg-btn" data-mode="add" title="اضغط في أي مكان لإضافة نص">إضافة نص</button>
     </div>
+    <button class="tool" id="sigBtn" title="أضف توقيعك">✍️ توقيع</button>
+    <button class="tool" id="imgBtn" title="أضف صورة أو شعار">🖼️ صورة</button>
+    <button class="tool" id="numBtn" title="ترقيم الصفحات">#️⃣ ترقيم</button>
+    <button class="tool" id="wmBtn" title="علامة مائية">💧 علامة مائية</button>
     <span class="sep"></span>
     <button class="icon" id="undo" title="تراجع (Ctrl+Z)" disabled>↶</button>
     <button class="icon" id="redo" title="إعادة (Ctrl+Y)" disabled>↷</button>
@@ -38,6 +43,9 @@
   </div>
   <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden>
   <input type="file" id="fontInput" accept=".ttf,.otf,.ttc,font/ttf,font/otf" hidden>
+  <input type="file" id="mergeInput" accept="application/pdf,.pdf" multiple hidden>
+  <input type="file" id="imageInput" accept="image/*" hidden>
+  <input type="file" id="sigImageInput" accept="image/*" hidden>
 </header>
 
 <main id="main">
@@ -46,14 +54,41 @@
       <div class="drop-icon">PDF</div>
       <h1>عدّل ملفات PDF بالعربية بنفس الخط والجودة</h1>
       <p>اسحب الملف هنا أو <button class="link" id="openBtn2">اختره من جهازك</button></p>
-      <ul class="points">
-        <li><b>نفس الخط والحجم:</b> اضغط على أي سطر وعدّله مباشرة.</li>
-        <li><b>بدون فقدان جودة:</b> النص يبقى نصًا حقيقيًا ولا يتحول لصورة.</li>
-        <li><b>ملفاتك لا تغادر جهازك:</b> كل المعالجة داخل المتصفح.</li>
-      </ul>
+      <p class="privacy">🔒 ملفاتك لا تغادر جهازك: كل المعالجة داخل المتصفح.</p>
     </div>
+    <div class="features">
+      <div class="feature"><i>✏️</i><b>تعديل النص</b><span>اضغط على أي سطر وعدّله بنفس الخط والحجم واللون.</span></div>
+      <div class="feature"><i>📑</i><b>ترتيب الصفحات</b><span>رتّب بالسحب، ودوّر، واحذف، وادمج عدة ملفات.</span></div>
+      <div class="feature"><i>✍️</i><b>التوقيع والصور</b><span>ارسم توقيعك أو أضف شعارًا وضعه في أي مكان.</span></div>
+      <div class="feature"><i>#️⃣</i><b>ترقيم وعلامة مائية</b><span>أرقام بالعربي أو الإنجليزي، وعلامة مائية شفافة.</span></div>
+    </div>
+    <ol class="howto">
+      <li><b>افتح الملف</b><span>من جهازك أو بالسحب والإفلات.</span></li>
+      <li><b>عدّل</b><span>نصوص، صفحات، توقيع، صور.</span></li>
+      <li><b>احفظ</b><span>ملف PDF بنفس الجودة.</span></li>
+    </ol>
   </section>
-  <section id="pages" class="pages" hidden></section>
+  <div id="workspace" class="workspace" hidden>
+    <aside class="sidebar" id="sidebar" aria-label="الصفحات">
+      <div class="sbHead">
+        <div class="sbTitle"><b>الصفحات</b><span id="pageCount"></span></div>
+        <div class="sbActions">
+          <button class="btn sm" id="mergeBtn" title="أضف صفحات ملف PDF آخر في النهاية">＋ دمج PDF</button>
+          <button class="btn sm" id="blankBtn" title="أضف صفحة فارغة بعد الصفحة الحالية">＋ صفحة فارغة</button>
+        </div>
+        <div class="sbSel" id="sbSel" hidden>
+          <span id="selCount"></span>
+          <button class="link" id="selRotate">تدوير</button>
+          <button class="link" id="selDelete">حذف</button>
+          <button class="link" id="selExtract">حفظ كملف</button>
+          <button class="link" id="selClear">إلغاء</button>
+        </div>
+        <p class="sbHint">اسحب الصفحة لتغيير ترتيبها.</p>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </aside>
+    <section id="pages" class="pages"></section>
+  </div>
 </main>
 
 <div id="editor" class="editor" hidden>
@@ -72,6 +107,79 @@
   </div>
   <div class="ed-status" id="edStatus"></div>
 </div>
+
+<div id="imgbar" class="editor" hidden>
+  <div class="ed-bar">
+    <span class="hint">اسحب لتحريك الصورة، واسحب الزاوية لتغيير حجمها.</span>
+    <span class="spacer"></span>
+    <button class="btn primary sm" id="imgApply">تثبيت</button>
+    <button class="btn ghost sm" id="imgCancel">إلغاء</button>
+    <button class="btn danger sm" id="imgDelete">حذف</button>
+  </div>
+</div>
+
+<dialog id="sigDlg" class="dlg">
+  <form method="dialog" class="dlgBody" id="sigForm">
+    <h2>أضف توقيعك</h2>
+    <div class="seg" id="sigTabs"><button type="button" class="seg-btn active" data-t="draw">ارسم</button><button type="button" class="seg-btn" data-t="upload">ارفع صورة</button></div>
+    <div id="sigDraw">
+      <canvas id="sigCanvas" width="640" height="240" aria-label="ارسم توقيعك هنا"></canvas>
+      <div class="dlgRow">
+        <span>اللون</span>
+        <button type="button" class="swatch active" data-c="#111827" style="background:#111827" title="أسود"></button>
+        <button type="button" class="swatch" data-c="#1d4ed8" style="background:#1d4ed8" title="أزرق"></button>
+        <span>السُمك</span><input type="range" id="sigWidth" min="1" max="8" value="3">
+        <span class="spacer"></span>
+        <button type="button" class="btn sm ghost" id="sigClear">مسح</button>
+      </div>
+    </div>
+    <div id="sigUpload" hidden>
+      <button type="button" class="btn" id="sigPick">اختر صورة التوقيع</button>
+      <p class="muted">الأفضل صورة بخلفية بيضاء أو شفافة. نحوّل الخلفية البيضاء إلى شفافة تلقائيًا.</p>
+      <img id="sigPreview" alt="" hidden>
+    </div>
+    <div class="dlgActions">
+      <button type="button" class="btn primary" id="sigUse">استخدام التوقيع</button>
+      <button type="submit" class="btn ghost" value="cancel">إلغاء</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="numDlg" class="dlg">
+  <form method="dialog" class="dlgBody">
+    <h2>ترقيم الصفحات</h2>
+    <div class="grid2">
+      <label>المكان<select id="numPos"><option value="bc">أسفل الوسط</option><option value="br">أسفل اليمين</option><option value="bl">أسفل اليسار</option><option value="tc">أعلى الوسط</option><option value="tr">أعلى اليمين</option><option value="tl">أعلى اليسار</option></select></label>
+      <label>الشكل<select id="numFormat"><option value="n">1</option><option value="of">1 / 10</option><option value="page">صفحة 1 من 10</option></select></label>
+      <label>الأرقام<select id="numDigits"><option value="latin">1 2 3</option><option value="arabic">١ ٢ ٣</option></select></label>
+      <label>يبدأ من<input id="numStart" type="number" min="0" value="1"></label>
+      <label>الحجم<input id="numSize" type="number" min="6" max="36" value="10"></label>
+      <label class="check"><input id="numSkip" type="checkbox"> بدون رقم على الصفحة الأولى</label>
+    </div>
+    <div class="dlgActions">
+      <button type="button" class="btn primary" id="numApply">تطبيق</button>
+      <button type="button" class="btn danger" id="numRemove">إزالة الترقيم</button>
+      <button type="submit" class="btn ghost" value="cancel">إلغاء</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="wmDlg" class="dlg">
+  <form method="dialog" class="dlgBody">
+    <h2>علامة مائية</h2>
+    <label>النص<input id="wmText" type="text" maxlength="60" placeholder="مثال: سري، نسخة تجريبية، CONFIDENTIAL" dir="auto"></label>
+    <div class="grid2">
+      <label>الشفافية<input id="wmOpacity" type="range" min="5" max="50" value="15"></label>
+      <label>الاتجاه<select id="wmAngle"><option value="45">مائل</option><option value="0">أفقي</option></select></label>
+      <label>اللون<input id="wmColor" type="color" value="#808080"></label>
+    </div>
+    <div class="dlgActions">
+      <button type="button" class="btn primary" id="wmApply">تطبيق</button>
+      <button type="button" class="btn danger" id="wmRemove">إزالة العلامة</button>
+      <button type="submit" class="btn ghost" value="cancel">إلغاء</button>
+    </div>
+  </form>
+</dialog>
 
 <div id="toast" class="toast" hidden></div>
 <div id="busy" class="busy" hidden><div class="spinner"></div></div>

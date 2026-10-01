@@ -3,7 +3,7 @@ import { analyzePage, pageFonts, winAnsiEncode } from './analyze.js';
 import { blankFor, splice, fmt } from './content.js';
 import { ShapeFont, layoutLine, needsShaping, hasArabic, guessBundled, isBoldName, cleanBaseName, subsetTrueType, bundledList, visualRuns, styleClass } from './fonts.js';
 
-const { PDFDocument, PDFName } = window.PDFLib;
+const { PDFDocument, PDFName, degrees } = window.PDFLib;
 
 const LINE_GAP = 1.35;
 
@@ -262,9 +262,13 @@ function colorOps(edit, g) {
 const targetOf = (res, g) => g.target || res.targets.get(g.font.id) || { kind: 'embed' };
 
 // Produce the content-stream operators for one edit.
-function emitEdit(edit, res, fontName) {
+function emitEdit(edit, res, fontName, gsName) {
   const fs = edit.size;
-  let out = 'q BT ';
+  let out = 'q ';
+  // frame: maps the edit's local (visual) coordinates to page user space, for rotated pages and watermarks
+  if (edit.frame) out += `${edit.frame.map(fmt).join(' ')} cm `;
+  if (gsName) out += `/${gsName} gs `;
+  out += 'BT ';
   let curColor = null;
   res.layout.forEach((L, li) => {
     const w = L.width * fs;
@@ -312,8 +316,29 @@ export async function buildPdf(originalBytes, edits, lib) {
   const byPage = new Map();
   for (const e of edits) { if (!byPage.has(e.page)) byPage.set(e.page, []); byPage.get(e.page).push(e); }
 
-  for (const [pi, pageEdits] of byPage) {
+  const images = new Map(); // imgId -> embedded image
+  for (const [pi, allEdits] of byPage) {
     const page = doc.getPage(pi);
+    const pageEdits = allEdits.filter((e) => e.type !== 'image');
+    const imageEdits = allEdits.filter((e) => e.type === 'image');
+    if (pageEdits.length) await applyTextEdits(doc, pi, page, pageEdits, lib, embedded);
+    for (const e of imageEdits) {
+      let img = images.get(e.imgId);
+      if (!img) {
+        img = e.imgType === 'jpg' ? await doc.embedJpg(e.imgBytes) : await doc.embedPng(e.imgBytes);
+        images.set(e.imgId, img);
+      }
+      page.drawImage(img, { x: e.x, y: e.y, width: e.w, height: e.h, rotate: degrees(e.angle || 0) });
+    }
+  }
+
+  for (const ent of embedded.values()) writeType0(doc, ent);
+  return doc.save({ useObjectStreams: false });
+}
+
+async function applyTextEdits(doc, pi, page, pageEdits, lib, embedded) {
+  const ctx = doc.context;
+  {
     const an = analyzePage(doc, pi);
     const fontsOf = pageFonts(doc, page);
     const reps = [];
@@ -335,6 +360,15 @@ export async function buildPdf(originalBytes, edits, lib) {
       return names.get(sf.id);
     };
     let additions = '';
+    const gsNames = new Map();
+    const gsFor = (op) => {
+      if (op == null || op >= 1) return null;
+      if (!gsNames.has(op)) {
+        const gs = ctx.obj({ Type: 'ExtGState', ca: op, CA: op });
+        gsNames.set(op, page.node.newExtGState('NdGS', ctx.register(gs)).decodeText());
+      }
+      return gsNames.get(op);
+    };
     for (const e of pageEdits) {
       if (!e.text || !e.text.trim()) continue;
       if (e.fontKey) e.pdfFont = fontsOf(e.fontKey) || e.pdfFont;
@@ -347,15 +381,102 @@ export async function buildPdf(originalBytes, edits, lib) {
       };
       // allocate refs before names are requested
       res.layout.forEach((L) => L.glyphs.forEach((g) => { if (targetOf(res, g).kind === 'embed') res.embed(g.font, g); }));
-      additions += emitEdit(e, res, fontName);
+      additions += emitEdit(e, res, fontName, gsFor(e.opacity));
     }
     const s1 = ctx.flateStream(concatBytes(new TextEncoder().encode('q\n'), newContent, new TextEncoder().encode('\nQ\n')));
     const s2 = ctx.flateStream(new TextEncoder().encode(additions));
     page.node.set(PDFName.of('Contents'), ctx.obj([ctx.register(s1), ctx.register(s2)]));
   }
+}
 
-  for (const ent of embedded.values()) writeType0(doc, ent);
+// ---------- page operations ----------
+const INHERITED = ['Resources', 'MediaBox', 'CropBox', 'Rotate'];
+
+// Reorder / drop / rotate pages. plan = [{o: sourceIndex, rot: 0|90|180|270}]
+export async function assemble(bytes, plan) {
+  const doc = await PDFDocument.load(bytes, { updateMetadata: false });
+  const pages = doc.getPages();
+  // pin inherited attributes on each page so moving it in the tree keeps its size, rotation and resources
+  for (const pg of pages) for (const k of INHERITED) {
+    const name = PDFName.of(k);
+    if (!pg.node.get(name)) { const v = pg.node.getInheritableAttribute(name); if (v) pg.node.set(name, v); }
+  }
+  for (let i = pages.length - 1; i >= 0; i--) doc.removePage(i);
+  plan.forEach((p, i) => {
+    const pg = pages[p.o];
+    doc.insertPage(i, pg);
+    if (p.rot) pg.setRotation(degrees((((pg.getRotation().angle + p.rot) % 360) + 360) % 360));
+  });
   return doc.save({ useObjectStreams: false });
+}
+
+// Append all pages of another PDF; returns new bytes and how many pages were added.
+export async function appendPdf(bytes, otherBytes) {
+  const doc = await PDFDocument.load(bytes, { updateMetadata: false });
+  const other = await PDFDocument.load(otherBytes, { updateMetadata: false });
+  const copied = await doc.copyPages(other, other.getPageIndices());
+  copied.forEach((p) => doc.addPage(p));
+  return { bytes: await doc.save({ useObjectStreams: false }), added: copied.length };
+}
+
+export async function appendBlank(bytes, width, height) {
+  const doc = await PDFDocument.load(bytes, { updateMetadata: false });
+  doc.addPage([width, height]);
+  return doc.save({ useObjectStreams: false });
+}
+
+// Matrix from a page's visual coordinates (origin bottom-left as displayed, x right, y up) to user space.
+export function visualFrame(page) {
+  const box = page.getCropBox ? page.getCropBox() : page.getMediaBox();
+  const { x, y, width: w, height: h } = box;
+  const r = ((page.getRotation().angle % 360) + 360) % 360;
+  if (r === 90) return { m: [0, 1, -1, 0, x + w, y], W: h, H: w };
+  if (r === 180) return { m: [-1, 0, 0, -1, x + w, y + h], W: w, H: h };
+  if (r === 270) return { m: [0, -1, 1, 0, x, y + h], W: h, H: w };
+  return { m: [1, 0, 0, 1, x, y], W: w, H: h };
+}
+
+const mulM = (a, b) => [
+  a[0] * b[0] + a[1] * b[2], a[0] * b[1] + a[1] * b[3],
+  a[2] * b[0] + a[3] * b[2], a[2] * b[1] + a[3] * b[3],
+  a[4] * b[0] + a[5] * b[2] + b[4], a[4] * b[1] + a[5] * b[3] + b[5],
+];
+const toArabicDigits = (s) => String(s).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+// Page numbers and watermark, drawn upright on every page whatever its rotation.
+export async function applyStamps(bytes, stamps, lib) {
+  if (!stamps || (!stamps.numbers && !stamps.watermark)) return bytes;
+  const doc = await PDFDocument.load(bytes, { updateMetadata: false });
+  const pages = doc.getPages();
+  const edits = [];
+  pages.forEach((page, i) => {
+    const { m, W, H } = visualFrame(page);
+    const n = stamps.numbers;
+    if (n && !(n.skipFirst && i === 0)) {
+      const first = n.start || 1;
+      const num = first + i - (n.skipFirst ? 1 : 0);
+      const total = first + pages.length - 1 - (n.skipFirst ? 1 : 0);
+      let text = n.format === 'of' ? `${num} / ${total}` : n.format === 'page' ? `صفحة ${num} من ${total}` : `${num}`;
+      if (n.digits === 'arabic') text = toArabicDigits(text);
+      const size = n.size || 10, margin = n.margin || 24;
+      const top = n.pos && n.pos[0] === 't';
+      const side = n.pos ? n.pos[1] : 'c';
+      const x = side === 'r' ? W - margin : side === 'l' ? margin : W / 2;
+      const align = side === 'r' ? 'right' : side === 'l' ? 'left' : 'center';
+      edits.push({ type: 'add', page: i, text, size, color: n.color || '#555555', colorChanged: true, align, x0: x, x1: x,
+        baseline: top ? H - margin - size * 0.8 : margin, rtl: /[\u0600-\u06FF]/.test(text), fontChoice: 'bundled:plex', frame: m });
+    }
+    const w = stamps.watermark;
+    if (w && w.text && w.text.trim()) {
+      const size = w.size || Math.round(Math.min(W, H) / 7);
+      const cx = W / 2, cy = H / 2, a = ((w.angle ?? 45) * Math.PI) / 180;
+      const rot = [Math.cos(a), Math.sin(a), -Math.sin(a), Math.cos(a), 0, 0];
+      const frame = mulM(mulM(mulM([1, 0, 0, 1, -cx, -cy], rot), [1, 0, 0, 1, cx, cy]), m);
+      edits.push({ type: 'add', page: i, text: w.text.trim(), size, color: w.color || '#808080', colorChanged: true, align: 'center',
+        x0: cx, x1: cx, baseline: cy - size * 0.35, rtl: /[\u0600-\u06FF]/.test(w.text), fontChoice: 'bundled:plex', frame, opacity: w.opacity ?? 0.15 });
+    }
+  });
+  return edits.length ? buildPdf(bytes, edits, lib) : bytes;
 }
 
 function concatBytes(...parts) {
