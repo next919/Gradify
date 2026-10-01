@@ -33,7 +33,7 @@
     const open = (v) => { more.hidden = !v; btn.setAttribute("aria-expanded", String(v)); };
     btn.onclick = () => open(more.hidden);
     // links like #contact or #useful open the section
-    if (location.hash === "#contact" || location.hash === "#useful") { open(true); setTimeout(() => document.querySelector(location.hash).scrollIntoView(), 50); }
+    if (location.hash === "#useful" || location.hash === "#english") { open(true); setTimeout(() => document.querySelector(location.hash).scrollIntoView(), 50); }
   }
 
   function initContact() {

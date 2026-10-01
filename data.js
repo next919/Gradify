@@ -77,6 +77,49 @@ window.GRADIFY = {
     ],
   },
 
+  // Business English: [name, description, url]
+  BIZ: {
+    "مجاني": [
+      ["BBC — English at Work", "مسلسل قصير عن الحياة في الشركة: اجتماعات وإيميلات ومواقف حقيقية.", "https://www.bbc.co.uk/learningenglish/english/features/english-at-work"],
+      ["British Council — Business English", "دروس مجانية للإيميلات والعروض والمقابلات.", "https://learnenglish.britishcouncil.org/free-resources/business"],
+      ["Coursera — English for Career Development", "دورة من جامعة بنسلفانيا للبحث عن عمل والمقابلات (مجانية بدون شهادة).", "https://www.coursera.org/learn/careerdevelopment"],
+      ["Coursera — Business English", "تخصص كامل في المراسلات والاجتماعات والعروض (المشاهدة مجانية).", "https://www.coursera.org/specializations/business-english"],
+      ["TED — Business", "محاضرات قصيرة عن الإدارة وريادة الأعمال مع ترجمة.", "https://www.ted.com/topics/business"],
+    ],
+    "مدفوع": [
+      ["Preply", "مدرّس خاص أونلاين بالساعة، وتقدر تختار مدرّس متخصص في إنجليزية الأعمال.", "https://preply.com/en/online/english-tutors"],
+      ["italki", "دروس محادثة مع مدرّسين من كل الدول بأسعار مختلفة.", "https://www.italki.com"],
+      ["Cambly", "محادثة فورية مع متحدثين أصليين في أي وقت.", "https://www.cambly.com"],
+      ["LinkedIn Learning", "دورات مهنية بالإنجليزية في الإدارة والتواصل.", "https://www.linkedin.com/learning/"],
+      ["Cambridge Business Certificates", "شهادات كامبريدج المعتمدة في إنجليزية الأعمال (B1 إلى C1).", "https://www.cambridgeenglish.org/exams-and-tests/qualifications/business/"],
+    ],
+    "بودكاست": [
+      ["Business English Pod", "حلقات مخصصة لإنجليزية الأعمال: اجتماعات، تفاوض، عروض.", "https://www.businessenglishpod.com"],
+      ["BBC 6 Minute English", "6 دقائق يوميًا عن مواضيع متنوعة، مع النص الكامل.", "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"],
+      ["HBR IdeaCast", "بودكاست هارفارد بزنس ريفيو عن الإدارة والقيادة.", "https://hbr.org/podcasts/ideacast"],
+      ["How I Built This", "قصص مؤسسي شركات عالمية بلغة واضحة وممتعة.", "https://www.npr.org/series/490248027/how-i-built-this"],
+      ["Planet Money", "الاقتصاد بأسلوب قصصي بسيط.", "https://www.npr.org/podcasts/510289/planet-money"],
+    ],
+    "يوتيوب": [
+      ["Business English Pod", "دروس فيديو لمواقف العمل اليومية.", "https://www.youtube.com/@BusinessEnglishPod"],
+      ["BBC Learning English", "مقاطع قصيرة للنطق والقواعد والمفردات.", "https://www.youtube.com/@bbclearningenglish"],
+      ["English with Lucy", "النطق والمفردات بأسلوب واضح.", "https://www.youtube.com/@EnglishwithLucy"],
+      ["Harvard Business Review", "مقاطع عن الإدارة والعمل بلغة احترافية.", "https://www.youtube.com/@harvardbusinessreview"],
+      ["Learn English with TV Series", "تعلّم من مشاهد المسلسلات والأفلام.", "https://www.youtube.com/@LearnEnglishWithTVSeries"],
+    ],
+  },
+
+  // free tools used in the "how to learn" steps
+  TOOLS: {
+    efset: "https://www.efset.org/",
+    cambridgeTest: "https://www.cambridgeenglish.org/test-your-english/",
+    youglish: "https://youglish.com/",
+    anki: "https://apps.ankiweb.net/",
+    tandem: "https://www.tandem.net/",
+    hellotalk: "https://www.hellotalk.com/",
+    sixMinute: "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+  },
+
   USEFUL: [
     ["Remove.bg", "إزالة خلفية الصور بضغطة.", "https://www.remove.bg"],
     ["TinyPNG", "ضغط الصور بدون فقدان واضح للجودة.", "https://tinypng.com"],

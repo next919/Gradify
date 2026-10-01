@@ -32,21 +32,16 @@
   const NEUTRAL = "linear-gradient(135deg,#5d6e6a,#3e4b48)";
 
   // [name, default scale]; the scale can always be changed by the student
+  // [name, default scale]; «جامعة أخرى» keeps whatever scale the student picks
   const UNIS = [
-    ["جامعة أخرى / عام", 0],
-    ["جامعة الأمير مساعد بن عبدالرحمن (الإلكترونية سابقًا)", 4],
-    ["جامعة الملك سعود", 5], ["جامعة الملك عبدالعزيز", 5], ["جامعة الإمام محمد بن سعود الإسلامية", 5],
-    ["جامعة أم القرى", 5], ["جامعة الملك خالد", 5], ["جامعة القصيم", 5], ["جامعة الإمام عبدالرحمن بن فيصل", 5],
-    ["جامعة الأميرة نورة بنت عبدالرحمن", 5], ["جامعة طيبة", 5], ["جامعة الطائف", 5], ["جامعة جدة", 5],
-    ["جامعة جازان", 5], ["جامعة حائل", 5], ["جامعة تبوك", 5], ["جامعة الجوف", 5], ["جامعة نجران", 5],
-    ["جامعة الباحة", 5], ["جامعة الحدود الشمالية", 5], ["جامعة المجمعة", 5], ["جامعة شقراء", 5],
-    ["جامعة الأمير سطام بن عبدالعزيز", 5], ["جامعة بيشة", 5], ["جامعة حفر الباطن", 5], ["الجامعة الإسلامية", 5],
-    ["جامعة الملك فيصل", 5],
-    ["جامعة الملك فهد للبترول والمعادن", 4], ["جامعة الفيصل", 4], ["جامعة الأمير سلطان", 4],
+    ["جامعة الأمير مساعد بن عبدالرحمن", 4],
+    ["جامعة أخرى", 0],
   ];
   let state = { uni: 0, scale: 4, mode: "letter", prevHours: "", prevGpa: "", rows: [] };
+  const clampUni = () => { if (!(state.uni >= 0 && state.uni < UNIS.length)) state.uni = 0; };
   try { state = { ...state, ...JSON.parse(localStorage.getItem("gradify-gpa-v2") || "{}") }; } catch (e) { /* private mode */ }
   const freshRows = () => Array.from({ length: 6 }, newRow);
+  clampUni();
   if (!Array.isArray(state.rows) || !state.rows.length) state.rows = freshRows();
   const save = () => { try { localStorage.setItem("gradify-gpa-v2", JSON.stringify(state)); } catch (e) { /* ignore */ } };
 
@@ -113,7 +108,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     $("#menuBtn").onclick = () => $("#nav").classList.toggle("open");
-    $("#uni").innerHTML = UNIS.map(([n, sc], i) => `<option value="${i}">${n}${sc ? ` — من ${sc}` : ""}</option>`).join("");
+    $("#uni").innerHTML = UNIS.map(([n, sc], i) => `<option value="${i}">${n}${sc ? ` (من ${sc})` : " — حدد نظامك 4 أو 5"}</option>`).join("");
     $("#uni").onchange = () => { state.uni = +$("#uni").value; const sc = UNIS[state.uni][1]; if (sc) state.scale = sc; all(); };
     $("#scaleSeg").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; state.scale = +b.dataset.v; all(); };
     $("#modeSeg").onclick = (e) => {

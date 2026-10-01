@@ -8,7 +8,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 <script src="analytics.js" defer></script>
 </head>
 <body>
@@ -22,9 +22,9 @@
       <a href="quran/">القرآن الكريم</a>
       <a href="pdf/">محرر PDF</a>
       <a href="gpa.html">حاسبة المعدل</a>
-      <a href="nidaa/">نداء</a>
       <a href="ai/">الذكاء الاصطناعي</a>
       <a href="english/">الإنجليزية</a>
+      <a href="nidaa/">نداء</a>
     </nav>
     <button class="menuBtn" id="menuBtn" aria-label="القائمة">☰</button>
   </div>
@@ -44,50 +44,51 @@
   </section>
 
   <section class="container">
-    <div class="portal">
-      <a class="door" href="quran/" style="--grad:linear-gradient(135deg,#17b39b,#0b7869);--glow:#e2f4ef;--shadowc:rgba(14,138,121,.3)">
+    <div class="portal four">
+      <a class="door wide" href="quran/" style="--grad:linear-gradient(135deg,#17b39b,#0b7869);--glow:#e2f4ef;--shadowc:rgba(14,138,121,.3)">
         <span class="arrow">←</span>
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7.5 4.5 4 4.8v13.5c3.5-.3 6 .2 8 1.7 2-1.5 4.5-2 8-1.7V4.8C16.5 4.5 14 5 12 6.5z"/><path d="M12 6.5V20"/></svg></span>
-        <h2>القرآن الكريم</h2>
-        <p>اقرأ واستمع آية بآية، مع التكرار للحفظ وألوان التجويد والتفسير.</p>
-        <div class="meta"><span>16 قارئًا آية بآية</span><span>241 قارئًا للسورة كاملة</span></div>
+        <div class="body"><h2>القرآن الكريم</h2><p>اقرأ واستمع آية بآية، مع التكرار للحفظ وألوان التجويد والتفسير.</p><div class="meta"><span>16 قارئًا آية بآية</span><span>241 قارئًا للسورة كاملة</span></div></div>
       </a>
-      <a class="door" href="pdf/" style="--grad:linear-gradient(135deg,#ef5d63,#c8242c);--glow:#fdeceb;--shadowc:rgba(215,38,46,.28)">
+      <a class="door wide" href="pdf/" style="--grad:linear-gradient(135deg,#ef5d63,#c8242c);--glow:#fdeceb;--shadowc:rgba(215,38,46,.28)">
         <span class="arrow">←</span>
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span>
-        <h2>محرر PDF العربي</h2>
-        <p>عدّل نصوص ملفات PDF بنفس الخط والحجم، بدون فقدان الجودة.</p>
-        <div class="meta"><span>عربي وإنجليزي</span><span>ملفاتك لا تغادر جهازك</span></div>
+        <div class="body"><h2>محرر PDF العربي</h2><p>عدّل النصوص بنفس الخط، ورتّب الصفحات، ووقّع، وأضف صورًا، بدون فقدان الجودة.</p><div class="meta"><span>عربي وإنجليزي</span><span>ملفاتك لا تغادر جهازك</span></div></div>
       </a>
-      <a class="door" href="gpa.html" style="--grad:linear-gradient(135deg,#f2b84b,#d98a1d);--glow:#fdf3df;--shadowc:rgba(217,138,29,.28)">
+      <a class="door wide" href="gpa.html" style="--grad:linear-gradient(135deg,#f2b84b,#d98a1d);--glow:#fdf3df;--shadowc:rgba(217,138,29,.28)">
         <span class="arrow">←</span>
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.2V16c0 1.6 2.7 3 6 3s6-1.4 6-3v-4.8"/><path d="M22 9v5"/></svg></span>
-        <h2>حاسبة المعدل</h2>
-        <p>معدلك الفصلي والتراكمي لأي جامعة، بنظام 4 أو 5.</p>
-        <div class="meta"><span>30 جامعة</span><span>بالحرف أو بالدرجة</span></div>
+        <div class="body"><h2>حاسبة المعدل</h2><p>معدلك الفصلي والتراكمي بنظام 4 أو 5، والنتيجة ملوّنة حسب تقديرك.</p><div class="meta"><span>جامعة الأمير مساعد</span><span>وأي جامعة أخرى</span></div></div>
       </a>
-      <a class="door" href="nidaa/" style="--grad:linear-gradient(135deg,#3fa9d8,#1d6fa8);--glow:#e6f1fb;--shadowc:rgba(47,127,209,.28)">
-        <span class="arrow">←</span>
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/><path d="M17 3.5l.7 1.8 1.8.7-1.8.7L17 8.5l-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
-        <h2>نداء — مواقيت الصلاة</h2>
-        <p>برنامج لويندوز: الأذان، والتاريخ الهجري، والمواسم، وأدوات سطح المكتب.</p>
-        <div class="meta"><span>Windows 10 / 11</span><span>مجاني</span></div>
-      </a>
-      <a class="door" href="ai/" style="--grad:linear-gradient(135deg,#8b7cf0,#5a48c4);--glow:#efedfb;--shadowc:rgba(107,91,210,.3)">
+      <a class="door wide" href="ai/" style="--grad:linear-gradient(135deg,#8b7cf0,#5a48c4);--glow:#efedfb;--shadowc:rgba(107,91,210,.3)">
         <span class="arrow">←</span>
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3l1.9 4.9 4.9 1.9-4.9 1.9L11 16.6l-1.9-4.9-4.9-1.9 4.9-1.9z"/><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></span>
-        <h2>الذكاء الاصطناعي</h2>
-        <p>أفضل مواقع الذكاء الاصطناعي للدراسة والكتابة والتصميم.</p>
-        <div class="meta"><span>29 موقعًا</span><span>مصنّفة حسب الاستخدام</span></div>
-      </a>
-      <a class="door" href="english/" style="--grad:linear-gradient(135deg,#ff8a7a,#e0566f);--glow:#fcebee;--shadowc:rgba(210,86,111,.28)">
-        <span class="arrow">←</span>
-        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l.9-4.4A8 8 0 1 1 21 12z"/><path d="M8.5 14l2-5 2 5M9.2 12.5h2.6M14.5 11.5h2.2M15.6 10.4v2.2"/></svg></span>
-        <h2>تعلّم الإنجليزية</h2>
-        <p>مصادر مجانية للاستماع والقواعد والمفردات، حسب المهارة.</p>
-        <div class="meta"><span>17 مصدرًا</span><span>للكبار والأطفال</span></div>
+        <div class="body"><h2>الذكاء الاصطناعي</h2><p>أفضل مواقع الذكاء الاصطناعي للدراسة والكتابة والتصميم، مصنّفة حسب الاستخدام.</p><div class="meta"><span>29 موقعًا</span><span>استخدمها بذكاء</span></div></div>
       </a>
     </div>
+
+    <section class="winApp" aria-labelledby="nidaaTitle">
+      <div>
+        <span class="winBadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>برنامج لويندوز 10 و 11</span>
+        <h2 id="nidaaTitle">نداء — برنامج مواقيت الصلاة لجهازك</h2>
+        <p>يشتغل مع تشغيل الكمبيوتر، ويؤذّن في وقت كل صلاة حسب تقويم أم القرى، مع التاريخ الهجري والمواسم وأدوات على سطح المكتب.</p>
+        <div class="feat"><span>الأذان في وقته</span><span>التاريخ الهجري</span><span>المواسم ورمضان</span><span>تنبيه قبل الأذان</span><span>مجاني</span></div>
+        <div class="heroActions">
+          <a class="btn primary" href="nidaa/">حمّل نداء مجانًا</a>
+          <a class="btn ghost" href="nidaa/#features">المميزات</a>
+        </div>
+      </div>
+      <div class="winMock" aria-hidden="true">
+        <div class="winBar"><b>نداء</b><span>مواقيت الصلاة</span><span class="ctl">─ ▢ ✕</span></div>
+        <div class="winBody">
+          <div class="winNext"><div><small>الصلاة القادمة</small><strong>العصر</strong></div><em>01:24:10</em></div>
+          <ul class="winTimes">
+            <li><span>الفجر</span><b>4:28</b></li><li><span>الشروق</span><b>5:47</b></li><li><span>الظهر</span><b>11:43</b></li>
+            <li class="on"><span>العصر</span><b>3:08</b></li><li><span>المغرب</span><b>5:39</b></li><li><span>العشاء</span><b>7:09</b></li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
     <div class="ayahStrip">
       <div class="lbl">آية اليوم</div>
@@ -99,33 +100,38 @@
     </div>
 
     <div class="moreWrap">
-      <button class="btn moreBtn" id="moreBtn" type="button" aria-expanded="false" aria-controls="more">المزيد <span class="chev">⌄</span></button>
+      <button class="btn moreBtn" id="moreBtn" type="button" aria-expanded="false" aria-controls="more">المزيد: تعلّم الإنجليزية ومواقع مفيدة <span class="chev">⌄</span></button>
     </div>
     <div class="more" id="more" hidden>
+      <div class="enFeature" id="english">
+        <div><h2>🇬🇧 تعلّم الإنجليزية</h2><p>طريقة مجانية خطوة بخطوة، والإنجليزية للأعمال، واختبر مستواك.</p></div>
+        <div class="heroActions"><a class="btn" href="english/">ابدأ التعلّم</a><a class="btn ghost" href="english/#business">الإنجليزية للأعمال</a></div>
+      </div>
       <section id="useful" class="section">
         <div class="sectionHead"><div><h2><span class="sectionIcon" style="background:var(--amber-soft)">🧭</span>مواقع مفيدة</h2><p>أدوات سريعة للصور والملفات والإنتاجية.</p></div></div>
         <div class="grid" id="usefulGrid"></div>
       </section>
-      <section id="contact" class="section">
-        <div class="sectionHead"><div><h2><span class="sectionIcon" style="background:var(--gold-soft)">✉️</span>تواصل معنا</h2><p>اقتراح، أو مشكلة، أو فكرة أداة جديدة؟</p></div></div>
-        <div class="contact single">
-          <form class="form" id="contactForm">
-            <input type="hidden" name="access_key" value="219a1c52-9eb6-449d-b48a-a1b06dc3f95e">
-            <input type="hidden" name="subject" value="رسالة جديدة من موقع Gradify">
-            <input type="checkbox" name="botcheck" hidden tabindex="-1" autocomplete="off">
-            <div class="two">
-              <input class="field" name="name" placeholder="الاسم" required maxlength="80">
-              <input class="field" name="email" type="email" placeholder="البريد الإلكتروني" required dir="auto" maxlength="120">
-            </div>
-            <textarea class="field" name="message" placeholder="رسالتك" required maxlength="3000"></textarea>
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-              <button class="btn primary" type="submit">إرسال</button>
-              <p class="formNote" id="formNote">تصلنا رسالتك مباشرة.</p>
-            </div>
-          </form>
-        </div>
-      </section>
     </div>
+
+    <section id="contact" class="section">
+      <div class="sectionHead"><div><h2><span class="sectionIcon" style="background:var(--gold-soft)">✉️</span>تواصل معنا</h2><p>اقتراح، أو مشكلة، أو فكرة أداة جديدة؟</p></div></div>
+      <div class="contact single">
+        <form class="form" id="contactForm">
+          <input type="hidden" name="access_key" value="219a1c52-9eb6-449d-b48a-a1b06dc3f95e">
+          <input type="hidden" name="subject" value="رسالة جديدة من موقع Gradify">
+          <input type="checkbox" name="botcheck" hidden tabindex="-1" autocomplete="off">
+          <div class="two">
+            <input class="field" name="name" placeholder="الاسم" required maxlength="80">
+            <input class="field" name="email" type="email" placeholder="البريد الإلكتروني" required dir="auto" maxlength="120">
+          </div>
+          <textarea class="field" name="message" placeholder="رسالتك" required maxlength="3000"></textarea>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <button class="btn primary" type="submit">إرسال</button>
+            <p class="formNote" id="formNote">تصلنا رسالتك مباشرة.</p>
+          </div>
+        </form>
+      </div>
+    </section>
   </section>
 </main>
 
@@ -135,8 +141,8 @@
     <nav><a href="quran/">القرآن الكريم</a><a href="pdf/">محرر PDF</a><a href="gpa.html">حاسبة المعدل</a><a href="nidaa/">نداء</a><a href="privacy/">سياسة الخصوصية</a></nav>
   </div>
 </footer>
-<script src="data.js?v=1" defer></script>
+<script src="data.js?v=2" defer></script>
 <script src="common.js?v=1" defer></script>
-<script src="home.js?v=1" defer></script>
+<script src="home.js?v=2" defer></script>
 </body>
 </html>
