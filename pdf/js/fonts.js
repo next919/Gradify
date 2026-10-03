@@ -320,7 +320,10 @@ export function layoutLine(text, baseDir, fonts, styleOf = null) {
 // RTL text is drawn in visual order and PDF readers reverse it character by character when copying, so a glyph
 // that stands for several RTL characters (a ligature such as lam-alef) lists them in visual order in our ToUnicode.
 // The marker comment tells this editor to read them back the same way; older files and other producers use logical order.
-export const VISUAL_ORDER_MARK = 'ligatures in visual order - arabic-pdf-editor';
+// It names neither the site nor the tool: nothing in a user's file should point back to us.
+export const VISUAL_ORDER_MARK = 'visual-order ligatures';
+const OLD_VISUAL_ORDER_MARK = 'ligatures in visual order - arabic-pdf-editor'; // files saved 2026-10-01..04
+export const hasVisualOrderMark = (head) => head.includes(VISUAL_ORDER_MARK) || head.includes(OLD_VISUAL_ORDER_MARK);
 // Glyphs a font adds on its own (no text) map to this invisible joiner: an empty mapping makes readers show junk.
 export const NO_TEXT = String.fromCharCode(0x34f);
 const isRtlCp = (cp) => (cp >= 0x590 && cp <= 0x8ff) || (cp >= 0xfb1d && cp <= 0xfdff) || (cp >= 0xfe70 && cp <= 0xfeff);

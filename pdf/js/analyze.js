@@ -1,6 +1,6 @@
 // Reads PDF font dictionaries and page content into editable text lines.
 import { interpret, parseCMap, apply } from './content.js';
-import { parseSfnt, VISUAL_ORDER_MARK, NO_TEXT, fromVisualCluster } from './fonts.js';
+import { parseSfnt, hasVisualOrderMark, NO_TEXT, fromVisualCluster } from './fonts.js';
 
 const { PDFName, PDFDict, PDFArray, PDFNumber, PDFStream, PDFRef, PDFString, PDFHexString, decodePDFRawStream } = window.PDFLib;
 
@@ -62,7 +62,7 @@ export class PdfFont {
       const bytes = streamBytes(tu);
       this.toUni = parseCMap(bytes).map;
       // written by this editor: turn visual-order ligature text and no-text glyphs back into the usual form
-      if (new TextDecoder('latin1').decode(bytes.subarray(0, 200)).includes(VISUAL_ORDER_MARK))
+      if (hasVisualOrderMark(new TextDecoder('latin1').decode(bytes.subarray(0, 200))))
         for (const [c, u] of this.toUni) this.toUni.set(c, u === NO_TEXT ? '' : fromVisualCluster(u));
     }
     let desc, fontDict = dict;
